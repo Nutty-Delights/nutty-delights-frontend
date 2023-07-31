@@ -176,68 +176,6 @@ const categoriesSlice = createSlice({
         })
     }
 
-    // extraReducers: {
-
-    //     //request is in pending state
-    //     [createCategory.pending]: (state, action) => {
-    //         console.log(state, action);
-    //         let newState = {
-    //             ...state,
-    //             isLoading: true,
-    //             isError: false
-    //         }
-    //         return newState;
-    //     },
-    //     //request fullfiled
-    //     [createCategory.fulfilled]: (state, action) => {
-    //         console.log(state, action);
-    //         const { category } = action.payload;
-    //         let newState = {
-    //             isLoading: false,
-    //             isError: false,
-    //             categories: [
-    //                 ...state.categories,
-    //                 category,
-    //             ]
-
-    //         }
-    //         return newState;
-    //     },
-    //     //request fullfiled
-    //     [createCategory.rejected]: (state, action) => {
-    //         console.log(state, action);
-    //         let newState = {
-    //             isLoading: false,
-    //             isError: true,
-
-
-    //         }
-    //         return newState;
-    //     },
-
-
-    //     [updateCategory.fulfilled]: (state, action) => {
-    //         const index = state.findIndex(category => category.id === action.payload.id);
-    //         state[index] = {
-    //             ...state[index],
-    //             ...action.payload
-    //         };
-
-    //     },
-    //     [deleteCategory.fulfilled]: (state, action) => {
-    //         console.log(state, action);
-    //         return state.filter((curr) => {
-    //             return curr.id !== action.payload;
-    //         });
-    //     },
-
-    //     [getAllCategories.fulfilled]: (state, action) => {
-    //         console.log(state, action);
-    //         return [action.payload];
-    //     },
-
-    // }
-
 })
 
 
