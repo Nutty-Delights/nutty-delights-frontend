@@ -1,10 +1,12 @@
 .categories {
-    margin: 30px;
+    margin-inline: 0px;
 }
 
 p.MuiTypography-root.MuiTypography-body1.heading {
     font-weight: bold;
     font-size: 20px;
+    margin-inline: 30px;
+    margin-top: 20px;
 }
 
 p.MuiTypography-root.MuiTypography-body1.category-heading {

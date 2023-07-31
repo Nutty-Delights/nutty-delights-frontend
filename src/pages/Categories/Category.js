@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom'
 const Category = ({ category, style = { borderRadius: '15px' } }) => {
     console.log(category)
     return (
-        <NavLink to={`/products?productType=${category.categoryType}`}>
+        <NavLink to={`/products?productType=${category.categoryId}`}>
             <div className='category'>
                 <Typography className='category-heading'>{category.categoryName}</Typography>
                 <Image style={style} duration={100} src={category.categoryImageUrl} />

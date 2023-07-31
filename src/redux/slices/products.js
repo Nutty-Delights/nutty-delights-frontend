@@ -6,7 +6,7 @@ import ProductDataService from '../../services/product.service';
 const initialState = {
     currentProduct: {},
     products: [],
-    prodcutsByCategory: [],
+    productsByCategory: [],
     isLoading: false,
     isError: false
 };
@@ -44,7 +44,7 @@ export const getAllProducts = createAsyncThunk(
     }
 );
 export const getAllProductsByCategory = createAsyncThunk(
-    `${productsUrl}/getAllProducts/`,
+    `${productsUrl}/getAllProducts/{id}`,
     async ({ categoryId }) => {
         const res = await ProductDataService.getAllProductsByCategory(categoryId);
         console.log("response", res);
@@ -63,7 +63,7 @@ export const getProduct = createAsyncThunk(
 
 
 //Product Slice
-const categoriesSlice = createSlice({
+const productSlice = createSlice({
     name: 'products',
     initialState: initialState,
     reducers: {},
@@ -136,6 +136,9 @@ const categoriesSlice = createSlice({
             }
             return newState;
         })
+
+
+        //get all products
         builder.addCase(getAllProducts.pending, (state, action) => {
             console.log(state, action);
             let newState = {
@@ -145,8 +148,6 @@ const categoriesSlice = createSlice({
             }
             return newState;
         })
-
-        //get all products
         builder.addCase(getAllProducts.fulfilled, (state, action) => {
             console.log(state, action);
             let newState = {
@@ -158,6 +159,7 @@ const categoriesSlice = createSlice({
                 ]
 
             }
+            // console.log(newState);
             return newState;
         })
         builder.addCase(getAllProducts.rejected, (state, action) => {
@@ -186,7 +188,7 @@ const categoriesSlice = createSlice({
                 ...state,
                 isLoading: false,
                 isError: false,
-                prodcutsByCategory: [
+                productsByCategory: [
                     ...action.payload
                 ]
 
@@ -264,10 +266,10 @@ const categoriesSlice = createSlice({
 
 
 export const getProducts = (state) => state.products.products;
-export const getProductsByCategory = (state) => state.products.prodcutsByCategory;
+export const getProductsByCategory = (state) => state.products.productsByCategory;
 export const getProductsById = (state) => state.products.cuurentProduct;
 export const getProdcutsLoading = (state) => state.products.isLoading;
 export const getProdcuctsError = (state) => state.product.isError;
 
 
-export default categoriesSlice.reducer;;
+export default productSlice.reducer;;

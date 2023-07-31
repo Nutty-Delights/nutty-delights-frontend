@@ -4,6 +4,7 @@ import './categories.css'
 import Category from './Category'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllCategories, getCategories, getCategoriesLoading } from '../../redux/slices/categories'
+import Carousel from '../../components/shared/Carousel/Carousel'
 
 
 
@@ -26,10 +27,11 @@ const Categories = () => {
 
     console.log("categories", categories);
 
-    const heading = 'Shop our top catgories'
+    const heading = 'Shop our top categories'
     return (
 
         <div className='categories'>
+            <Carousel />
             <Typography className='heading'>
                 {heading}
             </Typography>
