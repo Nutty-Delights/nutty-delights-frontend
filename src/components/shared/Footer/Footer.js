@@ -90,7 +90,7 @@ function Footer() {
                         <Typography className='content-heading'>{item.title}</Typography>
                         {
                             item.children.map((subItem, i) => (
-                                <Typography className={'content-subheading'} key={i * index}>{subItem.title}</Typography>
+                                <Typography className={'content-subheading'} key={subItem.title}>{subItem.title}</Typography>
                             ))
                         }
                     </div>

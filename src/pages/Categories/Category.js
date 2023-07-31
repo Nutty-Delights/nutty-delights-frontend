@@ -6,10 +6,10 @@ import { NavLink } from 'react-router-dom'
 const Category = ({ category, style = { borderRadius: '15px' } }) => {
     console.log(category)
     return (
-        <NavLink to={`/products?productType=${category.name}`}>
+        <NavLink to={`/products?productType=${category.categoryType}`}>
             <div className='category'>
-                <Typography className='category-heading'>{category.name}</Typography>
-                <Image showLoading style={style} duration={100} src={category.image_src} />
+                <Typography className='category-heading'>{category.categoryName}</Typography>
+                <Image style={style} duration={100} src={category.categoryImageUrl} />
             </div>
         </NavLink>
 

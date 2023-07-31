@@ -2,7 +2,12 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { URLs } from "../../services/base_urls/constant";
 import CategoryDataService from '../../services/category.service';
 
-const initialState = [];
+
+const initialState = {
+    categories: [],
+    isLoading: false,
+    isError: false
+};
 const categoryUrl = URLs.categories;
 
 //async reducers
@@ -32,6 +37,7 @@ export const getAllCategories = createAsyncThunk(
     `${categoryUrl}/getAllCategories/`,
     async () => {
         const res = await CategoryDataService.getAllCategories();
+        console.log("response", res);
         return res.data;
     }
 );
@@ -41,34 +47,203 @@ export const getAllCategories = createAsyncThunk(
 const categoriesSlice = createSlice({
     name: 'categories',
     initialState: initialState,
-    extraReducers: {
-        [createCategory.fulfilled]: (state, action) => {
+    reducers: {},
+    extraReducers: (builder) => {
+
+        //create category extra reducers
+        builder.addCase(createCategory.pending, (state, action) => {
             console.log(state, action);
-            return [...state, action.payload];
-        },
-        [updateCategory.fulfilled]: (state, action) => {
+            let newState = {
+                ...state,
+                isLoading: true,
+                isError: false
+            }
+            return newState;
+        })
+        builder.addCase(createCategory.fulfilled, (state, action) => {
+            console.log(state, action);
+            const { category } = action.payload;
+            let newState = {
+                isLoading: false,
+                isError: false,
+                categories: [
+                    ...state.categories,
+                    category,
+                ]
+
+            }
+            return newState;
+        })
+        builder.addCase(createCategory.rejected, (state, action) => {
+            console.log(state, action);
+            let newState = {
+                isLoading: false,
+                isError: true,
+
+
+            }
+            return newState;
+        })
+
+        //get all categories
+        builder.addCase(getAllCategories.pending, (state, action) => {
+            console.log(state, action);
+            let newState = {
+                ...state,
+                isLoading: true,
+                isError: false
+            }
+            return newState;
+        })
+        builder.addCase(getAllCategories.fulfilled, (state, action) => {
+            console.log(state, action);
+            let newState = {
+                isLoading: false,
+                isError: false,
+                categories: [
+                    ...action.payload
+                ]
+
+            }
+            return newState;
+        })
+        builder.addCase(getAllCategories.rejected, (state, action) => {
+            console.log(state, action);
+            let newState = {
+                ...state,
+                isLoading: false,
+                isError: true,
+
+
+            }
+            return newState;
+        })
+
+        //update category
+        builder.addCase(updateCategory.pending, (state, action) => {
+            console.log(state, action);
+            let newState = {
+                ...state,
+                isLoading: true,
+                isError: false
+            }
+            return newState;
+        })
+        builder.addCase(updateCategory.fulfilled, (state, action) => {
             const index = state.findIndex(category => category.id === action.payload.id);
             state[index] = {
                 ...state[index],
                 ...action.payload
             };
+        })
+        builder.addCase(updateCategory.rejected, (state, action) => {
+            console.log(state, action);
+            let newState = {
+                ...state,
+                isLoading: false,
+                isError: true,
 
-        },
-        [deleteCategory.fulfilled]: (state, action) => {
+
+            }
+            return newState;
+        })
+        //delete category
+        builder.addCase(deleteCategory.pending, (state, action) => {
+            console.log(state, action);
+            let newState = {
+                ...state,
+                isLoading: true,
+                isError: false
+            }
+            return newState;
+        })
+        builder.addCase(deleteCategory.fulfilled, (state, action) => {
             console.log(state, action);
             return state.filter((curr) => {
                 return curr.id !== action.payload;
             });
-        },
-
-        [getAllCategories.fulfilled]: (state, action) => {
+        })
+        builder.addCase(deleteCategory.rejected, (state, action) => {
             console.log(state, action);
-            return [action.payload];
-        },
+            let newState = {
+                ...state,
+                isLoading: false,
+                isError: true,
 
+
+            }
+            return newState;
+        })
     }
+
+    // extraReducers: {
+
+    //     //request is in pending state
+    //     [createCategory.pending]: (state, action) => {
+    //         console.log(state, action);
+    //         let newState = {
+    //             ...state,
+    //             isLoading: true,
+    //             isError: false
+    //         }
+    //         return newState;
+    //     },
+    //     //request fullfiled
+    //     [createCategory.fulfilled]: (state, action) => {
+    //         console.log(state, action);
+    //         const { category } = action.payload;
+    //         let newState = {
+    //             isLoading: false,
+    //             isError: false,
+    //             categories: [
+    //                 ...state.categories,
+    //                 category,
+    //             ]
+
+    //         }
+    //         return newState;
+    //     },
+    //     //request fullfiled
+    //     [createCategory.rejected]: (state, action) => {
+    //         console.log(state, action);
+    //         let newState = {
+    //             isLoading: false,
+    //             isError: true,
+
+
+    //         }
+    //         return newState;
+    //     },
+
+
+    //     [updateCategory.fulfilled]: (state, action) => {
+    //         const index = state.findIndex(category => category.id === action.payload.id);
+    //         state[index] = {
+    //             ...state[index],
+    //             ...action.payload
+    //         };
+
+    //     },
+    //     [deleteCategory.fulfilled]: (state, action) => {
+    //         console.log(state, action);
+    //         return state.filter((curr) => {
+    //             return curr.id !== action.payload;
+    //         });
+    //     },
+
+    //     [getAllCategories.fulfilled]: (state, action) => {
+    //         console.log(state, action);
+    //         return [action.payload];
+    //     },
+
+    // }
 
 })
 
-const { reducer } = categoriesSlice.reducer;
-export default reducer;
+
+export const getCategories = (state) => state.categories.categories;
+export const getCategoriesLoading = (state) => state.categories.isLoading;
+export const getCategoriesError = (state) => state.categories.isError;
+
+
+export default categoriesSlice.reducer;;
