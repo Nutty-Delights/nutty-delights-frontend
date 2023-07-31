@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import CategoryCarousel from './CategoryCarousel'
 import ProductFilter from './ProductFilter'
-import { Box, Paper, Skeleton, Typography } from '@mui/material'
+import { Box, Button, Paper, Skeleton, Typography } from '@mui/material'
 import { useSearchParams } from 'react-router-dom'
 import './productlist.css'
 import Image from 'mui-image'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllProducts, getAllProductsByCategory, getProdcutsLoading, getProducts, getProductsByCategory } from '../../redux/slices/products'
-
+import Ratings from '@mui/icons-material/StarRounded';
+import ShoppingBag from '@mui/icons-material/ShoppingBagOutlined';
 
 
 
@@ -30,7 +31,7 @@ function ProductList() {
     return (
 
         <div >
-            <CategoryCarousel />
+            {/* <CategoryCarousel /> */}
 
             <Box className='product-list-box'>
                 <ProductFilter />
@@ -43,7 +44,7 @@ function ProductList() {
             <div className='product-list'>
                 {
                     isLoading ? loading.map((e, i) => (
-                        <Box key={i} width={"250px"} >
+                        <Box key={i} width={"350px"} >
                             <Skeleton variant="rectangular" height={250} />
                             <Skeleton animation="wave" />
                             <Skeleton animation="wave" />
@@ -51,11 +52,36 @@ function ProductList() {
                         </Box>
                     )) :
                         products?.map((product, index) => (
-                            <Paper key={product.productId}>
-                                <Image duration={100} showLoading height={300} src={product.productImageUrl}></Image>
-                                <Box>
-                                    <Typography>{product.productName}</Typography>
-                                    <Typography>{`₹ ${product.productPrice}`}</Typography>
+                            <Paper sx={{ borderRadius: '15px !important', }} key={product.productId} elevation={3}>
+                                <Image style={{ padding: '10px' }} duration={100} showLoading height={300} src={product.productImageUrl}></Image>
+                                <Box sx={{ padding: '10px' }}>
+                                    <Typography sx={{ fontWeight: 'bold', color: 'grey', padding: '5px' }}>{product.productName}</Typography>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                        <Box sx={{ display: 'flex', padding: '5px', alignItems: 'center' }}>
+                                            <Typography sx={{ fontWeight: 'bold', fontSize: '18px' }}>{`₹ ${product.productPrice}`}</Typography>
+                                            <Typography sx={{ color: 'grey', textDecoration: 'line-through', marginLeft: '5px', fontSize: '17px' }}>{`₹ ${product.productPrice + product.productDiscount}`}</Typography>
+                                            <Typography sx={{ color: "orange", marginLeft: '5px', fontWeight: 'bold' }}>{`${Math.round(product.productDiscount * 100 / (product.productPrice + product.productDiscount))}% OFF`}</Typography>
+                                        </Box>
+                                        <Box sx={{ display: 'flex', padding: '5px', alignItems: 'center' }}>
+                                            <Ratings sx={{ color: 'green', fontSize: '16px' }} />
+                                            <Typography sx={{ color: "green", marginLeft: '1px', fontSize: '14px' }}>{`${product.productNumberOfReviews} reviews`}</Typography>
+                                        </Box>
+                                    </Box>
+                                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                                        <Button sx={{
+                                            width: "100%",
+                                            margin: '15px',
+                                            color: 'green',
+                                            fontWeight: 'bold',
+                                            borderRadius: '20px',
+                                            borderColor: 'green',
+                                            ':hover': {
+                                                backgroundColor: 'green', color: 'white', borderColor: 'white'
+                                            }
+                                        }} variant='outlined' endIcon={<ShoppingBag />}>
+                                            Add To Bag
+                                        </Button>
+                                    </Box>
 
                                 </Box>
                             </Paper>
