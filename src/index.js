@@ -12,6 +12,8 @@ import Delivery from './pages/Delivery';
 import Categories from './pages/Categories/Categories';
 import ProductList from './pages/ProductList/ProductList';
 import ProductPage from './pages/Product/ProductPage';
+import { Provider } from 'react-redux';
+import store from './redux/store';
 
 
 // creating the first route;
@@ -47,12 +49,6 @@ const router = createBrowserRouter([
       {
         path: 'products/',
         element: <ProductList />,
-        // children: [
-        //   {
-        //     path: ':productTypeId/:productId',
-        //     element: <ProductPage />
-        //   },
-        // ]
       },
       {
         path: ':productId',
@@ -71,9 +67,11 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <RouterProvider router={router} />
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </Provider>
   </React.StrictMode>
 );
 
