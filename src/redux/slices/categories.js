@@ -28,9 +28,10 @@ export const updateCategory = createAsyncThunk(
     }
 );
 export const deleteCategory = createAsyncThunk(
-    `${categoryUrl}/deleteCategory/`,
-    async ({ id }) => {
+    `${categoryUrl}/deleteCategory/:id`,
+    async (id) => {
         const res = await CategoryDataService.deleteCategory(id);
+        console.log(res);
         return res.data;
     }
 );
@@ -64,7 +65,8 @@ const categoriesSlice = createSlice({
         })
         builder.addCase(createCategory.fulfilled, (state, action) => {
             console.log(state, action);
-            const { category } = action.payload;
+            const category = action.payload;
+            console.log("payload", category);
             let newState = {
                 isLoading: false,
                 isError: false,
@@ -135,19 +137,22 @@ const categoriesSlice = createSlice({
             return newState;
         })
         builder.addCase(updateCategory.fulfilled, (state, action) => {
-            const index = state.categories.findIndex(category => category.categoryId === action.payload);
+            const index = state.categories.findIndex(category => category.categoryId === action.payload.categoryId);
+            var updatedArray = [...state.categories];
+            updatedArray[index] = {
+                ...updatedArray[index],
+                ...action.payload
+            }
+
             const newState = {
-                
+                ...state,
+                isLoading: false,
+                isError: false,
+                categories: updatedArray
             }
             console.log("index", index)
-            console.log("inside updated category fulfilled , ", state.categories, action)
-            state.categories[index] = {
-                ...state.categories[index],
-                ...action.payload
-            };
 
-            console.log(state.categories);
-            state.isLoading = false;
+            return newState;
         })
         builder.addCase(updateCategory.rejected, (state, action) => {
             console.log(state, action);
@@ -172,9 +177,17 @@ const categoriesSlice = createSlice({
         })
         builder.addCase(deleteCategory.fulfilled, (state, action) => {
             console.log(state, action);
-            return state.filter((curr) => {
-                return curr.id !== action.payload;
-            });
+            var filterCategories = state.categories.filter((cat) => cat.categoryId !== action.payload)
+            var newState = {
+                ...state,
+                isLoading: false,
+                isError: false,
+                categories: filterCategories
+
+            }
+
+            console.log("New State after deleting", newState);
+            return newState;
         })
         builder.addCase(deleteCategory.rejected, (state, action) => {
             console.log(state, action);
