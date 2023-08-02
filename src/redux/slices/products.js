@@ -268,8 +268,8 @@ const productSlice = createSlice({
 export const getProducts = (state) => state.products.products;
 export const getProductsByCategory = (state) => state.products.productsByCategory;
 export const getProductsById = (state) => state.products.cuurentProduct;
-export const getProdcutsLoading = (state) => state.products.isLoading;
-export const getProdcuctsError = (state) => state.product.isError;
+export const getProductsLoading = (state) => state.products.isLoading;
+export const getProductsError = (state) => state.products.isError;
 
 
 export default productSlice.reducer;;

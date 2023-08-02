@@ -14,6 +14,10 @@ import ProductList from './pages/ProductList/ProductList';
 import ProductPage from './pages/Product/ProductPage';
 import { Provider } from 'react-redux';
 import store from './redux/store';
+import Admin from './pages/Admin/AdminPanel';
+import AdminCategories from './pages/Admin/AdminCategories';
+import AdminProducts from './pages/Admin/AdminProducts';
+
 
 
 // creating the first route;
@@ -58,6 +62,21 @@ const router = createBrowserRouter([
 
     ]
   },
+  {
+    path: '/admin',
+    element: <Admin />,
+    children: [
+      {
+        path: 'categories',
+        element: <AdminCategories />,
+      },
+      {
+        path: 'Products',
+        element: <AdminProducts />,
+      }
+    ]
+
+  }
 ]);
 
 

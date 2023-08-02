@@ -6,7 +6,7 @@ import { useSearchParams } from 'react-router-dom'
 import './productlist.css'
 import Image from 'mui-image'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllProducts, getAllProductsByCategory, getProdcutsLoading, getProducts, getProductsByCategory } from '../../redux/slices/products'
+import { getAllProducts, getAllProductsByCategory, getProductsError, getProductsLoading, getProducts, getProductsByCategory } from '../../redux/slices/products'
 import Ratings from '@mui/icons-material/StarRounded';
 import ShoppingBag from '@mui/icons-material/ShoppingBagOutlined';
 
@@ -19,7 +19,8 @@ function ProductList() {
     console.log("categoryId", categoryId, searchParams);
     const dispatch = useDispatch();
     const products = useSelector(getProductsByCategory);
-    const isLoading = useSelector(getProdcutsLoading);
+    const isLoading = useSelector(getProductsLoading);
+    const isError = useSelector(getProductsError);
     const loading = [1, 2, 3, 4, 5, 6];
 
 
@@ -50,7 +51,7 @@ function ProductList() {
                             <Skeleton animation="wave" />
                             <Skeleton animation={false} />
                         </Box>
-                    )) :
+                    )) : isError ? "Something Went Wrong! \n Please try again" :
                         products?.map((product, index) => (
                             <Paper sx={{ borderRadius: '15px !important', }} key={product.productId} elevation={3}>
                                 <Image style={{ padding: '10px' }} duration={100} showLoading height={300} src={product.productImageUrl}></Image>

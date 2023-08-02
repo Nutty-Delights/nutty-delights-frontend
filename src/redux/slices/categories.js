@@ -19,9 +19,11 @@ export const createCategory = createAsyncThunk(
     }
 );
 export const updateCategory = createAsyncThunk(
-    `${categoryUrl}/updateCategory/`,
+    `${categoryUrl}/updateCategory`,
     async ({ id, data }) => {
+
         const res = await CategoryDataService.updateCategory(id, data);
+        console.log("inside update category", res);
         return res.data;
     }
 );
@@ -96,7 +98,7 @@ const categoriesSlice = createSlice({
             return newState;
         })
         builder.addCase(getAllCategories.fulfilled, (state, action) => {
-            console.log(state, action);
+            console.log("inside get all", state, action);
             let newState = {
                 isLoading: false,
                 isError: false,
@@ -105,17 +107,20 @@ const categoriesSlice = createSlice({
                 ]
 
             }
+
+            console.log("newState after fetching categories", newState);
             return newState;
         })
         builder.addCase(getAllCategories.rejected, (state, action) => {
             console.log(state, action);
             let newState = {
                 ...state,
+                categories: [...state.categories],
                 isLoading: false,
                 isError: true,
-
-
             }
+
+
             return newState;
         })
 
@@ -130,11 +135,19 @@ const categoriesSlice = createSlice({
             return newState;
         })
         builder.addCase(updateCategory.fulfilled, (state, action) => {
-            const index = state.findIndex(category => category.id === action.payload.id);
-            state[index] = {
-                ...state[index],
+            const index = state.categories.findIndex(category => category.categoryId === action.payload);
+            const newState = {
+                
+            }
+            console.log("index", index)
+            console.log("inside updated category fulfilled , ", state.categories, action)
+            state.categories[index] = {
+                ...state.categories[index],
                 ...action.payload
             };
+
+            console.log(state.categories);
+            state.isLoading = false;
         })
         builder.addCase(updateCategory.rejected, (state, action) => {
             console.log(state, action);

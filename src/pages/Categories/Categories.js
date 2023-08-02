@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import './categories.css'
 import Category from './Category'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllCategories, getCategories, getCategoriesLoading } from '../../redux/slices/categories'
+import { getAllCategories, getCategories, getCategoriesError, getCategoriesLoading } from '../../redux/slices/categories'
 import Carousel from '../../components/shared/Carousel/Carousel'
 
 
@@ -15,6 +15,7 @@ const Categories = () => {
     const loading = [1, 2, 3, 4, 5, 6];
     const categories = useSelector(getCategories);
     const isLoading = useSelector(getCategoriesLoading);
+    const isError = useSelector(getCategoriesError);
     // const [categories, setCategories] = useState();
     const dispatch = useDispatch();
 
@@ -45,7 +46,7 @@ const Categories = () => {
                             <Skeleton animation="wave" />
                             <Skeleton animation={false} />
                         </Box>
-                    )) :
+                    )) : isError ? "Something Went Wrong! \n Please try again" :
                         categories?.map((category) => {
                             console.log("category", category)
                             return <Category key={category.categoryId} category={category} />
