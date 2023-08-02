@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { createCategory, deleteCategory, getAllCategories, getCategories, getCategoriesError, getCategoriesLoading, updateCategory } from '../../redux/slices/categories';
+import { createCategory, deleteCategory, getAllCategories, getCategories, updateCategory } from '../../redux/slices/categories';
 import { Avatar, Box, Button, Divider, FormControl, IconButton, InputLabel, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, MenuItem, Paper, Select, TextField, Typography } from '@mui/material';
-import { getAllProductsByCategory, getProductsByCategory, getProductsError, getProductsLoading } from '../../redux/slices/products';
+import { getAllProductsByCategory, getProductsByCategory, getProductsError, getProductsLoading, updateProduct } from '../../redux/slices/products';
 import Refresh from '@mui/icons-material/Loop';
 const AdminProducts = () => {
 
@@ -16,15 +16,18 @@ const AdminProducts = () => {
     const dispatch = useDispatch();
     const [categoryId, setCategoryId] = useState();
     const products = useSelector(getProductsByCategory);
+    const categories = useSelector(getCategories);
     const isLoading = useSelector(getProductsLoading);
     const isError = useSelector(getProductsError);
-    const [selected, setSelected] = useState(0);
-    const [selectedCategory, setSelectedCategory] = useState({
-        categoryId: '#1',
-        categoryName: "name",
-        categoryImageUrl: "imageUrl",
-        categoryType: "type"
-    });
+    const [selected, setSelected] = useState(-1);
+
+    const [selectedProduct, setselectedProduct] = useState(products[0]);
+    // const [selectedProduct, setselectedProduct] = useState({
+    //     categoryId: '#1',
+    //     categoryName: "name",
+    //     categoryImageUrl: "imageUrl",
+    //     categoryType: "type"
+    // });
     const [addCategory, setAddCategory] = useState({
         categoryName: "name",
         categoryImageUrl: "imageUrl",
@@ -34,38 +37,73 @@ const AdminProducts = () => {
     //functions to handle update category
     const handleUpdatedNameChange = (e) => {
         // console.log(e.target.value)
-        setSelectedCategory((prev) => ({
+        setselectedProduct((prev) => ({
             ...prev,
-            categoryName: e.target.value
+            productName: e.target.value
         }))
     }
-    const handleUpdatedTypeChange = (e) => {
+    const handleUpdatedCategoryChange = (e) => {
         // console.log(e.target.value)
-        setSelectedCategory((prev) => ({
+        setselectedProduct((prev) => ({
             ...prev,
-            categoryType: e.target.value
+            productCategoryId: e.target.value
         }))
     }
     const handleUpdatedImageChange = (e) => {
         // console.log(e.target.value)
-        setSelectedCategory((prev) => ({
+        setselectedProduct((prev) => ({
             ...prev,
-            categoryImageUrl: e.target.value
+            productImageUrl: e.target.value
         }))
     }
-    const handleCategory = (e, index, category) => {
+    const handleUpdatedStockChange = (e) => {
+        // console.log(e.target.value)
+        setselectedProduct((prev) => ({
+            ...prev,
+            productStockCount: e.target.value
+        }))
+    }
+    const handleUpdatedPurchasingPriceChange = (e) => {
+        // console.log(e.target.value)
+        setselectedProduct((prev) => ({
+            ...prev,
+            productPurchasingPrice: e.target.value
+        }))
+    }
+    const handleUpdatedSellingPriceChange = (e) => {
+        // console.log(e.target.value)
+        setselectedProduct((prev) => ({
+            ...prev,
+            productPrice: e.target.value
+        }))
+    }
+    const handleUpdatedDiscountChange = (e) => {
+        // console.log(e.target.value)
+        setselectedProduct((prev) => ({
+            ...prev,
+            productDiscount: e.target.value
+        }))
+    }
+    const handleProductSelection = (e, index, product) => {
         setSelected(index);
-        setSelectedCategory(category);
+        setselectedProduct(product);
     }
 
-    const handleUpdateCategory = async (id) => {
-        // console.log(selectedCategory);
-        const data = {
-            categoryName: selectedCategory.categoryName,
-            categoryImageUrl: selectedCategory.categoryImageUrl,
-            categoryType: selectedCategory.categoryType
+    const handleUpdateProduct = async (id) => {
+
+        // console.log(selectedProduct);
+        // const data = {
+        //     productName: selectedProduct.productName,
+        //     productImageUrl: selectedProduct.productImageUrl,
+        //     productType: selectedProduct.productType
+        // }
+        console.log("id", id);
+        var product = {
+            productId: id,
+            ...selectedProduct
         }
-        dispatch(updateCategory({ id, data }));
+        dispatch(updateProduct({ product }));
+
 
 
     }
@@ -108,7 +146,7 @@ const AdminProducts = () => {
     //function to delete the category
     const handleDeleteCategory = async (id) => {
         // eslint-disable-next-line no-restricted-globals
-        var result = confirm(`Confirm to delete ${selectedCategory.categoryName}?`);
+        var result = confirm(`Confirm to delete ${selectedProduct.categoryName}?`);
 
         if (result) {
             dispatch(deleteCategory(id))
@@ -121,6 +159,7 @@ const AdminProducts = () => {
     }
     useEffect(() => {
         dispatch(getAllProductsByCategory({ categoryId }))
+        dispatch(getAllCategories());
     }, [categoryId, dispatch])
 
 
@@ -148,7 +187,7 @@ const AdminProducts = () => {
                                             products?.map((item, i) => (
                                                 <ListItem key={item?.productId} disablePadding >
                                                     <Box height={'50px'} width={5} sx={{ background: item.productStockCount > 0 ? "green" : 'red' }}></Box>
-                                                    <ListItemButton disableRipple onClick={(e) => { handleCategory(e, i, item) }} sx={{ backgroundColor: selected === i ? '#ffa5001f' : 'white' }} >
+                                                    <ListItemButton disableRipple onClick={(e) => { handleProductSelection(e, i, item) }} sx={{ backgroundColor: selected === i ? '#ffa5001f' : 'white' }} >
                                                         <ListItemAvatar>
                                                             <Avatar alt="Remy Sharp" src={item.productImageUrl} />
                                                         </ListItemAvatar>
@@ -167,16 +206,16 @@ const AdminProducts = () => {
                             </Paper>
                             <Paper sx={{ height: '500px', width: '40vw', padding: '15px' }}>
                                 <Typography sx={{ margin: '15px', fontWeight: 'bold' }}>{"Update Product"}</Typography>
-                                <Box sx={{ gap: '10px' }}>
+                                <Box sx={{ gap: '10px', display: selected > -1 ? "inherit" : 'inherit' }}>
                                     <TextField
-                                        onChange={handleAddNameChange}
+                                        onChange={handleUpdatedNameChange}
                                         sx={{ marginBlock: '10px' }}
                                         fullWidth
                                         required
                                         id="outlined-required"
                                         label="Name"
-                                        value={addCategory.categoryName}
-                                    // defaultValue="Category"
+                                        value={selectedProduct?.productName || ""}
+                                    // defaultValue="product"
                                     />
                                     <FormControl fullWidth required sx={{ marginBlock: '10px', minWidth: 120 }}>
                                         <InputLabel id="demo-simple-select-required-label">Category</InputLabel>
@@ -184,79 +223,75 @@ const AdminProducts = () => {
                                             fullWidth
                                             labelId="demo-simple-select-required-label"
                                             id="demo-simple-select-required"
-                                            value={"10"}
+                                            value={selectedProduct?.productCategoryId || ""}
                                             label="Category *"
-                                        // onChange={}
+                                            onChange={handleUpdatedCategoryChange}
                                         >
-                                            <MenuItem value="">
-                                                <em>None</em>
-                                            </MenuItem>
-                                            <MenuItem value={10}>Almonds</MenuItem>
-                                            <MenuItem value={20}>Raisins</MenuItem>
-                                            <MenuItem value={30}>Figs</MenuItem>
+                                            {
+                                                categories?.map((cat, i) => (
+                                                    <MenuItem key={i} value={cat.categoryId}>{cat.categoryName}</MenuItem>
+                                                ))
+                                            }
                                         </Select>
 
                                     </FormControl>
                                     <TextField
-                                        onChange={handleAddImageChange}
+                                        onChange={handleUpdatedImageChange}
                                         sx={{ marginBlock: '10px' }}
                                         fullWidth
                                         required
-                                        value={addCategory.categoryImageUrl}
+                                        value={selectedProduct?.productImageUrl || ""}
                                         id="outlined-required"
                                         label="Image Url"
                                     // defaultValue="image url"
                                     />
                                     <TextField
-                                        onChange={handleAddTypeChange}
-                                        sx={{ margin: '10px' }}
+                                        onChange={handleUpdatedStockChange}
+                                        sx={{ margin: '10px 0px' }}
                                         // fullWidth
                                         type='number'
                                         required
                                         id="outlined-required"
-                                        label="Total Items"
-                                        value={addCategory.categoryType}
+                                        label="Stock Count"
+                                        value={selectedProduct?.productStockCount || 0}
                                     // defaultValue="Nuts"
                                     />
                                     <TextField
-                                        onChange={handleAddTypeChange}
-                                        sx={{ margin: '10px' }}
-                                        // fullWidth
+                                        onChange={handleUpdatedPurchasingPriceChange}
+                                        sx={{ margin: '10px 0px 0 10px' }}                                        // fullWidth
                                         type='number'
                                         required
                                         id="outlined-required"
                                         label="Purchasing Price"
-                                        value={addCategory.categoryType}
+                                        value={selectedProduct?.categoryType || ""}
                                     // defaultValue="Nuts"
                                     />
                                     <TextField
-                                        onChange={handleAddTypeChange}
-                                        sx={{ margin: '10px' }}
-                                        // fullWidth
+                                        onChange={handleUpdatedSellingPriceChange}
+                                        sx={{ margin: '10px 0px' }}                                        // fullWidth
                                         type='number'
                                         required
                                         id="outlined-required"
                                         label="Selling Price"
-                                        value={addCategory.categoryType}
+                                        value={selectedProduct?.productPrice || ""}
                                     // defaultValue="Nuts"
                                     />
                                     <TextField
-                                        onChange={handleAddTypeChange}
-                                        sx={{ margin: '10px' }}
-                                        // fullWidth
+                                        onChange={handleUpdatedDiscountChange}
+                                        sx={{ margin: '10px 0px 0 10px' }}                                        // fullWidth
                                         type='number'
                                         required
                                         id="outlined-required"
                                         label="Discount"
-                                        value={addCategory.categoryType}
+                                        value={selectedProduct?.productDiscount || ""}
                                     // defaultValue="Nuts"
                                     />
 
 
                                 </Box>
-                                <Box sx={{ display: 'flex', justifyContent: 'start', marginLeft: '10px', gap: '20px' }}>
-                                    <Button onClick={() => { handleDeleteCategory(selectedCategory.categoryId) }} sx={{ background: 'red' }} variant='contained'>Delete</Button>
-                                    <Button onClick={() => { handleUpdateCategory(selectedCategory.categoryId) }} sx={{ background: 'orange' }} variant='contained'>Update </Button>
+                                <Box sx={{ display: selected > -1 ? 'flex' : 'flex', justifyContent: 'start', marginLeft: '0px', gap: '20px' }}>
+                                    <Button onClick={() => { handleDeleteCategory(selectedProduct?.productId) }} sx={{ background: 'red' }} variant='contained'>Delete</Button>
+                                    <Button onClick={() => { handleUpdateProduct(selectedProduct?.productId) }} sx={{ background: 'orange' }} variant='contained'>Update </Button>
                                 </Box>
                             </Paper>
 
@@ -270,7 +305,7 @@ const AdminProducts = () => {
                                         required
                                         id="outlined-required"
                                         label="Name"
-                                        value={addCategory.categoryName}
+                                        value={addCategory.categoryName || ""}
                                     // defaultValue="Category"
                                     />
                                     <FormControl fullWidth required sx={{ marginBlock: '10px', minWidth: 120 }}>
@@ -297,7 +332,7 @@ const AdminProducts = () => {
                                         sx={{ marginBlock: '10px' }}
                                         fullWidth
                                         required
-                                        value={addCategory.categoryImageUrl}
+                                        value={addCategory.categoryImageUrl || ""}
                                         id="outlined-required"
                                         label="Image Url"
                                     // defaultValue="image url"
@@ -310,7 +345,7 @@ const AdminProducts = () => {
                                         required
                                         id="outlined-required"
                                         label="Total Items"
-                                        value={addCategory.categoryType}
+                                        value={addCategory || ""}
                                     // defaultValue="Nuts"
                                     />
                                     <TextField
@@ -321,7 +356,7 @@ const AdminProducts = () => {
                                         required
                                         id="outlined-required"
                                         label="Purchasing Price"
-                                        value={addCategory.categoryType}
+                                        value={addCategory.categoryType || ""}
                                     // defaultValue="Nuts"
                                     />
                                     <TextField
@@ -332,24 +367,23 @@ const AdminProducts = () => {
                                         required
                                         id="outlined-required"
                                         label="Selling Price"
-                                        value={addCategory.categoryType}
+                                        value={addCategory.categoryType || ""}
                                     // defaultValue="Nuts"
                                     />
                                     <TextField
                                         onChange={handleAddTypeChange}
-                                        sx={{ margin: '10px' }}
-                                        // fullWidth
+                                        sx={{ margin: '10px 0px' }}                                        // fullWidth
                                         type='number'
                                         required
                                         id="outlined-required"
                                         label="Discount"
-                                        value={addCategory.categoryType}
+                                        value={addCategory.categoryType || ""}
                                     // defaultValue="Nuts"
                                     />
 
 
                                 </Box>
-                                <Box sx={{ display: 'flex', justifyContent: 'start', ml: "10px" }}>
+                                <Box sx={{ display: 'flex', justifyContent: 'start', ml: "0px" }}>
                                     <Button onClick={handleAddCategory} sx={{ background: 'orange' }} variant='contained'>Add To inventory</Button>
                                 </Box>
                             </Paper>

@@ -17,6 +17,7 @@ import store from './redux/store';
 import Admin from './pages/Admin/AdminPanel';
 import AdminCategories from './pages/Admin/AdminCategories';
 import AdminProducts from './pages/Admin/AdminProducts';
+import AdminApis from './pages/Admin/AdminApis';
 
 
 
@@ -73,6 +74,10 @@ const router = createBrowserRouter([
       {
         path: 'Products',
         element: <AdminProducts />,
+      },
+      {
+        path: 'apis',
+        element: <AdminApis />,
       }
     ]
 

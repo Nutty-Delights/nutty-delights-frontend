@@ -23,7 +23,7 @@ const AdminCategories = () => {
     const categories = useSelector(getCategories);
     const isLoading = useSelector(getCategoriesLoading);
     const isError = useSelector(getCategoriesError);
-    const [selected, setSelected] = useState(0);
+    const [selected, setSelected] = useState(-1);
     const [selectedCategory, setSelectedCategory] = useState({
         categoryId: '#1',
         categoryName: "name",
@@ -193,7 +193,7 @@ const AdminCategories = () => {
                                         value={selectedCategory?.categoryImageUrl}
                                     />
                                 </Box>
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <Box sx={{ display: 'flex', justifyContent: 'start', gap: '20px' }}>
                                     <Button onClick={() => { handleDeleteCategory(selectedCategory.categoryId) }} sx={{ background: 'red' }} variant='contained'>Delete</Button>
                                     <Button onClick={() => { handleUpdateCategory(selectedCategory.categoryId) }} sx={{ background: 'orange' }} variant='contained'>Update </Button>
                                 </Box>
@@ -233,7 +233,7 @@ const AdminCategories = () => {
                                     // defaultValue="image url"
                                     />
                                 </Box>
-                                <Box sx={{ display: 'flex', justifyContent: 'end' }}>
+                                <Box sx={{ display: 'flex', justifyContent: 'start' }}>
                                     <Button onClick={handleAddCategory} sx={{ background: 'orange' }} variant='contained'>Add Category</Button>
                                 </Box>
                             </Paper>

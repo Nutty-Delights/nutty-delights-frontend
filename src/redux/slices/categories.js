@@ -24,6 +24,7 @@ export const updateCategory = createAsyncThunk(
 
         const res = await CategoryDataService.updateCategory(id, data);
         console.log("inside update category", res);
+        // alert("updated in database");
         return res.data;
     }
 );
@@ -187,6 +188,7 @@ const categoriesSlice = createSlice({
             }
 
             console.log("New State after deleting", newState);
+
             return newState;
         })
         builder.addCase(deleteCategory.rejected, (state, action) => {

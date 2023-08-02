@@ -22,8 +22,11 @@ export const createProduct = createAsyncThunk(
 );
 export const updateProduct = createAsyncThunk(
     `${productsUrl}/updateProduct/`,
-    async ({ id, data }) => {
-        const res = await ProductDataService.updateProduct(id, data);
+    async (data) => {
+        console.log("id , data", data)
+        // var { productId } = data.product;
+        var product = data.product;
+        const res = await ProductDataService.updateProduct(product.productId, product);
         return res.data;
     }
 );
@@ -81,7 +84,7 @@ const productSlice = createSlice({
         })
         builder.addCase(createProduct.fulfilled, (state, action) => {
             console.log(state, action);
-            const { Product } = action.payload;
+            const Product = action.payload;
             let newState = {
                 ...state,
                 isLoading: false,
@@ -148,6 +151,7 @@ const productSlice = createSlice({
             }
             return newState;
         })
+
         builder.addCase(getAllProducts.fulfilled, (state, action) => {
             console.log(state, action);
             let newState = {
@@ -218,11 +222,24 @@ const productSlice = createSlice({
             return newState;
         })
         builder.addCase(updateProduct.fulfilled, (state, action) => {
-            const index = state.findIndex(Product => Product.id === action.payload.id);
-            state.products[index] = {
-                ...state.products[index],
+
+
+            const index = state.products.findIndex(Product => Product.productId === action.payload.productId);
+            console.log(action.payload, index)
+            var updatedArray = [...state.products];
+            updatedArray[index] = {
+                ...updatedArray[index],
                 ...action.payload
-            };
+            }
+
+            const newState = {
+                ...state,
+                isLoading: false,
+                isError: false,
+                products: updatedArray
+            }
+
+            return newState;
         })
         builder.addCase(updateProduct.rejected, (state, action) => {
             console.log(state, action);
