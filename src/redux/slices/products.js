@@ -127,6 +127,8 @@ const productSlice = createSlice({
                 }
 
             }
+
+            console.log(newState);
             return newState;
         })
         builder.addCase(getProduct.rejected, (state, action) => {
@@ -263,9 +265,18 @@ const productSlice = createSlice({
         })
         builder.addCase(deleteProduct.fulfilled, (state, action) => {
             console.log(state, action);
-            return state.products.filter((curr) => {
-                return curr.id !== action.payload;
-            });
+            var filterProducts = state.products.filter((pro) => pro.productId !== action.payload)
+            var newState = {
+                ...state,
+                isLoading: false,
+                isError: false,
+                products: filterProducts
+
+            }
+
+            console.log("New State after deleting", newState);
+
+            return newState;
         })
         builder.addCase(deleteProduct.rejected, (state, action) => {
             console.log(state, action);
@@ -284,7 +295,7 @@ const productSlice = createSlice({
 
 export const getProducts = (state) => state.products.products;
 export const getProductsByCategory = (state) => state.products.productsByCategory;
-export const getProductsById = (state) => state.products.cuurentProduct;
+export const getProductsById = (state) => state.products?.currentProduct;
 export const getProductsLoading = (state) => state.products.isLoading;
 export const getProductsError = (state) => state.products.isError;
 

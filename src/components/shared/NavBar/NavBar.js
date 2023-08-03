@@ -32,7 +32,7 @@ const NavBar = (props) => {
       icon: (color = 'black') => <CategoryIcon sx={{ color: color }} />
     },
     {
-      name: "Offers",
+      name: "Explore",
       link: '/products',
       icon: (color = 'black') => <DealsIcons sx={{ color: color }} />
     },

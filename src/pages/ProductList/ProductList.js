@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import CategoryCarousel from './CategoryCarousel'
 import ProductFilter from './ProductFilter'
 import { Box, Button, Paper, Skeleton, Typography } from '@mui/material'
-import { useSearchParams } from 'react-router-dom'
+import { NavLink, useSearchParams } from 'react-router-dom'
 import './productlist.css'
 import Image from 'mui-image'
 import { useDispatch, useSelector } from 'react-redux'
@@ -54,14 +54,65 @@ function ProductList() {
                     )) : isError ? "Something Went Wrong! \n Please try again" :
                         products?.map((product, index) => (
                             <Paper sx={{ borderRadius: '15px !important', }} key={product.productId} elevation={3}>
-                                <Image style={{ padding: '10px' }} duration={100} showLoading height={300} src={product.productImageUrl}></Image>
-                                <Box sx={{ padding: '10px' }}>
-                                    <Typography sx={{ fontWeight: 'bold', color: 'grey', padding: '5px' }}>{product.productName}</Typography>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                        <Box sx={{ display: 'flex', padding: '5px', alignItems: 'center' }}>
-                                            <Typography sx={{ fontWeight: 'bold', fontSize: '18px' }}>{`₹ ${product.productPrice}`}</Typography>
-                                            <Typography sx={{ color: 'grey', textDecoration: 'line-through', marginLeft: '5px', fontSize: '17px' }}>{`₹ ${product.productPrice + product.productDiscount}`}</Typography>
-                                            <Typography sx={{ color: "orange", marginLeft: '5px', fontWeight: 'bold' }}>{`${Math.round(product.productDiscount * 100 / (product.productPrice + product.productDiscount))}% OFF`}</Typography>
+                                <NavLink to={`/pid=${product.productId}`}>
+                                    <Image
+                                        style={{ padding: '10px' }}
+                                        duration={100}
+                                        showLoading
+                                        height={200}
+                                        fit='contain'
+                                        src={product.productImageUrl}>
+
+                                    </Image>
+                                </NavLink>
+                                <Box
+                                    sx={{
+                                        padding: '10px'
+                                    }}>
+                                    <Typography
+                                        sx={{
+                                            fontWeight: 'bold',
+                                            color: 'grey',
+                                            padding: '5px'
+                                        }}
+                                    >{product.productName}
+                                    </Typography>
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'space-between'
+                                        }}>
+                                        <Box
+                                            sx={{
+                                                display: 'flex',
+                                                padding: '5px',
+                                                alignItems: 'center'
+                                            }}>
+                                            <Typography
+                                                sx={{
+                                                    fontWeight: 'bold',
+                                                    fontSize: '18px'
+                                                }}>
+                                                {`₹ ${product.productPrice}`}
+                                            </Typography>
+                                            <Typography
+                                                sx={{
+                                                    color: 'grey',
+                                                    textDecoration: 'line-through',
+                                                    marginLeft: '5px',
+                                                    fontSize: '17px'
+                                                }}>
+                                                {`₹ ${product.productPrice + product.productDiscount}`}
+                                            </Typography>
+                                            <Typography
+                                                sx={{
+                                                    color: "orange",
+                                                    marginLeft: '5px',
+                                                    fontWeight: 'bold'
+                                                }}>
+                                                {`${Math.round(product.productDiscount * 100 / (product.productPrice + product.productDiscount))}% OFF`}
+                                            </Typography>
                                         </Box>
                                         <Box sx={{ display: 'flex', padding: '5px', alignItems: 'center' }}>
                                             <Ratings sx={{ color: 'green', fontSize: '16px' }} />
@@ -69,19 +120,38 @@ function ProductList() {
                                         </Box>
                                     </Box>
                                     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                                        <Button sx={{
-                                            width: "100%",
-                                            margin: '15px',
-                                            color: 'green',
-                                            fontWeight: 'bold',
-                                            borderRadius: '20px',
-                                            borderColor: 'green',
-                                            ':hover': {
-                                                backgroundColor: 'green', color: 'white', borderColor: 'white'
-                                            }
-                                        }} variant='outlined' endIcon={<ShoppingBag />}>
-                                            Add To Bag
-                                        </Button>
+
+                                        {
+                                            product.productStockCount <= 0 ?
+                                                <Button
+                                                    // disabled={!product.productStockCount}
+                                                    sx={{
+                                                        pointerEvents: 'none',
+                                                        width: "100%",
+                                                        margin: '15px',
+                                                        color: 'red',
+                                                        fontWeight: 'bold',
+                                                        borderRadius: '20px',
+                                                        borderColor: 'white',
+                                                        ':hover': {
+                                                            backgroundColor: 'white', color: 'red', borderColor: 'white'
+                                                        }
+                                                    }} variant='outlined' >
+                                                    Out Of Stock
+                                                </Button> : <Button sx={{
+                                                    width: "100%",
+                                                    margin: '15px',
+                                                    color: 'green',
+                                                    fontWeight: 'bold',
+                                                    borderRadius: '20px',
+                                                    borderColor: 'green',
+                                                    ':hover': {
+                                                        backgroundColor: 'green', color: 'white', borderColor: 'white'
+                                                    }
+                                                }} variant='outlined' endIcon={<ShoppingBag />}>
+                                                    Add To Bag
+                                                </Button>
+                                        }
                                     </Box>
 
                                 </Box>

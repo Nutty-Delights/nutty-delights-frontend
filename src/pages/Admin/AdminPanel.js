@@ -4,11 +4,18 @@ import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import CategoryIcon from '@mui/icons-material/Category';
 import AllInboxIcon from '@mui/icons-material/AllInbox';
 import SensorsIcon from '@mui/icons-material/Sensors';
+import OrderIcon from '@mui/icons-material/ShoppingBag';
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 
 function Admin() {
 
 
     const actions = [
+        {
+            "name": "Orders",
+            "link": 'orders',
+            "icon": <OrderIcon sx={{ color: 'orange', fontSize: '20px' }} />
+        },
         {
             "name": "Categories",
             "link": 'categories',
@@ -18,6 +25,11 @@ function Admin() {
             "name": "Products",
             "link": 'products',
             "icon": <AllInboxIcon sx={{ color: 'orange', fontSize: '20px' }} />
+        },
+        {
+            "name": "Payments",
+            "link": 'payments',
+            "icon": <CurrencyRupeeIcon sx={{ color: 'orange', fontSize: '20px' }} />
         },
         {
             "name": "APIs",

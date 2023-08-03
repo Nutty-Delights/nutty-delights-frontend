@@ -18,6 +18,8 @@ import Admin from './pages/Admin/AdminPanel';
 import AdminCategories from './pages/Admin/AdminCategories';
 import AdminProducts from './pages/Admin/AdminProducts';
 import AdminApis from './pages/Admin/AdminApis';
+import AdminOrders from './pages/Admin/AdminOrders';
+import AdminPayments from './pages/Admin/AdminPayments';
 
 
 
@@ -40,7 +42,7 @@ const router = createBrowserRouter([
         element: <Categories />
       },
       {
-        path: 'offers',
+        path: '/products',
         element: <Offers />
       },
       {
@@ -70,6 +72,14 @@ const router = createBrowserRouter([
       {
         path: 'categories',
         element: <AdminCategories />,
+      },
+      {
+        path: 'orders',
+        element: <AdminOrders />,
+      },
+      {
+        path: 'payments',
+        element: <AdminPayments />,
       },
       {
         path: 'Products',
