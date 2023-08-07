@@ -20,6 +20,8 @@ import AdminProducts from './pages/Admin/AdminProducts';
 import AdminApis from './pages/Admin/AdminApis';
 import AdminOrders from './pages/Admin/AdminOrders';
 import AdminPayments from './pages/Admin/AdminPayments';
+import Register from './pages/Auth/Register';
+import Login from './pages/Auth/Login';
 
 
 
@@ -41,10 +43,10 @@ const router = createBrowserRouter([
         path: 'categories',
         element: <Categories />
       },
-      {
-        path: '/products',
-        element: <Offers />
-      },
+      // {
+      //   path: '/products',
+      //   element: <Offers />
+      // },
       {
         path: 'bulk-orders',
         element: <BulkOrder />
@@ -53,14 +55,14 @@ const router = createBrowserRouter([
         path: 'delivery',
         element: <Delivery />
       },
-      {
-        path: 'products/',
-        element: <ProductList />,
-      },
-      {
-        path: ':productId',
-        element: <ProductPage />
-      },
+      // {
+      //   path: 'products/',
+      //   element: <ProductList />,
+      // },
+      // {
+      //   path: ':productId',
+      //   element: <ProductPage />
+      // },
 
 
     ]
@@ -90,8 +92,25 @@ const router = createBrowserRouter([
         element: <AdminApis />,
       }
     ]
+  },
+  {
+    path: '/register',
+    element: <Register />
 
-  }
+  },
+  {
+    path: '/login',
+    element: <Login />
+
+  },
+  {
+    path: '/products/',
+    element: <ProductList />,
+  },
+  {
+    path: '/:productId',
+    element: <ProductPage />
+  },
 ]);
 
 

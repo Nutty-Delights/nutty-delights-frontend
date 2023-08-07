@@ -6,6 +6,7 @@ import { useLocation } from 'react-router-dom';
 import './productPage.css'
 import { Box, Button, Divider, Skeleton, Typography } from '@mui/material';
 import ShoppingBag from '@mui/icons-material/ShoppingBagOutlined';
+import NavBar from '../../components/shared/NavBar/NavBar';
 
 
 function ProductPage() {
@@ -20,55 +21,58 @@ function ProductPage() {
     }, [productId])
     return (
 
-        <Box sx={{
-            display: {
-                'xs': 'block',
-                'sm': 'block',
-                'md': 'flex',
-                'lg': 'flex',
-                'xl': 'flex'
-            }
-        }} className='product-page'>
-            <div className='product-images'>
+        <div>
+            <NavBar />
+            <Box sx={{
+                display: {
+                    'xs': 'block',
+                    'sm': 'block',
+                    'md': 'flex',
+                    'lg': 'flex',
+                    'xl': 'flex'
+                }
+            }} className='product-page'>
+                <div className='product-images'>
 
-                <Image height={'50vh'} fit='contain' showLoading duration={100} src={product?.productImageUrl}></Image>
-            </div>
-            <div className='product-details'>
-                <Typography>{product?.productName}</Typography>
-                <Typography>{product?.productDescription + "Product Description Goes Here"}</Typography>
-                <Divider></Divider>
-                <Typography>{product?.productPrice}</Typography>
-                <Divider></Divider>
-                <div className='buy-actions'>
-                    <Button sx={{
-                        width: "100%",
-                        marginBlock: '15px',
-                        color: 'orange',
-                        fontWeight: 'bold',
-                        borderRadius: '20px',
-                        borderColor: 'Orange',
-                        ':hover': {
-                            backgroundColor: 'green', color: 'white', borderColor: 'white'
-                        }
-                    }} variant='outlined' endIcon={<ShoppingBag />}>
-                        Buy Now
-                    </Button>
-                    <Button sx={{
-                        width: "100%",
-                        marginBlock: '15px',
-                        color: 'green',
-                        fontWeight: 'bold',
-                        borderRadius: '20px',
-                        borderColor: 'green',
-                        ':hover': {
-                            backgroundColor: 'green', color: 'white', borderColor: 'white'
-                        }
-                    }} variant='outlined' endIcon={<ShoppingBag />}>
-                        Add To Bag
-                    </Button>
+                    <Image height={'50vh'} fit='contain' showLoading duration={100} src={product?.productImageUrl}></Image>
                 </div>
-            </div>
-        </Box>
+                <div className='product-details'>
+                    <Typography>{product?.productName}</Typography>
+                    <Typography>{product?.productDescription + "Product Description Goes Here"}</Typography>
+                    <Divider></Divider>
+                    <Typography>{product?.productPrice}</Typography>
+                    <Divider></Divider>
+                    <div className='buy-actions'>
+                        <Button sx={{
+                            width: "100%",
+                            marginBlock: '15px',
+                            color: 'orange',
+                            fontWeight: 'bold',
+                            borderRadius: '20px',
+                            borderColor: 'Orange',
+                            ':hover': {
+                                backgroundColor: 'green', color: 'white', borderColor: 'white'
+                            }
+                        }} variant='outlined' endIcon={<ShoppingBag />}>
+                            Buy Now
+                        </Button>
+                        <Button sx={{
+                            width: "100%",
+                            marginBlock: '15px',
+                            color: 'green',
+                            fontWeight: 'bold',
+                            borderRadius: '20px',
+                            borderColor: 'green',
+                            ':hover': {
+                                backgroundColor: 'green', color: 'white', borderColor: 'white'
+                            }
+                        }} variant='outlined' endIcon={<ShoppingBag />}>
+                            Add To Bag
+                        </Button>
+                    </div>
+                </div>
+            </Box>
+        </div>
     )
 }
 

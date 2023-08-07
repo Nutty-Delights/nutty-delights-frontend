@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import CategoryCarousel from './CategoryCarousel'
 import ProductFilter from './ProductFilter'
-import { Box, Button, Paper, Skeleton, Typography } from '@mui/material'
+import { Box, Button, Divider, Paper, Skeleton, Typography } from '@mui/material'
 import { NavLink, useSearchParams } from 'react-router-dom'
 import './productlist.css'
 import Image from 'mui-image'
@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getAllProducts, getAllProductsByCategory, getProductsError, getProductsLoading, getProducts, getProductsByCategory } from '../../redux/slices/products'
 import Ratings from '@mui/icons-material/StarRounded';
 import ShoppingBag from '@mui/icons-material/ShoppingBagOutlined';
+import NavBar from '../../components/shared/NavBar/NavBar'
+import Footer from '../../components/shared/Footer/Footer'
 
 
 
@@ -32,6 +34,7 @@ function ProductList() {
     return (
 
         <div >
+            <NavBar />
             {/* <CategoryCarousel /> */}
 
             <Box className='product-list-box'>
@@ -159,7 +162,11 @@ function ProductList() {
                         ))
                 }
             </div>
+            <Divider sx={{ margin: '20px' }} />
+            <div style={{ margin: '40px' }}></div>
 
+            {/* <CategoryCarousel /> */}
+            <Footer />
         </div>
     )
 }

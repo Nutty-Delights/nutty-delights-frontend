@@ -3,7 +3,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 //https://dribbble.com/shots/19614098-Shopcart-E-Commerce-Product-Page
 
 import AppBar from '@mui/material/AppBar';
-import { Box, CssBaseline, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Toolbar, Tooltip, Typography, makeStyles } from '@mui/material';
+import { Box, Button, CssBaseline, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Toolbar, Tooltip, Typography, makeStyles } from '@mui/material';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../../assets/images/logo-png.png'
 import Image from 'mui-image';
@@ -51,11 +51,12 @@ const NavBar = (props) => {
   ];
 
   const navUserActionItems = [
-    {
-      name: 'Account',
-      link: '/account',
-      icon: <AccountIcon />
-    },
+    // {
+    //   name: 'Account',
+    //   link: '/account',
+    //   icon: <AccountIcon />
+    // },
+
     {
       name: 'Cart',
       link: '/cart',
@@ -99,8 +100,8 @@ const NavBar = (props) => {
     <div>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <AppBar sx={{ zIndex: '5', marginBottom: '10px', minHeight: '0 !important' }} position='relative' className='app-bar' elevation={0} component="nav">
-          <Toolbar sx={{ marginInline: '10px', padding: '0px !important ', minHeight: 'none !important' }}>
+        <AppBar sx={{ zIndex: '5', marginBlock: '10px', minHeight: '0 !important' }} position='relative' className='app-bar' elevation={0} component="nav">
+          <Toolbar sx={{ paddingInline: '20px !important', minHeight: 'none !important' }}>
             <IconButton
               aria-label="open drawer"
               // edge="start"
@@ -110,7 +111,9 @@ const NavBar = (props) => {
               <MenuIcon />
             </IconButton>
             <Box sx={{ marginRight: "10px" }}>
-              <Image style={{ display: { sm: 'none', md: 'flex' }, }} duration={0} src={logo} fit='cover' height='42px' width='124px' />
+              <NavLink replace={true} to='/'>
+                <Image style={{ display: { sm: 'none', md: 'flex' }, }} duration={0} src={logo} fit='cover' height='42px' width='124px' />
+              </NavLink>
             </Box>
             <Box sx={{ display: { xs: 'none', sm: 'none', md: 'flex' }, flexGrow: 1, }}>
               {
@@ -126,25 +129,57 @@ const NavBar = (props) => {
                 ))
               }
             </Box>
-            <Box sx={{ display: { xs: 'flex', sm: 'flex' }, justifyContent: 'space-between' }}>
+            <Box sx={{ display: { xs: 'flex', sm: 'flex', marginRight: '30px' }, justifyContent: 'space-between' }}>
 
-              <Box sx={{ display: { xs: 'flex', md: 'flex', sm: 'flex' }, }}>
+              {<Box sx={{ display: { xs: 'none', md: 'none', sm: 'flex' }, }}>
                 <SearchBar width={'fit-content'} marginRight={'3vh'} />
+              </Box>}
+
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+
+                <AccountIcon />
+                <NavLink to={'/login'} style={{ color: 'black', textDecoration: "none", }}>
+                  <Typography sx={{ fontWeight: 'bold' }}>
+                    {"Login"}
+                  </Typography>
+
+                </NavLink>
+                <Box sx={{ display: "flex", flex: '1', marginRight: '20px' }}>
+
+                </Box>
+                <ShoppingCartIcon />
+                <NavLink to={'/cart'} style={{ color: 'black', textDecoration: "none", }}>
+                  <Typography sx={{ fontWeight: 'bold' }}>
+                    {"Cart"}
+                  </Typography>
+
+                </NavLink>
+                {/* <Button sx={{
+                  padding: '6px',
+                  borderRadius: '14px',
+                  borderColor: '#80808057'
+
+                }} variant='outlined'>
+                  <NavLink to={'/login'} style={{ color: 'black', textDecoration: "none", }}>
+                    <Typography sx={{ fontWeight: 'bold' }}>
+                      {"Login/Register"}
+                    </Typography>
+
+                  </NavLink>
+                </Button> */}
               </Box>
-              {navUserActionItems.map((item, index) => (
+              {/* {navUserActionItems.map((item, index) => (
                 <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
 
 
                   <NavLink to={item.link} style={{ color: 'black', textDecoration: "none", marginRight: "1rem" }}>
-                    {/* <Typography sx={{ fontWeight: 'bold' }}>
-                      {item.name}
-                    </Typography> */}
+                   
                     <Tooltip title={item.name}>
                       {item.icon}
                     </Tooltip>
                   </NavLink>
                 </Box>
-              ))}
+              ))} */}
 
             </Box>
           </Toolbar>

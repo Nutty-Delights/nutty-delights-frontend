@@ -29,7 +29,7 @@ function CategoryCarousel() {
         speed: 2000,
         slidesToShow: 5,
         slidesToScroll: 1,
-        autoplay: true,
+        // autoplay: true,
         // // fade: true,
         // cssEase: 'linear',
         centerMode: true,
@@ -62,7 +62,8 @@ function CategoryCarousel() {
             <Skeleton animation="wave" />
             <Skeleton animation={false} />
         </Box>
-            : <div className='slider' style={{ marginInline: '30px' }}>
+            : <div className='slider' style={{ marginInline: '30px', }}>
+
                 <Slider   {...settings}>
                     {categories?.map((category, index) => (
                         <Box key={index} sx={{ height: 'fit-content', background: 'white', margin: '0px', padding: '10px' }}>
