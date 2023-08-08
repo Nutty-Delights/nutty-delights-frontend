@@ -3,6 +3,6 @@
     align-items: center;
     /* margin-block: 50px; */
     justify-content: center;
-    /* min-height: 100vh; */
-    margin-inline: 20px;
+    min-height: 100vh;
+    margin-inline: 0px;
 }

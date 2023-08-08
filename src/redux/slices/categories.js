@@ -120,7 +120,7 @@ const categoriesSlice = createSlice({
                 ...state,
                 categories: [...state.categories],
                 isLoading: false,
-                isError: true,
+                isError: action,
             }
 
 

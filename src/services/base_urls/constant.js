@@ -2,6 +2,6 @@
 export const URLs = {
     categories: 'categories',
     products: '',
-    users: ''
+    users: 'auth'
 }
 

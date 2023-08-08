@@ -46,7 +46,7 @@ const Categories = () => {
                             <Skeleton animation="wave" />
                             <Skeleton animation={false} />
                         </Box>
-                    )) : isError ? "Something Went Wrong! \n Please try again" :
+                    )) : isError ? isError.error.message :
                         categories?.map((category) => {
                             console.log("category", category)
                             return <Category key={category.categoryId} category={category} />

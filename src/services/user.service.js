@@ -6,23 +6,26 @@ import { URLs } from './base_urls/constant';
 class UserService {
 
     userUrl = URLs.users;
-    userLogin(token) {
-        return http.post(`${this.userUrl}/login`, token);
-    }
-    userLogout(token) {
-        return http.post(`${this.userUrl}/logout`, token);
-    }
+
     userRegisteration(data) {
-        return http.post(`${this.userUrl}/register`, data);
+        return http.post(`/${this.userUrl}/register`, data);
     }
+    userLogin(data) {
+        console.log("Login here", data);
+        return http.post(`/${this.userUrl}/login`, data);
+    }
+    // userLogout(token) {
+    //     return http.post(`/${this.userUrl}/logout`, token);
+    // }
 
-    deleteUser(token) {
-        return http.delete(`${this.userUrl}/user/delete/${token}`);
-    }
 
-    getUserAccountDetails(token) {
-        return http.get(`${this.userUrl}/user/${token}`);
-    }
+    // deleteUser(token) {
+    //     return http.delete(`${this.userUrl}/user/delete/${token}`);
+    // }
+
+    // getUserAccountDetails(token) {
+    //     return http.get(`${this.userUrl}/user/${token}`);
+    // }
 
 
 }
