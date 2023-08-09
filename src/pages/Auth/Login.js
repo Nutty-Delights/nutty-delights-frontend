@@ -12,7 +12,7 @@ import NavBar from '../../components/shared/NavBar/NavBar';
 import validator from 'validator';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import { getUser, loginUser } from '../../redux/slices/user';
+import { getUser, getUserProfile, loginUser } from '../../redux/slices/user';
 import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 
@@ -25,16 +25,19 @@ const Login = () => {
     const [passWordError, setPasswordError] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setLoading] = useState(false);
-    const token = useSelector(getUser);
+    const jwt = localStorage.getItem('jwt');
+    const user = useSelector(getUser);
+    console.log(jwt, user);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log(localStorage.getItem('jwt'))
-        if (localStorage.getItem('jwt')) {
-            navigate('/');
+        if (jwt) {
+            dispatch(getUserProfile(jwt))
+            navigate(-1)
         }
-    }, [localStorage.getItem('jwt')])
+
+    }, [jwt])
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
@@ -169,7 +172,7 @@ const Login = () => {
                                 // '& > :not(style)': { m: 1, width: '25ch' },
                             }}
                             noValidate
-                            autoComplete="off"
+                            autoComplete="on"
                         >
                             <Box sx={{ marginBlock: '20px', gap: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'space- evenly' }}>
                                 <TextField
@@ -197,6 +200,7 @@ const Login = () => {
                                     value={email || ""}
                                     onChange={handleEmailChange}
                                     error={emailError}
+
                                 />
                                 <TextField
                                     sx={{

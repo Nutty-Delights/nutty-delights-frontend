@@ -4,7 +4,7 @@ import CategoryDataService from '../../services/category.service';
 
 
 const initialState = {
-    categories: [],
+    // categories: [],
     isLoading: false,
     isError: false
 };

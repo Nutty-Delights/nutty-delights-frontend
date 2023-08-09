@@ -14,6 +14,16 @@ class UserService {
         console.log("Login here", data);
         return http.post(`/${this.userUrl}/login`, data);
     }
+
+    getUser(token) {
+        return http.get(`/users/profile`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
+    }
+
+
     // userLogout(token) {
     //     return http.post(`/${this.userUrl}/logout`, token);
     // }

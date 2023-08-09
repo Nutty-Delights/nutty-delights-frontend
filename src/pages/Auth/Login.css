@@ -1,8 +1,8 @@
 .login-panel {
     display: flex;
     align-items: center;
-    /* margin-block: 50px; */
+    margin-block: 50px;
     justify-content: center;
-    min-height: 100vh;
+    /* min-height: 100vh; */
     margin-inline: 0px;
 }

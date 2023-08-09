@@ -22,6 +22,7 @@ import AdminOrders from './pages/Admin/AdminOrders';
 import AdminPayments from './pages/Admin/AdminPayments';
 import Register from './pages/Auth/Register';
 import Login from './pages/Auth/Login';
+import UserAccount from './pages/UserAccount/UserAccount';
 
 
 
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
       {
         path: 'delivery',
         element: <Delivery />
+      },
+      {
+        path: 'user/account',
+        element: <UserAccount />
       },
       // {
       //   path: 'products/',

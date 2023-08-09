@@ -20,9 +20,11 @@ const Categories = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getAllCategories());
+
+        if (!categories)
+            dispatch(getAllCategories());
         // console.log("")
-    }, [dispatch])
+    }, [])
 
 
 

@@ -5,8 +5,8 @@ import ProductDataService from '../../services/product.service';
 
 const initialState = {
     currentProduct: {},
-    products: [],
-    productsByCategory: [],
+    // products: [],
+    // productsByCategory: [],
     isLoading: false,
     isError: false
 };

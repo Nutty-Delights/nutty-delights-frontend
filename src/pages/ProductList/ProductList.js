@@ -27,7 +27,8 @@ function ProductList() {
 
 
     useEffect(() => {
-        dispatch(getAllProductsByCategory({ categoryId }))
+        if (!products)
+            dispatch(getAllProductsByCategory({ categoryId }))
     }, [categoryId])
 
 
@@ -60,8 +61,8 @@ function ProductList() {
                                 <NavLink to={`/pid=${product.productId}`}>
                                     <Image
                                         style={{ padding: '10px' }}
-                                        duration={100}
-                                        showLoading
+                                        duration={0}
+                                        // showLoading
                                         height={200}
                                         fit='contain'
                                         src={product.productImageUrl}>

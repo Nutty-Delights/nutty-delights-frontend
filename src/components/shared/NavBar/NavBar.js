@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 //https://dribbble.com/shots/19614098-Shopcart-E-Commerce-Product-Page
 
@@ -16,6 +16,10 @@ import DealsIcons from '@mui/icons-material/LocalOfferOutlined';
 import BulkOrderIcon from '@mui/icons-material/CasesOutlined';
 import CombosIcon from '@mui/icons-material/AcUnitOutlined';
 import DeliveryIcon from '@mui/icons-material/LocalShippingOutlined';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUser, getUserProfile, logoutUser } from '../../../redux/slices/user';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 
 
@@ -50,19 +54,7 @@ const NavBar = (props) => {
 
   ];
 
-  const navUserActionItems = [
-    // {
-    //   name: 'Account',
-    //   link: '/account',
-    //   icon: <AccountIcon />
-    // },
 
-    {
-      name: 'Cart',
-      link: '/cart',
-      icon: <ShoppingCartIcon />
-    },
-  ];
 
   const drawerWidth = 240;
   const { window } = props;
@@ -71,7 +63,42 @@ const NavBar = (props) => {
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  }
+
+  const handleAccount = () => {
+    setAnchorEl(null);
+    dispatch(getUserProfile(localStorage.getItem('jwt')));
+    navigate('/user/account');
+  }
+  const handleLogout = () => {
+
+    setAnchorEl(null);
+    dispatch(logoutUser());
+    navigate('/')
+
+
+  }
+
+
+
+
+  const user = useSelector(getUser);
+  console.log("User", user);
+  useEffect(() => {
+    if (!user)
+      dispatch(getUserProfile(localStorage.getItem('jwt')));
+  }, [])
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{}}>
       <Image style={{ padding: '10px' }} duration={0} src={logo} fit='cover' height='60px' width='130px' />
@@ -137,13 +164,53 @@ const NavBar = (props) => {
 
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
 
-                <AccountIcon />
-                <NavLink to={'/login'} style={{ color: 'black', textDecoration: "none", }}>
-                  <Typography sx={{ fontWeight: 'bold' }}>
-                    {"Login"}
-                  </Typography>
 
-                </NavLink>
+                {
+                  localStorage.getItem('jwt') ?
+                    <Box>
+                      <Button
+                        disableRipple
+                        aria-controls={open ? 'basic-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        onClick={handleClick}
+                        style={{ color: 'black', textDecoration: "none", }
+                        }>
+                        <AccountIcon />
+                        <Typography sx={{ fontWeight: 'bold', ml: '2px' }}>
+                          {user ? `${user?.firstName}` : ""}
+                        </Typography>
+
+
+                      </Button>
+                      <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                        MenuListProps={{
+                          'aria-labelledby': 'basic-button',
+                        }}
+                      >
+                        <MenuItem onClick={handleAccount}>Profile</MenuItem>
+                        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                      </Menu>
+                    </Box> :
+                    <NavLink to={'/login'} style={{ color: 'black', textDecoration: "none", display: 'flex' }}>
+                      <AccountIcon />
+                      <Typography sx={{ fontWeight: 'bold' }}>
+                        {"Login"}
+                      </Typography>
+
+                      {/* <Button variant='outlined' sx={{ border: ' 1px solid orange' }}>
+                        <Typography sx={{ fontWeight: 'bold', color: 'orange', }}>
+                          {"Login/Register"}
+                        </Typography>
+                      </Button> */}
+
+                    </NavLink>
+
+                }
                 <Box sx={{ display: "flex", flex: '1', marginRight: '20px' }}>
 
                 </Box>

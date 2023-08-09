@@ -13,7 +13,7 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import Right from '@mui/icons-material/TaskAltOutlined';
 import Error from '@mui/icons-material/ErrorOutlineOutlined';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUser, getUserError, getUserLoading, registerUser } from '../../redux/slices/user';
+import { getUser, getUserError, getUserLoading, getUserProfile, registerUser } from '../../redux/slices/user';
 import { ToastContainer, toast } from 'react-toastify';
 
 
@@ -39,17 +39,19 @@ const Register = () => {
     const [isEmpty, setEmpty] = useState(true);
     const isLoading = useSelector(getUserLoading);
     const isError = useSelector(getUserError);
-    const token = useSelector(getUser);
+    const jwt = localStorage.getItem('jwt');
+    const user = useSelector(getUser);
+    console.log(jwt, user);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const tokenLocal = localStorage.getItem('jwt');
 
     useEffect(() => {
-        console.log(tokenLocal)
-        if (tokenLocal) {
-            navigate('/');
+        if (jwt) {
+            dispatch(getUserProfile(jwt))
+            navigate(-1)
         }
-    }, [tokenLocal])
+
+    }, [jwt])
 
     const handleNameChange = (e) => {
         setName(e.target.value);
@@ -98,7 +100,7 @@ const Register = () => {
             emailError ||
             mobile === "" ||
             mobile === undefined ||
-            mobile.length < 10 ||
+            mobile.length !== 10 ||
             password === '' ||
             password === undefined ||
             password.length < 6
@@ -107,7 +109,7 @@ const Register = () => {
             console.log("Error in one of the field");
             setNameError((name === '' || name === undefined));
             setShowEmailError((email === '' || email === undefined || emailError));
-            setMobileError((mobile === "" || mobile === undefined || mobile.length < 10))
+            setMobileError((mobile === "" || mobile === undefined || mobile.length !== 10))
             setPasswordError((password === undefined || password.length < 6))
 
 
@@ -119,7 +121,7 @@ const Register = () => {
 
             setNameError((name === '' || name === undefined));
             setShowEmailError((email === '' || email === undefined || emailError));
-            setMobileError((mobile === "" || mobile === undefined || mobile.length < 10))
+            setMobileError((mobile === "" || mobile === undefined || mobile.length !== 10))
             setPasswordError((password === undefined || password.length < 6))
 
             const userName = name.trim().split(/\s+/);
