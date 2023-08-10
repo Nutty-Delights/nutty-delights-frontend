@@ -21,7 +21,7 @@ const AdminProducts = () => {
     const isError = useSelector(getProductsError);
     const [selected, setSelected] = useState(-1);
 
-    const [selectedProduct, setselectedProduct] = useState(products[0]);
+    const [selectedProduct, setselectedProduct] = useState(products ? products[0] : {});
     // const [selectedProduct, setselectedProduct] = useState({
     //     categoryId: '#1',
     //     categoryName: "name",
@@ -181,11 +181,14 @@ const AdminProducts = () => {
     }
 
     const handleRefresh = () => {
+
         dispatch(getAllProductsByCategory({ categoryId }))
     }
     useEffect(() => {
-        dispatch(getAllProductsByCategory({ categoryId }))
-        dispatch(getAllCategories());
+        if (!products) {
+            dispatch(getAllProductsByCategory({ categoryId }))
+            dispatch(getAllCategories());
+        }
     }, [categoryId, dispatch])
 
 

@@ -16,7 +16,7 @@ import { getUser, getUserProfile, loginUser } from '../../redux/slices/user';
 import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 
-const Login = () => {
+const Login = ({ setAuthForm }) => {
 
 
     const [email, setEmail] = useState("");
@@ -27,6 +27,7 @@ const Login = () => {
     const [isLoading, setLoading] = useState(false);
     const jwt = localStorage.getItem('jwt');
     const user = useSelector(getUser);
+    const token = useSelector((state) => state?.user?.token)
     console.log(jwt, user);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -34,10 +35,10 @@ const Login = () => {
     useEffect(() => {
         if (jwt) {
             dispatch(getUserProfile(jwt))
-            navigate(-1)
+            // navigate(-1)
         }
 
-    }, [jwt])
+    }, [token])
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
@@ -101,6 +102,10 @@ const Login = () => {
             console.log(userData);
             // setLoading(true);
             dispatch(loginUser(userData));
+            if (jwt) {
+                dispatch(getUserProfile(jwt))
+                // navigate(-1)
+            }
 
 
         }
@@ -123,6 +128,7 @@ const Login = () => {
                     'md': 'flex',
                     'lg': 'flex'
                 }
+
             }} className='login-panel'>
                 {/* <Image style={{ display: { 'xs': 'none', 'sm': 'none', 'md': 'none' }, margin: '15px' }} src={login} /> */}
 
@@ -131,14 +137,14 @@ const Login = () => {
                     elevation={2}
                     sx={{
                         // border: '1px solid rgb(0 0 0 / 18%)',
-                        paddingInline: '15px', paddingBlock: '0px', width: {
-                            'xs': "80vw",
-                            'sm': "80vw",
-                            'md': "40vw",
+                        paddingInline: '10px', width: {
+                            // 'xs': "100vw",
+                            // 'sm': "90vw",
+                            'md': "30vw",
 
                         }
                     }} variant='elevation'>
-                    <CardContent sx={{ paddingBottom: '0px !important' }}>
+                    <CardContent sx={{}}>
 
                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <NavLink replace={true} to='/'>
@@ -160,8 +166,8 @@ const Login = () => {
                                     title="green iguana"
                                 />
                             </NavLink>
-                            <Typography sx={{ fontSize: '30px' }} gutterBottom>
-                                Hi, Welcome Back !
+                            <Typography sx={{ fontSize: '30px', fontWeight: 'normal', marginTop: '5px' }} >
+                                Hi, Welcome User!
                             </Typography>
 
                         </Box>
@@ -174,7 +180,7 @@ const Login = () => {
                             noValidate
                             autoComplete="on"
                         >
-                            <Box sx={{ marginBlock: '20px', gap: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'space- evenly' }}>
+                            <Box sx={{ marginBottom: '20px', marginTop: '10px', gap: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'space- evenly' }}>
                                 <TextField
                                     sx={{
 
@@ -191,7 +197,7 @@ const Login = () => {
                                             }
                                         }
                                     }}
-                                    size="medium"
+                                    size="small"
                                     required
                                     margin='dense'
                                     id="email"
@@ -233,7 +239,7 @@ const Login = () => {
                                             </InputAdornment>
                                         ),
                                     }}
-                                    size="medium"
+                                    size="small"
                                     required
                                     margin='dense'
                                     id="password"
@@ -265,39 +271,50 @@ const Login = () => {
                                 onClick={handleSubmitLogin}
                                 size='large'
                                 sx={{
-                                    padding: '12px',
+                                    padding: '8px',
                                     background: 'orange',
                                     fontSize: '1rem',
                                     ':hover': {
-                                        padding: '12px',
+                                        padding: '8px',
                                         background: 'orange',
                                         fontSize: '1rem'
 
                                     }
                                 }} variant='contained' fullWidth>Sign In</LoadingButton>
-                            <LoadingButton size='large' startIcon={<Image duration={0} height={25} width={25} src={Google}></Image>} sx={{ padding: '12px', color: 'black', border: '0.5px solid grey', fontSize: '1rem' }} variant='outlined' fullWidth>Sign in with Google</LoadingButton>
+                            <LoadingButton size='large' startIcon={<Image duration={0} height={25} width={25} src={Google}></Image>} sx={{ padding: '8px', color: 'black', border: '1px solid #8080806e', fontSize: '1rem' }} variant='outlined' fullWidth>Sign in with Google</LoadingButton>
                         </Box>
 
 
 
                         <Box sx={{
                             display: {
-                                'xs': 'block',
+                                'xs': 'flex',
                                 'sm': 'block',
                                 'md': 'flex',
                                 'lg': 'flex'
-                            }, paddingBlock: '20px', justifyContent: 'space-between'
+                            }, paddingBlock: '20px', justifyContent: 'space-around'
                         }}>
                             <Typography>
                                 Dont Have an account ?
                             </Typography>
-                            <NavLink replace={true} to={'/register'}>
-                                <Typography sx={{ textDecoration: 'underline', color: 'orange' }}>Create an account</Typography>
-                            </NavLink>
+                            < Box onClick={() => { setAuthForm(true) }}>
+                                <Typography sx={{ textDecoration: 'underline', color: 'orange', cursor: 'pointer' }}>Create an account</Typography>
+                            </Box>
                         </Box>
 
                     </CardContent>
-                    <ToastContainer />
+                    <ToastContainer
+                        position="top-right"
+                        autoClose={1000}
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover={false}
+                        theme="light"
+                    />
                 </Card>
             </Box >
         </Box>

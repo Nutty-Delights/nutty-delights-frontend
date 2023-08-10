@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 //https://dribbble.com/shots/19614098-Shopcart-E-Commerce-Product-Page
 
 import AppBar from '@mui/material/AppBar';
-import { Box, Button, CssBaseline, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Toolbar, Tooltip, Typography, makeStyles } from '@mui/material';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { Card, Box, Button, CssBaseline, Dialog, DialogTitle, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Toolbar, Tooltip, Typography, makeStyles, Badge } from '@mui/material';
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../../assets/images/logo-png.png'
 import Image from 'mui-image';
 import AccountIcon from '@mui/icons-material/PermIdentityOutlined';
@@ -20,6 +20,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getUser, getUserProfile, logoutUser } from '../../../redux/slices/user';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import Login from '../../../pages/Auth/Login';
+import Register from '../../../pages/Auth/Register';
+import { toast } from 'react-toastify';
+import VerfiyEmail from '../../../pages/Auth/VerfiyEmail';
+// import { Login } from '@mui/icons-material';
 
 
 
@@ -65,16 +70,35 @@ const NavBar = (props) => {
   };
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [openDialog, setOpen] = useState(false);
+  const [openEmailDialog, setOpenEmail] = useState(false);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
+  // const [anchorElEmail, setAnchorElEmail] = React.useState(null);
   const open = Boolean(anchorEl);
+  // const openEmail = Boolean(anchorElEmail);
+
+
+  const [toggleAuthForm, setAuthForm] = useState(false);
+  // const [emailVerifyDialog, shetEmailVerifyDialog] = useState(false);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
+    setAuthForm(false);
   }
+
+  const handleEmailClose = () => {
+    setAnchorEl(null);
+    setOpenEmail(true);
+    // setAuthForm(false);
+  }
+
+
+
+
 
   const handleAccount = () => {
     setAnchorEl(null);
@@ -88,17 +112,47 @@ const NavBar = (props) => {
     navigate('/')
 
 
+
+
+  }
+
+  const handleAuthForm = () => {
+    setAuthForm(prev => !prev);
+  }
+
+  const handleDialog = () => {
+    setOpen(false);
+    setAuthForm(false);
+
+  }
+  const handleEmailDialog = () => {
+    setOpenEmail(false);
+
+
+  }
+  const handleOpenDialog = () => {
+    setOpen(true);
   }
 
 
 
 
   const user = useSelector(getUser);
+  const success = useSelector((state) => state?.user?.success)
   console.log("User", user);
   useEffect(() => {
     if (!user)
       dispatch(getUserProfile(localStorage.getItem('jwt')));
-  }, [])
+
+    if (user || success) {
+      // dispatch(getUserProfile(localStorage.getItem('jwt')));
+      handleDialog();
+      handleEmailDialog();
+    }
+
+
+
+  }, [user, success])
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{}}>
       <Image style={{ padding: '10px' }} duration={0} src={logo} fit='cover' height='60px' width='130px' />
@@ -164,7 +218,16 @@ const NavBar = (props) => {
 
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
 
+                <ShoppingCartIcon />
+                <NavLink to={'/cart'} style={{ color: 'black', textDecoration: "none", }}>
+                  <Typography sx={{ fontWeight: 'bold' }}>
+                    {"Cart"}
+                  </Typography>
 
+                </NavLink>
+                <Box sx={{ display: "flex", flex: '1', marginRight: '20px' }}>
+
+                </Box>
                 {
                   localStorage.getItem('jwt') ?
                     <Box>
@@ -176,8 +239,21 @@ const NavBar = (props) => {
                         onClick={handleClick}
                         style={{ color: 'black', textDecoration: "none", }
                         }>
-                        <AccountIcon />
-                        <Typography sx={{ fontWeight: 'bold', ml: '2px' }}>
+                        <Badge
+
+                          // variant='dot'
+                          invisible={true && user?.isEnabled}
+                          anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                          }}
+                          badgeContent={"1"}
+                          color="error"
+                        >
+                          <AccountIcon />
+                        </Badge>
+
+                        <Typography sx={{ fontWeight: 'bold', ml: user?.isEnabled ? "2px" : '10px' }}>
                           {user ? `${user?.firstName}` : ""}
                         </Typography>
 
@@ -192,61 +268,68 @@ const NavBar = (props) => {
                           'aria-labelledby': 'basic-button',
                         }}
                       >
+
+                        {user?.isEnabled ? <></> : <MenuItem sx={{ color: 'red' }} onClick={handleEmailClose}>
+                          <Badge
+
+                            variant='dot'
+                            invisible={true && user?.isEnabled}
+                            anchorOrigin={{
+                              vertical: 'top',
+                              horizontal: 'right',
+                            }}
+                            badgeContent={"1"}
+                            color="error"
+                          >
+                            Verify email
+                          </Badge>
+
+                        </MenuItem>}
                         <MenuItem onClick={handleAccount}>Profile</MenuItem>
                         <MenuItem onClick={handleLogout}>Logout</MenuItem>
                       </Menu>
                     </Box> :
-                    <NavLink to={'/login'} style={{ color: 'black', textDecoration: "none", display: 'flex' }}>
+                    <Box onClick={handleOpenDialog} style={{ color: 'black', textDecoration: "none", display: 'flex', cursor: 'pointer' }}>
                       <AccountIcon />
+
                       <Typography sx={{ fontWeight: 'bold' }}>
                         {"Login"}
                       </Typography>
 
-                      {/* <Button variant='outlined' sx={{ border: ' 1px solid orange' }}>
-                        <Typography sx={{ fontWeight: 'bold', color: 'orange', }}>
-                          {"Login/Register"}
-                        </Typography>
-                      </Button> */}
 
-                    </NavLink>
+
+                    </Box>
 
                 }
-                <Box sx={{ display: "flex", flex: '1', marginRight: '20px' }}>
+                <Dialog PaperProps={{
+                  style: {
+                    borderRadius: '12px',
 
-                </Box>
-                <ShoppingCartIcon />
-                <NavLink to={'/cart'} style={{ color: 'black', textDecoration: "none", }}>
-                  <Typography sx={{ fontWeight: 'bold' }}>
-                    {"Cart"}
-                  </Typography>
+                  },
+                  elevation: 10
+                }} onClose={handleEmailDialog} open={openEmailDialog}>
 
-                </NavLink>
-                {/* <Button sx={{
-                  padding: '6px',
-                  borderRadius: '14px',
-                  borderColor: '#80808057'
+                  <VerfiyEmail />
 
-                }} variant='outlined'>
-                  <NavLink to={'/login'} style={{ color: 'black', textDecoration: "none", }}>
-                    <Typography sx={{ fontWeight: 'bold' }}>
-                      {"Login/Register"}
-                    </Typography>
+                </Dialog>
+                <Dialog PaperProps={{
+                  style: {
+                    borderRadius: '12px',
 
-                  </NavLink>
-                </Button> */}
+                  },
+                  elevation: 10
+                }} onClose={handleDialog} open={openDialog}>
+
+                  {
+                    !toggleAuthForm ? <Login setAuthForm={setAuthForm} /> : <Register setAuthForm={setAuthForm} />
+                  }
+
+                </Dialog>
+
+
+
               </Box>
-              {/* {navUserActionItems.map((item, index) => (
-                <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
 
-
-                  <NavLink to={item.link} style={{ color: 'black', textDecoration: "none", marginRight: "1rem" }}>
-                   
-                    <Tooltip title={item.name}>
-                      {item.icon}
-                    </Tooltip>
-                  </NavLink>
-                </Box>
-              ))} */}
 
             </Box>
           </Toolbar>

@@ -23,6 +23,21 @@ class UserService {
         })
     }
 
+    generateCode(data) {
+        return http.post(`/${this.userUrl}/generateCode`, data, {
+            headers: {
+                "Authorization": `Bearer ${data.jwt}`
+            }
+        });
+    }
+    verfiyCode(data) {
+        return http.post(`/${this.userUrl}/verifyCode`, data, {
+            headers: {
+                "Authorization": `Bearer ${data.jwt}`
+            }
+        });
+    }
+
 
     // userLogout(token) {
     //     return http.post(`/${this.userUrl}/logout`, token);

@@ -18,7 +18,7 @@ import { ToastContainer, toast } from 'react-toastify';
 
 
 
-const Register = () => {
+const Register = ({ setAuthForm }) => {
 
 
 
@@ -48,7 +48,7 @@ const Register = () => {
     useEffect(() => {
         if (jwt) {
             dispatch(getUserProfile(jwt))
-            navigate(-1)
+            // navigate(-1)
         }
 
     }, [jwt])
@@ -164,7 +164,13 @@ const Register = () => {
                 </NavLink>
             </Box> */}
             <Box sx={{
-                display: "flex"
+                display: "flex",
+                // minHeight: {
+                //     'xs': '90vh',
+                //     'sm': '90vh',
+                //     'md': '100vh',
+                //     'lg': '100vh'
+                // }
             }} className='login-panel'>
                 {/* <Image style={{ display: { 'xs': 'none', 'sm': 'none', 'md': 'none' }, margin: '15px' }} src={login} /> */}
 
@@ -173,9 +179,9 @@ const Register = () => {
                     sx={{
                         // border: '1px solid rgb(0 0 0 / 18%)',
                         paddingInline: '15px', paddingBlock: '0px', width: {
-                            'xs': "80vw",
-                            'sm': "80vw",
-                            'md': "40vw",
+                            // 'xs': "80vw",
+                            // 'sm': "80vw",
+                            'md': "30vw",
 
                         }
                     }} variant='elevation'>
@@ -203,7 +209,7 @@ const Register = () => {
                                 />
                             </NavLink>
                             <Typography sx={{ fontSize: '30px' }} gutterBottom>
-                                Create account !
+                                Create an account!
                             </Typography>
                         </Box>
 
@@ -213,8 +219,8 @@ const Register = () => {
                             noValidate
                             autoComplete="off"
                         >
-                            <Box sx={{ marginBottom: '10px', gap: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'space- evenly' }}>
-                                <TextField size="medium"
+                            <Box sx={{ marginBottom: '15px', gap: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'space- evenly' }}>
+                                <TextField size="small"
                                     sx={{
 
 
@@ -287,7 +293,7 @@ const Register = () => {
                                         }
                                     }}
                                     required
-                                    size="medium"
+                                    size="small"
                                     margin='dense'
                                     id="email"
                                     type='email'
@@ -318,7 +324,7 @@ const Register = () => {
                                     }}
                                     inputProps={{
                                         style: {
-                                            paddingBlock: '16.5px',
+                                            // paddingBlock: '16.5px',
                                             paddingLeft: mobile ? '0px' : '14px'
                                         }
                                     }}
@@ -335,7 +341,7 @@ const Register = () => {
                                             </InputAdornment> : <></>
                                     }}
                                     required
-                                    size="medium"
+                                    size="small"
                                     margin='dense'
                                     id="mobileNumber"
                                     type={'tel'}
@@ -398,7 +404,7 @@ const Register = () => {
                                         ),
                                     }}
                                     required
-                                    size="medium"
+                                    size="small"
                                     margin='dense'
                                     id="password"
                                     type={showPassword ? 'name' : 'password'}
@@ -425,18 +431,18 @@ const Register = () => {
                                     disableElevation
                                     size='large'
                                     sx={{
-                                        padding: '12px',
+                                        padding: '8px',
                                         background: 'orange',
                                         fontSize: '1rem',
                                         ':hover': {
-                                            padding: '12px',
+                                            padding: '8px',
                                             background: 'orange',
                                             fontSize: '1rem'
 
                                         }
                                     }} variant='contained' fullWidth>Create Account</LoadingButton>
 
-                                <LoadingButton size='large' startIcon={<Image duration={0} height={25} width={25} src={Google}></Image>} sx={{ padding: '12px', color: 'black', border: '0.5px solid grey', fontSize: '1rem' }} variant='outlined' fullWidth>Sign up with Google</LoadingButton>
+                                <LoadingButton size='large' startIcon={<Image duration={0} height={25} width={25} src={Google}></Image>} sx={{ padding: '8px', color: 'black', border: '1px solid #8080806e', fontSize: '1rem' }} variant='outlined' fullWidth>Sign up with Google</LoadingButton>
                             </Box>
 
 
@@ -447,18 +453,20 @@ const Register = () => {
 
                         <Box sx={{
                             display: {
-                                'xs': 'flex',
+                                'xs': 'block',
                                 'sm': 'block',
                                 'md': 'flex',
                                 'lg': 'flex'
-                            }, paddingBlock: '20px', justifyContent: 'space-between'
+                            }, paddingBlock: '20px', justifyContent: 'space-around'
                         }}>
                             <Typography>
                                 Already Have an account ?
                             </Typography>
-                            <NavLink replace={true} to={'/login'}>
-                                <Typography sx={{ textDecoration: 'underline', color: 'orange' }}>Sign in</Typography>
-                            </NavLink>
+
+                            <Box onClick={() => { setAuthForm((prev) => !prev) }}>
+                                <Typography sx={{ textDecoration: 'underline', color: 'orange', cursor: 'pointer' }}>Sign in</Typography>
+                            </Box>
+
                         </Box>
                         <Box sx={{
                             display: {
@@ -471,7 +479,18 @@ const Register = () => {
 
 
                         </Box>
-                        <ToastContainer />
+                        <ToastContainer
+                            position="top-right"
+                            autoClose={1000}
+                            hideProgressBar={false}
+                            newestOnTop={false}
+                            closeOnClick
+                            rtl={false}
+                            pauseOnFocusLoss
+                            draggable
+                            pauseOnHover={false}
+                            theme="light"
+                        />
 
 
                     </CardContent>

@@ -98,16 +98,16 @@ const router = createBrowserRouter([
       }
     ]
   },
-  {
-    path: '/register',
-    element: <Register />
+  // {
+  //   path: '/register',
+  //   element: <App />
 
-  },
-  {
-    path: '/login',
-    element: <Login />
+  // },
+  // {
+  //   path: '/login',
+  //   element: <App />
 
-  },
+  // },
   {
     path: '/products/',
     element: <ProductList />,
