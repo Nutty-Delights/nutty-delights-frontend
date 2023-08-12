@@ -5,6 +5,9 @@ import Category from './Category'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllCategories, getCategories, getCategoriesError, getCategoriesLoading } from '../../redux/slices/categories'
 import Carousel from '../../components/shared/Carousel/Carousel'
+import { NavLink, useLocation } from 'react-router-dom'
+import Image from 'mui-image'
+import image from '../../assets/images/categories.png'
 
 
 
@@ -16,6 +19,7 @@ const Categories = () => {
     const categories = useSelector(getCategories);
     const isLoading = useSelector(getCategoriesLoading);
     const isError = useSelector(getCategoriesError);
+    const location = useLocation().pathname;
     // const [categories, setCategories] = useState();
     const dispatch = useDispatch();
 
@@ -35,9 +39,22 @@ const Categories = () => {
 
         <div className='categories'>
             <Carousel />
-            <Typography className='heading'>
+            {/* <Toolbar /> */}
+            <Typography className='heading-category'>
                 {heading}
             </Typography>
+            {location !== '/categories' ? <Box sx={{ background: 'white', marginInline: '20px', marginTop: '0px' }}>
+                <NavLink>
+
+
+                    <Image
+                        // height={'20vw'}
+                        style={{
+                            borderRadius: '10px'
+                        }} duration={0} easing='ease' fit='contain' src={image}></Image>
+                    {/* <Button>Shop Now</Button> */}
+                </NavLink>
+            </Box> : <></>}
             <div className='category-cards'>
                 {
 

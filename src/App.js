@@ -4,11 +4,13 @@ import Carousel from './components/shared/Carousel/Carousel';
 import Footer from './components/shared/Footer/Footer';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
+import { Toolbar } from '@mui/material'
 
 function App() {
   return (
     <div className="App">
       <NavBar />
+      <Toolbar sx={{ margin: '10px' }} />
 
       <Outlet />
       <ToastContainer
@@ -23,6 +25,7 @@ function App() {
         pauseOnHover={false}
         theme="light"
       />
+
       <Footer />
     </div>
   );

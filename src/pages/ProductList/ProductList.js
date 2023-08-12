@@ -27,8 +27,8 @@ function ProductList() {
 
 
     useEffect(() => {
-        if (!products)
-            dispatch(getAllProductsByCategory({ categoryId }))
+        // if (!products)
+        dispatch(getAllProductsByCategory({ categoryId }))
     }, [categoryId])
 
 

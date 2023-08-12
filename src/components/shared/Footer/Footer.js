@@ -1,8 +1,11 @@
 import React from 'react'
 import './footer.css'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, IconButton } from '@mui/material'
 import Image from 'mui-image'
 import logo from '../../../assets/images/logo-png.png'
+import Facebook from '@mui/icons-material/FacebookOutlined';
+import Instagram from '@mui/icons-material/Instagram';
+import { NavLink } from 'react-router-dom'
 
 function Footer() {
 
@@ -82,7 +85,24 @@ function Footer() {
 
             <Box sx={{ display: { xs: 'flex', sm: 'flex', md: 'block' }, alignItems: 'center', marginBottom: '15px' }}>
                 <Image style={{}} duration={0} src={logo} fit='contain' width='170px' height='fit-content' />
-                <Typography className='content-heading'>Always serving satisfaction and taste.</Typography>
+                <Typography className='content-heading'>Always serving the best.</Typography>
+            </Box>
+            <Box sx={{ display: { xs: 'flex', sm: 'flex', md: 'block' }, alignItems: 'center', marginBottom: '15px' }}>
+                <Typography className='content-heading'>{"Connect with us"}</Typography>
+
+                <NavLink target="_blank" to={'https://instagram.com/nutty___delights?igshid=OGQ5ZDc2ODk2ZA=='}>
+                    <IconButton >
+
+                        <Instagram sx={{ color: 'white', fontSize: "35px" }} />
+                    </IconButton>
+                </NavLink>
+
+                <IconButton>
+
+                    <Facebook sx={{ color: 'white', fontSize: "35px" }} />
+
+                </IconButton>
+
             </Box>
             <div className='content'>
                 {content.map((item, index) => {

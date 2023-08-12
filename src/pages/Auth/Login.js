@@ -12,7 +12,7 @@ import NavBar from '../../components/shared/NavBar/NavBar';
 import validator from 'validator';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import { getUser, getUserProfile, loginUser } from '../../redux/slices/user';
+import { getUser, getUserLoading, getUserProfile, loginUser } from '../../redux/slices/user';
 import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 
@@ -24,7 +24,7 @@ const Login = ({ setAuthForm }) => {
     const [emailError, setEmailError] = useState(false);
     const [passWordError, setPasswordError] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const [isLoading, setLoading] = useState(false);
+    const isLoading = useSelector(getUserLoading);
     const jwt = localStorage.getItem('jwt');
     const user = useSelector(getUser);
     const token = useSelector((state) => state?.user?.token)

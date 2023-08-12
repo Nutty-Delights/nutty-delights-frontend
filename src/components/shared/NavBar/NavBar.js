@@ -24,8 +24,28 @@ import Login from '../../../pages/Auth/Login';
 import Register from '../../../pages/Auth/Register';
 import { toast } from 'react-toastify';
 import VerfiyEmail from '../../../pages/Auth/VerfiyEmail';
+import Slide from '@mui/material/Slide';
+import useScrollTrigger from '@mui/material/useScrollTrigger';
+
 // import { Login } from '@mui/icons-material';
 
+
+
+function HideOnScroll(props) {
+  const { children, window } = props;
+  // Note that you normally won't need to set the window ref as useScrollTrigger
+  // will default to window.
+  // This is only being set here because the demo is in an iframe.
+  const trigger = useScrollTrigger({
+    target: window ? window() : undefined,
+  });
+
+  return (
+    <Slide appear={false} direction="down" in={!trigger}>
+      {children}
+    </Slide>
+  );
+}
 
 
 const NavBar = (props) => {
@@ -144,9 +164,13 @@ const NavBar = (props) => {
     if (!user)
       dispatch(getUserProfile(localStorage.getItem('jwt')));
 
-    if (user || success) {
+    if (user) {
       // dispatch(getUserProfile(localStorage.getItem('jwt')));
       handleDialog();
+
+    }
+
+    if (success === true) {
       handleEmailDialog();
     }
 
@@ -181,98 +205,68 @@ const NavBar = (props) => {
     <div>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <AppBar sx={{ zIndex: '5', marginBlock: '10px', minHeight: '0 !important' }} position='relative' className='app-bar' elevation={0} component="nav">
-          <Toolbar sx={{ paddingInline: '20px !important', minHeight: 'none !important' }}>
-            <IconButton
-              aria-label="open drawer"
-              // edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ display: { sm: 'flex', md: 'none' } }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Box sx={{ marginRight: "10px" }}>
-              <NavLink replace={true} to='/'>
-                <Image style={{ display: { sm: 'none', md: 'flex' }, }} duration={0} src={logo} fit='cover' height='42px' width='124px' />
-              </NavLink>
-            </Box>
-            <Box sx={{ display: { xs: 'none', sm: 'none', md: 'flex' }, flexGrow: 1, }}>
-              {
-                navItems.map((item, index) => (
-                  <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
-                    {item.icon(location === item.link ? "#ffa732" : "black")}
-                    <NavLink to={item.link} style={{ color: location === item.link ? "#ffa732" : 'black', textDecoration: "none", marginRight: "1.5rem", marginLeft: '6px' }}>
-                      <Typography sx={{ fontWeight: 'bold' }}>
-                        {item.name}
-                      </Typography>
-                    </NavLink>
-                  </Box>
-                ))
-              }
-            </Box>
-            <Box sx={{ display: { xs: 'flex', sm: 'flex', marginRight: '30px' }, justifyContent: 'space-between' }}>
-
-              {<Box sx={{ display: { xs: 'none', md: 'none', sm: 'flex' }, }}>
-                <SearchBar width={'fit-content'} marginRight={'3vh'} />
-              </Box>}
-
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-
-                <ShoppingCartIcon />
-                <NavLink to={'/cart'} style={{ color: 'black', textDecoration: "none", }}>
-                  <Typography sx={{ fontWeight: 'bold' }}>
-                    {"Cart"}
-                  </Typography>
-
+        <HideOnScroll {...props}>
+          <AppBar sx={{ paddingBlock: '10px', zIndex: '5', minHeight: '0 !important' }} className='app-bar' elevation={0} component="nav">
+            <Toolbar sx={{ paddingBlock: '0px', paddingInline: '20px !important', minHeight: 'none !important' }}>
+              <IconButton
+                aria-label="open drawer"
+                // edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ display: { sm: 'flex', md: 'none' } }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Box sx={{ marginRight: "10px" }}>
+                <NavLink replace={true} to='/'>
+                  <Image style={{ display: { sm: 'none', md: 'flex' }, }} duration={0} src={logo} fit='cover' height='42px' width='124px' />
                 </NavLink>
-                <Box sx={{ display: "flex", flex: '1', marginRight: '20px' }}>
-
-                </Box>
+              </Box>
+              <Box sx={{ display: { xs: 'none', sm: 'none', md: 'flex' }, flexGrow: 1, }}>
                 {
-                  localStorage.getItem('jwt') ?
-                    <Box>
-                      <Button
-                        disableRipple
-                        aria-controls={open ? 'basic-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
-                        onClick={handleClick}
-                        style={{ color: 'black', textDecoration: "none", }
-                        }>
-                        <Badge
-
-                          // variant='dot'
-                          invisible={true && user?.isEnabled}
-                          anchorOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                          }}
-                          badgeContent={"1"}
-                          color="error"
-                        >
-                          <AccountIcon />
-                        </Badge>
-
-                        <Typography sx={{ fontWeight: 'bold', ml: user?.isEnabled ? "2px" : '10px' }}>
-                          {user ? `${user?.firstName}` : ""}
+                  navItems.map((item, index) => (
+                    <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
+                      {item.icon(location === item.link ? "#ffa732" : "black")}
+                      <NavLink to={item.link} style={{ color: location === item.link ? "#ffa732" : 'black', textDecoration: "none", marginRight: "1.5rem", marginLeft: '6px' }}>
+                        <Typography sx={{ fontWeight: 'bold' }}>
+                          {item.name}
                         </Typography>
+                      </NavLink>
+                    </Box>
+                  ))
+                }
+              </Box>
+              <Box sx={{ display: { xs: 'flex', sm: 'flex', marginRight: '30px' }, justifyContent: 'space-between' }}>
 
+                {<Box sx={{ display: { xs: 'none', md: 'none', sm: 'flex' }, }}>
+                  <SearchBar width={'fit-content'} marginRight={'3vh'} />
+                </Box>}
 
-                      </Button>
-                      <Menu
-                        id="basic-menu"
-                        anchorEl={anchorEl}
-                        open={open}
-                        onClose={handleClose}
-                        MenuListProps={{
-                          'aria-labelledby': 'basic-button',
-                        }}
-                      >
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
 
-                        {user?.isEnabled ? <></> : <MenuItem sx={{ color: 'red' }} onClick={handleEmailClose}>
+                  <ShoppingCartIcon />
+                  <NavLink to={'/cart'} style={{ color: 'black', textDecoration: "none", }}>
+                    <Typography sx={{ fontWeight: 'bold' }}>
+                      {"Cart"}
+                    </Typography>
+
+                  </NavLink>
+                  <Box sx={{ display: "flex", flex: '1', marginRight: '20px' }}>
+
+                  </Box>
+                  {
+                    localStorage.getItem('jwt') ?
+                      <Box>
+                        <Button
+                          disableRipple
+                          aria-controls={open ? 'basic-menu' : undefined}
+                          aria-haspopup="true"
+                          aria-expanded={open ? 'true' : undefined}
+                          onClick={handleClick}
+                          style={{ color: 'black', textDecoration: "none", }
+                          }>
                           <Badge
 
-                            variant='dot'
+                            // variant='dot'
                             invisible={true && user?.isEnabled}
                             anchorOrigin={{
                               vertical: 'top',
@@ -281,59 +275,91 @@ const NavBar = (props) => {
                             badgeContent={"1"}
                             color="error"
                           >
-                            Verify email
+                            <AccountIcon />
                           </Badge>
 
-                        </MenuItem>}
-                        <MenuItem onClick={handleAccount}>Profile</MenuItem>
-                        <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                      </Menu>
-                    </Box> :
-                    <Box onClick={handleOpenDialog} style={{ color: 'black', textDecoration: "none", display: 'flex', cursor: 'pointer' }}>
-                      <AccountIcon />
-
-                      <Typography sx={{ fontWeight: 'bold' }}>
-                        {"Login"}
-                      </Typography>
+                          <Typography sx={{ fontWeight: 'bold', ml: user?.isEnabled ? "2px" : '10px' }}>
+                            {user ? `${user?.firstName}` : ""}
+                          </Typography>
 
 
+                        </Button>
+                        <Menu
+                          id="basic-menu"
+                          anchorEl={anchorEl}
+                          open={open}
+                          onClose={handleClose}
+                          MenuListProps={{
+                            'aria-labelledby': 'basic-button',
+                          }}
+                        >
 
-                    </Box>
+                          {user?.isEnabled ? <></> : <MenuItem sx={{ color: 'red' }} onClick={handleEmailClose}>
+                            <Badge
 
-                }
-                <Dialog PaperProps={{
-                  style: {
-                    borderRadius: '12px',
+                              variant='dot'
+                              invisible={true && user?.isEnabled}
+                              anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                              }}
+                              badgeContent={"1"}
+                              color="error"
+                            >
+                              Verify email
+                            </Badge>
 
-                  },
-                  elevation: 10
-                }} onClose={handleEmailDialog} open={openEmailDialog}>
+                          </MenuItem>}
+                          <MenuItem onClick={handleAccount}>Profile</MenuItem>
+                          <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                        </Menu>
+                      </Box> :
+                      <Box onClick={handleOpenDialog} style={{ color: 'black', textDecoration: "none", display: 'flex', cursor: 'pointer' }}>
+                        <AccountIcon />
 
-                  <VerfiyEmail />
+                        <Typography sx={{ fontWeight: 'bold' }}>
+                          {"Login"}
+                        </Typography>
 
-                </Dialog>
-                <Dialog PaperProps={{
-                  style: {
-                    borderRadius: '12px',
 
-                  },
-                  elevation: 10
-                }} onClose={handleDialog} open={openDialog}>
 
-                  {
-                    !toggleAuthForm ? <Login setAuthForm={setAuthForm} /> : <Register setAuthForm={setAuthForm} />
+                      </Box>
+
                   }
+                  <Dialog PaperProps={{
+                    style: {
+                      borderRadius: '12px',
 
-                </Dialog>
+                    },
+                    elevation: 10
+                  }} onClose={handleEmailDialog} open={openEmailDialog}>
 
+                    <VerfiyEmail />
+
+                  </Dialog>
+                  <Dialog PaperProps={{
+                    style: {
+                      borderRadius: '12px',
+
+                    },
+                    elevation: 10
+                  }} onClose={handleDialog} open={openDialog}>
+
+                    {
+                      !toggleAuthForm ? <Login setAuthForm={setAuthForm} /> : <Register setAuthForm={setAuthForm} />
+                    }
+
+                  </Dialog>
+
+
+
+                </Box>
 
 
               </Box>
-
-
-            </Box>
-          </Toolbar>
-        </AppBar>
+            </Toolbar>
+          </AppBar>
+        </HideOnScroll>
         <Box component="nav">
           <Drawer
             container={container}
@@ -351,6 +377,7 @@ const NavBar = (props) => {
             {drawer}
           </Drawer>
         </Box>
+
       </Box>
     </div >
   )

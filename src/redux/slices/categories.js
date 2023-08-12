@@ -4,7 +4,7 @@ import CategoryDataService from '../../services/category.service';
 
 
 const initialState = {
-    // categories: [],
+    categories: null,
     isLoading: false,
     isError: false
 };
@@ -118,7 +118,7 @@ const categoriesSlice = createSlice({
             console.log(state, action);
             let newState = {
                 ...state,
-                categories: [...state.categories],
+                // categories: [...state.categories],
                 isLoading: false,
                 isError: action,
             }

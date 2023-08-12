@@ -23,6 +23,7 @@ import AdminPayments from './pages/Admin/AdminPayments';
 import Register from './pages/Auth/Register';
 import Login from './pages/Auth/Login';
 import UserAccount from './pages/UserAccount/UserAccount';
+import Home from './pages/Home/Home';
 
 
 
@@ -34,7 +35,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Categories />
+        element: < Home />
       },
       {
         path: 'cart',

@@ -6,7 +6,14 @@ p.MuiTypography-root.MuiTypography-body1.heading {
     font-weight: bold;
     font-size: 20px;
     margin-inline: 30px;
-    margin-top: 20px;
+    margin-top: 30px;
+}
+
+p.MuiTypography-root.MuiTypography-body1.heading-category {
+    font-weight: bold;
+    font-size: 20px;
+    margin-inline: 70px;
+    margin-top: 0px;
 }
 
 p.MuiTypography-root.MuiTypography-body1.category-heading {
@@ -34,15 +41,16 @@ p.MuiTypography-root.MuiTypography-body1.category-heading {
 }
 
 .category-cards {
+    /* background-color: black; */
     display: flex;
     flex-wrap: wrap;
     gap: 60px;
-    padding: 20px;
+    padding: 0px;
     justify-content: center;
 
 }
 
 .category {
     height: 200px;
-    width: 300px;
+    width: 340px;
 }

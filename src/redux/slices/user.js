@@ -336,7 +336,7 @@ const userSlice = createSlice({
                 ...state,
                 isLoading: false,
                 isError: false,
-                success: true
+                success: payload.success
 
 
             }
