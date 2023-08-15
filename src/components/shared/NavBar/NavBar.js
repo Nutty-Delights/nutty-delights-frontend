@@ -26,6 +26,9 @@ import { toast } from 'react-toastify';
 import VerfiyEmail from '../../../pages/Auth/VerfiyEmail';
 import Slide from '@mui/material/Slide';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
+// import { ShopOutlined, ShoppingBasketOutlined } from '@mui/icons-material';
+import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
+import ShoppingBasketOutlined from '@mui/icons-material/ShoppingBasketOutlined';
 
 // import { Login } from '@mui/icons-material';
 
@@ -56,12 +59,17 @@ const NavBar = (props) => {
   // const activeColor = '#ffa732';
   const navItems = [
     {
+      name: "Shop",
+      link: '/',
+      icon: (color = 'black') => <LocalMallOutlinedIcon sx={{ color: color }} />
+    },
+    {
       name: "Categories",
       link: '/categories',
       icon: (color = 'black') => <CategoryIcon sx={{ color: color }} />
     },
     {
-      name: "Explore",
+      name: "Products",
       link: '/products',
       icon: (color = 'black') => <DealsIcons sx={{ color: color }} />
     },
@@ -237,7 +245,7 @@ const NavBar = (props) => {
               </Box>
               <Box sx={{ display: { xs: 'flex', sm: 'flex', marginRight: '30px' }, justifyContent: 'space-between' }}>
 
-                {<Box sx={{ display: { xs: 'none', md: 'none', sm: 'flex' }, }}>
+                {<Box sx={{ display: { xs: 'none', md: 'flex', sm: 'flex' }, }}>
                   <SearchBar width={'fit-content'} marginRight={'3vh'} />
                 </Box>}
 

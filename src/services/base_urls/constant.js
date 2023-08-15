@@ -1,7 +1,7 @@
 
 export const URLs = {
     categories: 'categories',
-    products: '',
+    products: 'product',
     users: 'auth'
 }
 

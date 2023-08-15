@@ -2,7 +2,7 @@ import { MicOutlined } from "@mui/icons-material";
 import Image from "mui-image";
 import React from "react";
 
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Card, Typography, Box } from '@mui/material'
 import './HomePageCard.css';
 
@@ -12,17 +12,22 @@ const HomeProductCard = ({ product }) => {
 
 
     return (
+
         <Card className="home-product-card">
-            <div onDragStart={handleDragStart}>
-                <Image
-                    duration={0}
-                    src={product?.productImageUrl}
-                    alt={product?.productName}
-                />
-            </div>
+            <NavLink to={`/pid=${product.productId}`}>
+                <div onDragStart={handleDragStart}>
+                    <Image
+                        duration={0}
+                        src={product?.productImageUrl}
+                        alt={product?.productName}
+                    />
+                </div>
+            </NavLink>
+
 
             <div className="product-name" style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-                <Typography>{product?.productName?.split("Nutty Delights")[1]?.split("|")[0]}</Typography>
+                <Typography>{product?.productName?.split("Nutty Delights ")[1]?.split("|")[1]} </Typography>
+
                 <Box
                     sx={{
                         display: 'flex',
@@ -38,9 +43,9 @@ const HomeProductCard = ({ product }) => {
                         <Typography
                             sx={{
                                 fontWeight: 'bold',
-                                fontSize: '15px'
+                                fontSize: '14px'
                             }}>
-                            {`₹ ${product.productPrice}`}
+                            {`₹ ${product?.productVariants?.[0]?.sellingPrice}`}
                         </Typography>
                         <Typography
                             sx={{
@@ -49,7 +54,7 @@ const HomeProductCard = ({ product }) => {
                                 marginLeft: '5px',
                                 fontSize: '15px'
                             }}>
-                            {`₹ ${product.productPrice + product.productDiscount}`}
+                            {`₹ ${product?.productVariants?.[0]?.sellingPrice + product?.productVariants?.[0]?.discount}`}
                         </Typography>
                         <Typography
                             sx={{
@@ -58,12 +63,15 @@ const HomeProductCard = ({ product }) => {
                                 fontWeight: 'bold',
                                 fontSize: '14px'
                             }}>
-                            {`${Math.round(product.productDiscount * 100 / (product.productPrice + product.productDiscount))}% Off`}
+                            {`${Math.round(product?.productVariants?.[0]?.discount * 100 / (product?.productVariants?.[0]?.sellingPrice + product?.productVariants?.[0]?.discount))}% Off`}
                         </Typography>
                     </Box>
+
                 </Box>
+                {/* <Typography>{product?.productVariants?.[0]?.weight} </Typography> */}
             </div>
         </Card>
+
     );
 };
 

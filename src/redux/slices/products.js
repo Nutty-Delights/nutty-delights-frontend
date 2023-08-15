@@ -6,6 +6,7 @@ import ProductDataService from '../../services/product.service';
 const initialState = {
     currentProduct: {},
     products: [],
+    adminProducts: [],
     // productsByCategory: [],
     isLoading: false,
     isError: false
@@ -226,9 +227,12 @@ const productSlice = createSlice({
         builder.addCase(updateProduct.fulfilled, (state, action) => {
 
 
-            const index = state.products?.findIndex(Product => Product.productId === action.payload.productId);
+
+
+            const index = state.productsByCategory?.findIndex(Product => Product.productId === action.payload.productId);
+            console.log("state products", state.productsByCategory.length)
             console.log(action.payload, index)
-            var updatedArray = [...state.products];
+            var updatedArray = [...state.productsByCategory];
             updatedArray[index] = {
                 ...updatedArray[index],
                 ...action.payload
@@ -238,7 +242,7 @@ const productSlice = createSlice({
                 ...state,
                 isLoading: false,
                 isError: false,
-                products: updatedArray
+                productsByCategory: updatedArray
             }
 
             return newState;

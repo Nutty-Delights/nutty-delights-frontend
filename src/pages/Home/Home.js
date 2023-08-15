@@ -190,7 +190,7 @@ const Home = () => {
                     <Skeleton />
 
                 </Box> : < Slider
-                    style={{ marginInline: '30px' }}
+                    style={{ marginInline: '20px' }}
                     arrows={false}
                     autoplay={true}
                     autoplaySpeed={3000}
@@ -262,8 +262,8 @@ const Home = () => {
                         // arrows={false}
 
                         // arrows={false}
-                        nextArrow={<ChevronRight sx={{ zIndex: '5', borderRadius: '100px', background: '#e3b131a8 !important', color: 'white !important', marginRight: '-10px', fontSize: '2rem', }} />}
-                        prevArrow={<ChevronLeft sx={{ zIndex: '5', borderRadius: '100px', background: '#e3b131a8 !important', color: 'white !important', marginLeft: '-10px', fontSize: '2rem', }} />}
+                        nextArrow={<ChevronRight sx={{ zIndex: '5', borderRadius: '100px', background: '#e3b131a8 !important', color: 'white !important', marginRight: '-10px', fontSize: '1.5rem', }} />}
+                        prevArrow={<ChevronLeft sx={{ zIndex: '5', borderRadius: '100px', background: '#e3b131a8 !important', color: 'white !important', marginLeft: '-10px', fontSize: '1.5rem', }} />}
                         autoplay={true}
                         autoplaySpeed={3000}
                         dots={false}
@@ -300,7 +300,7 @@ const Home = () => {
 
                 }
             }}></Divider>
-            <Image style={{ position: 'relative', marginBlock: '40px' }} height={"22vw"} src={nuts} fit='contain'></Image>
+            <Image style={{ position: 'relative', marginBlock: '40px' }} height={"26vw"} src={nuts} fit='contain'></Image>
 
 
             <Banner />

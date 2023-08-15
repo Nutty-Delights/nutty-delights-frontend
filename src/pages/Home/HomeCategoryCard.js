@@ -2,7 +2,7 @@ import { MicOutlined } from "@mui/icons-material";
 import Image from "mui-image";
 import React from "react";
 
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Card, Typography, Box } from '@mui/material'
 import './HomePageCard.css';
 
@@ -13,14 +13,17 @@ const HomeCategoryCard = ({ category: category }) => {
 
     return (
         <Card sx={{ margin: '10px', borderRadius: '10px' }}>
-            <div onDragStart={handleDragStart}>
-                <Image
-                    // height={100}
-                    duration={0}
-                    src={category?.categoryImageUrl}
-                    alt={category?.categoryName}
-                />
-            </div>
+            <NavLink to={`/products?productType=${category?.categoryId}`}>
+                <div onDragStart={handleDragStart}>
+                    <Image
+                        // height={100}
+                        duration={0}
+                        src={category?.categoryImageUrl}
+                        alt={category?.categoryName}
+                    />
+                </div>
+            </NavLink>
+
 
             <div className="category-name" style={{ background: '', padding: '10px', display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
                 <Typography sx={{

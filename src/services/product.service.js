@@ -7,27 +7,27 @@ class ProductDataService {
 
     productsUrl = URLs.products;
     createProduct(data) {
-        return http.post(`${this.productsUrl}/createProduct`, data);
+        return http.post(`/${this.productsUrl}/createProduct`, data);
     }
 
     updateProduct(id, data) {
-        return http.put(`${this.productsUrl}/updateProduct/${id}`, data);
+        return http.put(`/${this.productsUrl}/updateProduct/${id}`, data);
     }
 
     deleteProduct(id) {
-        return http.delete(`${this.productsUrl}/deleteProduct/${id}`);
+        return http.delete(`/${this.productsUrl}/deleteProduct/${id}`);
     }
 
     getProduct(productId) {
-        return http.get(`${this.productsUrl}/${productId}`);
+        return http.get(`/${this.productsUrl}/${productId}`);
     }
 
     getAllProductsByCategory(categoryId) {
-        return http.get(`${this.productsUrl}/getAllProducts/${categoryId}`);
+        return http.get(`/${this.productsUrl}/getAllProducts/${categoryId}`);
     }
 
     getAllProducts() {
-        return http.get(`${this.productsUrl}/getAllProducts`);
+        return http.get(`/${this.productsUrl}/getAllProducts`);
     }
 }
 

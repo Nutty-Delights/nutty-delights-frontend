@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import CategoryCarousel from './CategoryCarousel'
 import ProductFilter from './ProductFilter'
-import { Box, Button, Divider, Paper, Skeleton, Typography } from '@mui/material'
+import { Box, Button, Divider, Paper, Skeleton, Toolbar, Typography } from '@mui/material'
 import { NavLink, useSearchParams } from 'react-router-dom'
 import './productlist.css'
 import Image from 'mui-image'
@@ -37,6 +37,7 @@ function ProductList() {
         <div >
             <NavBar />
             {/* <CategoryCarousel /> */}
+            <Toolbar></Toolbar>
 
             <Box className='product-list-box'>
                 <ProductFilter />
@@ -46,7 +47,7 @@ function ProductList() {
                 <Typography className='product-list-box-heading'>{`Best for you !`}</Typography>
             </div>
 
-            <div className='product-list'>
+            <div style={{ padding: '50px', }} className='product-list'>
                 {
                     isLoading ? loading.map((e, i) => (
                         <Box key={i} width={"350px"} >
@@ -98,7 +99,7 @@ function ProductList() {
                                                     fontWeight: 'bold',
                                                     fontSize: '18px'
                                                 }}>
-                                                {`₹ ${product.productPrice}`}
+                                                {`₹ ${product?.productVariants?.[0]?.sellingPrice}`}
                                             </Typography>
                                             <Typography
                                                 sx={{
@@ -107,7 +108,7 @@ function ProductList() {
                                                     marginLeft: '5px',
                                                     fontSize: '17px'
                                                 }}>
-                                                {`₹ ${product.productPrice + product.productDiscount}`}
+                                                {`₹ ${product?.productVariants?.[0]?.sellingPrice + product?.productVariants?.[0]?.discount}`}
                                             </Typography>
                                             <Typography
                                                 sx={{
@@ -115,7 +116,7 @@ function ProductList() {
                                                     marginLeft: '5px',
                                                     fontWeight: 'bold'
                                                 }}>
-                                                {`${Math.round(product.productDiscount * 100 / (product.productPrice + product.productDiscount))}% OFF`}
+                                                {`${Math.round(product?.productVariants?.[0]?.discount * 100 / (product?.productVariants?.[0]?.sellingPrice + product?.productVariants?.[0]?.discount))}% OFF`}
                                             </Typography>
                                         </Box>
                                         <Box sx={{ display: 'flex', padding: '5px', alignItems: 'center' }}>

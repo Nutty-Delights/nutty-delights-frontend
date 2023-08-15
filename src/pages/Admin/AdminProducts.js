@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { createCategory, deleteCategory, getAllCategories, getCategories, updateCategory } from '../../redux/slices/categories';
-import { Avatar, Box, Button, Divider, FormControl, IconButton, InputLabel, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, MenuItem, Paper, Select, TextField, Typography } from '@mui/material';
+import { Avatar, Box, Button, Card, Divider, FormControl, IconButton, InputLabel, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, MenuItem, Paper, Select, TextField, Typography } from '@mui/material';
 import { createProduct, deleteProduct, getAllProductsByCategory, getProductsByCategory, getProductsError, getProductsLoading, updateProduct } from '../../redux/slices/products';
 import Refresh from '@mui/icons-material/Loop';
 const AdminProducts = () => {
@@ -20,6 +20,7 @@ const AdminProducts = () => {
     const isLoading = useSelector(getProductsLoading);
     const isError = useSelector(getProductsError);
     const [selected, setSelected] = useState(-1);
+    const [variants, setVariants] = useState([]);
 
     const [selectedProduct, setselectedProduct] = useState(products ? products[0] : {});
     // const [selectedProduct, setselectedProduct] = useState({
@@ -36,7 +37,20 @@ const AdminProducts = () => {
         "productPrice": 0,
         "productDiscount": 0,
         "productStockCount": 0,
+        "productDescription": "",
     });
+    const [addVariant, setAddVariantProduct] = useState({
+        "weight": "",
+        // "productImageUrl": "https://m.media-amazon.com/images/I/61-HeXX496L.jpg",
+        // "productNumberOfReviews": 0,
+        "purchasingPrice": 100,
+        "sellingPrice": 100,
+        "discount": 0,
+        "quantity": 0,
+        // "productDescription": "",
+    });
+
+
 
     //functions to handle update category
     const handleUpdatedNameChange = (e) => {
@@ -44,6 +58,13 @@ const AdminProducts = () => {
         setselectedProduct((prev) => ({
             ...prev,
             productName: e.target.value
+        }))
+    }
+    const handleUpdatedDescriptionChange = (e) => {
+        // console.log(e.target.value)
+        setselectedProduct((prev) => ({
+            ...prev,
+            productDescription: e.target.value
         }))
     }
     const handleUpdatedCategoryChange = (e) => {
@@ -60,6 +81,44 @@ const AdminProducts = () => {
             productImageUrl: e.target.value
         }))
     }
+
+    const handleProductSelection = (e, index, product) => {
+        setSelected(index);
+        setselectedProduct(product);
+    }
+    //functions to handle update category
+    const handleAddNameChange = (e) => {
+        // console.log(e.target.value)
+        setAddProduct((prev) => ({
+            ...prev,
+            productName: e.target.value
+        }))
+    }
+    const handleAddDescriptionChange = (e) => {
+        // console.log(e.target.value)
+        setAddProduct((prev) => ({
+            ...prev,
+            productDescription: e.target.value
+        }))
+    }
+    const handleAddCategoryChange = (e) => {
+        // console.log(e.target.value)
+        setAddProduct((prev) => ({
+            ...prev,
+            productCategoryId: e.target.value
+        }))
+    }
+    const handleAddImageChange = (e) => {
+        // console.log(e.target.value)
+        setAddProduct((prev) => ({
+            ...prev,
+            productImageUrl: e.target.value
+        }))
+    }
+
+
+
+    //variants
     const handleUpdatedStockChange = (e) => {
         // console.log(e.target.value)
         setselectedProduct((prev) => ({
@@ -88,58 +147,42 @@ const AdminProducts = () => {
             productDiscount: e.target.value
         }))
     }
-    const handleProductSelection = (e, index, product) => {
-        setSelected(index);
-        setselectedProduct(product);
-    }
-    //functions to handle update category
-    const handleAddNameChange = (e) => {
-        // console.log(e.target.value)
-        setAddProduct((prev) => ({
-            ...prev,
-            productName: e.target.value
-        }))
-    }
-    const handleAddCategoryChange = (e) => {
-        // console.log(e.target.value)
-        setAddProduct((prev) => ({
-            ...prev,
-            productCategoryId: e.target.value
-        }))
-    }
-    const handleAddImageChange = (e) => {
-        // console.log(e.target.value)
-        setAddProduct((prev) => ({
-            ...prev,
-            productImageUrl: e.target.value
-        }))
-    }
+
+
+    //add variants
     const handleAddStockChange = (e) => {
         // console.log(e.target.value)
-        setAddProduct((prev) => ({
+        setAddVariantProduct((prev) => ({
             ...prev,
-            productStockCount: e.target.value
+            quantity: e.target.value
         }))
     }
     const handleAddPurchasingPriceChange = (e) => {
         // console.log(e.target.value)
-        setAddProduct((prev) => ({
+        setAddVariantProduct((prev) => ({
             ...prev,
-            productPurchasingPrice: e.target.value
+            purchasingPrice: e.target.value
         }))
     }
     const handleAddSellingPriceChange = (e) => {
         // console.log(e.target.value)
-        setAddProduct((prev) => ({
+        setAddVariantProduct((prev) => ({
             ...prev,
-            productPrice: e.target.value
+            sellingPrice: e.target.value
         }))
     }
     const handleAddDiscountChange = (e) => {
         // console.log(e.target.value)
-        setAddProduct((prev) => ({
+        setAddVariantProduct((prev) => ({
             ...prev,
-            productDiscount: e.target.value
+            discount: e.target.value
+        }))
+    }
+    const handleAddWeightChange = (e) => {
+        // console.log(e.target.value)
+        setAddVariantProduct((prev) => ({
+            ...prev,
+            weight: e.target.value
         }))
     }
 
@@ -158,13 +201,17 @@ const AdminProducts = () => {
     }
 
 
+    console.log(selectedProduct?.productVariants)
+
 
     const handleAddProduct = async () => {
         console.log(addProduct);
         const data = {
-            ...addProduct
+            ...addProduct,
+            productVariants: [...variants],
         }
         dispatch(createProduct(data));
+        setVariants([]);
 
 
     }
@@ -185,10 +232,10 @@ const AdminProducts = () => {
         dispatch(getAllProductsByCategory({ categoryId }))
     }
     useEffect(() => {
-        if (!products) {
-            dispatch(getAllProductsByCategory({ categoryId }))
-            dispatch(getAllCategories());
-        }
+
+        dispatch(getAllProductsByCategory({ categoryId }))
+        dispatch(getAllCategories());
+
     }, [categoryId, dispatch])
 
 
@@ -256,7 +303,7 @@ const AdminProducts = () => {
 
                                     </Box> */}
                                 </Box>
-                                <List sx={{ width: '21vw' }}>
+                                <List sx={{ width: '21vw', }}>
 
 
                                     <Divider></Divider>
@@ -264,8 +311,8 @@ const AdminProducts = () => {
                                         isLoading ? <Box sx={{ alignItems: 'center', justifyContent: 'center', display: 'flex' }}><Typography>{"Loading...."}</Typography></Box> :
                                             products?.map((item, i) => (
                                                 <ListItem key={item?.productId} disablePadding >
-                                                    <Box height={'50px'} width={5} sx={{ background: item.productStockCount > 0 ? "green" : 'red' }}></Box>
-                                                    <ListItemButton disableRipple onClick={(e) => { handleProductSelection(e, i, item) }} sx={{ backgroundColor: selected === i ? '#ffa5001f' : 'white' }} >
+                                                    <Box height={'50px'} width={5} sx={{ background: item?.productVariants[0]?.quantity > 0 ? "green" : 'red' }}></Box>
+                                                    <ListItemButton onClick={(e) => { handleProductSelection(e, i, item) }} sx={{ backgroundColor: selected === i ? '#ffa5001f' : 'white' }} >
                                                         <ListItemAvatar>
                                                             <Avatar alt="Remy Sharp" src={item.productImageUrl} />
                                                         </ListItemAvatar>
@@ -287,6 +334,7 @@ const AdminProducts = () => {
                                 <Typography sx={{ margin: '15px', fontWeight: 'bold' }}>{"Update Product"}</Typography>
                                 <Box sx={{ gap: '10px', display: selected > -1 ? "inherit" : 'inherit' }}>
                                     <TextField
+                                        size='small'
                                         onChange={handleUpdatedNameChange}
                                         sx={{ marginBlock: '10px' }}
                                         fullWidth
@@ -296,9 +344,21 @@ const AdminProducts = () => {
                                         value={selectedProduct?.productName || ""}
                                     // defaultValue="product"
                                     />
+                                    <TextField
+                                        size='small'
+                                        onChange={handleUpdatedDescriptionChange}
+                                        sx={{ marginBlock: '10px' }}
+                                        fullWidth
+                                        required
+                                        id="outlined-required"
+                                        label="Description"
+                                        value={selectedProduct?.productDescription || ""}
+                                    // defaultValue="product"
+                                    />
                                     <FormControl fullWidth required sx={{ marginBlock: '10px', minWidth: 120 }}>
                                         <InputLabel id="demo-simple-select-required-label">Category</InputLabel>
                                         <Select
+                                            // size='small'
                                             fullWidth
                                             labelId="demo-simple-select-required-label"
                                             id="demo-simple-select-required"
@@ -315,6 +375,7 @@ const AdminProducts = () => {
 
                                     </FormControl>
                                     <TextField
+                                        size='small'
                                         onChange={handleUpdatedImageChange}
                                         sx={{ marginBlock: '10px' }}
                                         fullWidth
@@ -324,7 +385,34 @@ const AdminProducts = () => {
                                         label="Image Url"
                                     // defaultValue="image url"
                                     />
+                                    <Typography>Variants</Typography>
+                                    <Card variant='outlined'>
+                                        {console.log(selectedProduct)}
+                                        {
+
+                                            selectedProduct?.productVariants?.map((item, i) => (
+                                                <ListItem key={item?.productId} disablePadding >
+                                                    <Box height={'50px'} width={5} sx={{ background: item.quantity > 0 ? "green" : 'red' }}></Box>
+                                                    <ListItemButton onClick={(e) => { handleProductSelection(e, i, item) }} sx={{ backgroundColor: selected === i ? '#ffa5001f' : 'white', }} >
+
+                                                        <ListItemText
+                                                            sx={{ fontWeight: selected === i ? 'bold !important' : '400', color: item.quantity === 0 ? "red" : 'green' }}
+                                                            primary={`${i + 1}. ${item?.weight}`}
+                                                            secondary={`selling price :₹ ${item.sellingPrice} | discount : ₹${item.discount} | stock : ${item.quantity}`}
+                                                        />
+                                                        {/* <Box sx={{}} height={'50px'} width={5} sx={{ background: item.productStockCount > 0 ? "green" : 'red' }}></Box> */}
+
+                                                    </ListItemButton>
+                                                    {/* <Divider sx={{ margin: '2px', height: '1px' }}></Divider> */}
+
+                                                </ListItem>
+                                            ))
+                                        }
+
+                                    </Card>
+
                                     <TextField
+                                        size='small'
                                         onChange={handleUpdatedStockChange}
                                         sx={{ margin: '10px 0px' }}
                                         // fullWidth
@@ -335,7 +423,10 @@ const AdminProducts = () => {
                                         value={selectedProduct?.productStockCount || 0}
                                     // defaultValue="Nuts"
                                     />
+
+
                                     <TextField
+                                        size='small'
                                         onChange={handleUpdatedPurchasingPriceChange}
                                         sx={{ margin: '10px 0px 0 10px' }}                                        // fullWidth
                                         type='number'
@@ -346,6 +437,7 @@ const AdminProducts = () => {
                                     // defaultValue="Nuts"
                                     />
                                     <TextField
+                                        size='small'
                                         onChange={handleUpdatedSellingPriceChange}
                                         sx={{ margin: '10px 0px' }}                                        // fullWidth
                                         type='number'
@@ -356,6 +448,7 @@ const AdminProducts = () => {
                                     // defaultValue="Nuts"
                                     />
                                     <TextField
+                                        size='small'
                                         onChange={handleUpdatedDiscountChange}
                                         sx={{ margin: '10px 0px 0 10px' }}                                        // fullWidth
                                         type='number'
@@ -378,6 +471,7 @@ const AdminProducts = () => {
                                 <Typography sx={{ fontWeight: 'bold', margin: '15px' }}>{"Add New Product"}</Typography>
                                 <Box sx={{ gap: '10px' }}>
                                     <TextField
+                                        size='small'
                                         onChange={handleAddNameChange}
                                         sx={{ marginBlock: '10px' }}
                                         fullWidth
@@ -387,9 +481,21 @@ const AdminProducts = () => {
                                         value={addProduct.productName || ""}
                                     // defaultValue="Category"
                                     />
+                                    <TextField
+                                        size='small'
+                                        onChange={handleAddDescriptionChange}
+                                        sx={{ marginBlock: '10px' }}
+                                        fullWidth
+                                        required
+                                        id="outlined-required"
+                                        label="Description"
+                                        value={addProduct.productDescription || ""}
+                                    // defaultValue="Category"
+                                    />
                                     <FormControl fullWidth required sx={{ marginBlock: '10px', minWidth: 120 }}>
                                         <InputLabel id="demo-simple-select-required-label">Category</InputLabel>
                                         <Select
+                                            // size='small'
                                             fullWidth
                                             labelId="demo-simple-select-required-label"
                                             id="demo-simple-select-required"
@@ -406,6 +512,7 @@ const AdminProducts = () => {
 
                                     </FormControl>
                                     <TextField
+                                        size='small'
                                         onChange={handleAddImageChange}
                                         sx={{ marginBlock: '10px' }}
                                         fullWidth
@@ -415,7 +522,47 @@ const AdminProducts = () => {
                                         label="Image Url"
                                     // defaultValue="image url"
                                     />
+                                    {
+                                        variants.length > 0 ? <Box>
+                                            <Typography sx={{ margin: '10px' }}>Variants </Typography>
+                                            {
+                                                variants?.map((item, i) => (
+                                                    <ListItem key={i} disablePadding >
+                                                        <Box height={'50px'} width={5} sx={{ background: item.quantity > 0 ? "green" : 'red' }}></Box>
+                                                        <ListItemButton onClick={(e) => { handleProductSelection(e, i, item) }} sx={{ backgroundColor: selected === i ? '#ffa5001f' : 'white' }} >
+                                                            {/* <ListItemAvatar>
+                                                                <Avatar alt="Remy Sharp" src={item.productImageUrl} />
+                                                            </ListItemAvatar> */}
+                                                            <ListItemText
+                                                                sx={{ fontWeight: selected === i ? 'bold !important' : '400', color: item.quantity === 0 ? "red" : 'green' }}
+                                                                primary={`${i + 1}. ${item?.weight}`}
+                                                                secondary={`selling price :₹ ${item.sellingPrice} | discount : ₹${item.discount} | stock : ${item.quantity}`}
+                                                            />
+                                                            {/* <Box sx={{}} height={'50px'} width={5} sx={{ background: item.productStockCount > 0 ? "green" : 'red' }}></Box> */}
+
+                                                        </ListItemButton>
+
+                                                    </ListItem>
+                                                ))
+                                            }
+                                        </Box> : <></>
+                                    }
+                                    <Typography sx={{ margin: '10px' }}>Add Variants </Typography>
                                     <TextField
+
+                                        size='small'
+                                        onChange={handleAddWeightChange}
+                                        sx={{ margin: '10px 10px' }}
+                                        // fullWidth
+                                        type='name'
+                                        required
+                                        id="outlined-required"
+                                        label="Weight"
+                                        value={addVariant?.weight || "0gm"}
+                                    // defaultValue="Nuts"
+                                    />
+                                    <TextField
+                                        size='small'
                                         onChange={handleAddStockChange}
                                         sx={{ margin: '10px' }}
                                         // fullWidth
@@ -423,10 +570,11 @@ const AdminProducts = () => {
                                         required
                                         id="outlined-required"
                                         label="Total Items"
-                                        value={addProduct.productStockCount || 0}
+                                        value={addVariant.quantity || 0}
                                     // defaultValue="Nuts"
                                     />
-                                    <TextField
+                                    {/* <TextField
+                                        size='small'
                                         onChange={handleAddPurchasingPriceChange}
                                         sx={{ margin: '10px' }}
                                         // fullWidth
@@ -434,10 +582,11 @@ const AdminProducts = () => {
                                         required
                                         id="outlined-required"
                                         label="Purchasing Price"
-                                        value={addProduct.purchasingPrice || 0}
+                                        value={addVariant.purchasingPrice || 0}
                                     // defaultValue="Nuts"
-                                    />
+                                    /> */}
                                     <TextField
+                                        size='small'
                                         onChange={handleAddSellingPriceChange}
                                         sx={{ margin: '10px' }}
                                         // fullWidth
@@ -445,21 +594,27 @@ const AdminProducts = () => {
                                         required
                                         id="outlined-required"
                                         label="Selling Price"
-                                        value={addProduct.productPrice || 0}
+                                        value={addVariant.sellingPrice || 0}
                                     // defaultValue="Nuts"
                                     />
                                     <TextField
+                                        size='small'
                                         onChange={handleAddDiscountChange}
-                                        sx={{ margin: '10px 0px' }}                                        // fullWidth
+                                        sx={{ margin: '10px 10px' }}                                        // fullWidth
                                         type='number'
                                         required
                                         id="outlined-required"
                                         label="Discount"
-                                        value={addProduct.productDiscount || 0}
+                                        value={addVariant.discount || 0}
                                     // defaultValue="Nuts"
                                     />
 
 
+                                </Box>
+                                <Box sx={{ display: 'flex', justifyContent: 'end', ml: "0px" }}>
+                                    <Button onClick={() => {
+                                        setVariants([...variants, addVariant]);
+                                    }} sx={{ background: 'orange' }} variant='contained'>Add </Button>
                                 </Box>
                                 <Box sx={{ display: 'flex', justifyContent: 'start', ml: "0px" }}>
                                     <Button onClick={handleAddProduct} sx={{ background: 'orange' }} variant='contained'>Add To inventory</Button>
