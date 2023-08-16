@@ -4,7 +4,8 @@ import Carousel from './components/shared/Carousel/Carousel';
 import Footer from './components/shared/Footer/Footer';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-import { Toolbar } from '@mui/material'
+import { Fab, Toolbar } from '@mui/material'
+import { ShoppingBagOutlined } from '@mui/icons-material';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Toolbar sx={{ margin: '10px' }} />
 
       <Outlet />
+
       <ToastContainer
         position="top-right"
         autoClose={1000}
@@ -25,6 +27,7 @@ function App() {
         pauseOnHover={false}
         theme="light"
       />
+
 
       <Footer />
     </div>

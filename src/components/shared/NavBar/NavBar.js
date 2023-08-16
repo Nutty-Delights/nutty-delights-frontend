@@ -29,6 +29,7 @@ import useScrollTrigger from '@mui/material/useScrollTrigger';
 // import { ShopOutlined, ShoppingBasketOutlined } from '@mui/icons-material';
 import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
 import ShoppingBasketOutlined from '@mui/icons-material/ShoppingBasketOutlined';
+import { getCart, getUserCart } from '../../../redux/slices/cart';
 
 // import { Login } from '@mui/icons-material';
 
@@ -166,9 +167,12 @@ const NavBar = (props) => {
 
 
   const user = useSelector(getUser);
+  const cart = useSelector(getUserCart);
   const success = useSelector((state) => state?.user?.success)
   console.log("User", user);
   useEffect(() => {
+
+
     if (!user)
       dispatch(getUserProfile(localStorage.getItem('jwt')));
 
@@ -182,9 +186,27 @@ const NavBar = (props) => {
       handleEmailDialog();
     }
 
+    // dispatch(getCart(localStorage.getItem('jwt')))
+
+
 
 
   }, [user, success])
+
+
+
+  useEffect(() => {
+
+
+
+
+    dispatch(getCart(localStorage.getItem('jwt')))
+    // setCart(cartStore);
+
+
+
+
+  }, [])
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{}}>
       <Image style={{ padding: '10px' }} duration={0} src={logo} fit='cover' height='60px' width='130px' />
@@ -251,7 +273,22 @@ const NavBar = (props) => {
 
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
 
-                  <ShoppingCartIcon />
+                  <Badge
+
+                    // variant='dot'
+                    invisible={false}
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    showZero
+                    badgeContent={cart?.cartTotalItems || 0}
+                    sx={{ margin: cart?.cartTotalItems ? '10px' : 0 }}
+                    color='success'
+                  >
+                    <ShoppingCartIcon />
+                  </Badge>
+
                   <NavLink to={'/cart'} style={{ color: 'black', textDecoration: "none", }}>
                     <Typography sx={{ fontWeight: 'bold' }}>
                       {"Cart"}
@@ -287,7 +324,7 @@ const NavBar = (props) => {
                           </Badge>
 
                           <Typography sx={{ fontWeight: 'bold', ml: user?.isEnabled ? "2px" : '10px' }}>
-                            {user ? `${user?.firstName}` : ""}
+                            {user ? `${user?.firstName}` : "User"}
                           </Typography>
 
 

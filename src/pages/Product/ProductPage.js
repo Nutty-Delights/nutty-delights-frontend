@@ -4,17 +4,20 @@ import { getAllProducts, getAllProductsByCategory, getProduct, getProducts, getP
 import Image from 'mui-image';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import './productPage.css'
-import { Box, Button, Divider, Skeleton, Typography, Toolbar, CircularProgress, LinearProgress, Card, Chip } from '@mui/material';
+import { Box, Button, Divider, Skeleton, Typography, Toolbar, CircularProgress, LinearProgress, Card, Chip, IconButton } from '@mui/material';
 import ShoppingBag from '@mui/icons-material/ShoppingBagOutlined';
 import NavBar from '../../components/shared/NavBar/NavBar';
 import BuyNow from '@mui/icons-material/Bolt';
 import Ratings from '@mui/icons-material/StarRounded';
 import Slider from 'react-slick';
 import HomeProductCard from '../Home/HomeProductCard';
-import { BrandingWatermark, ChevronLeft, ChevronRight, EnergySavingsLeaf, EnergySavingsLeafOutlined, EventAvailable, FoodBank, FoodBankOutlined, HealthAndSafety, LineWeight, PropaneOutlined, TypeSpecimen } from '@mui/icons-material';
+import { Add, BrandingWatermark, ChevronLeft, ChevronRight, EnergySavingsLeaf, EnergySavingsLeafOutlined, EventAvailable, FoodBank, FoodBankOutlined, HealthAndSafety, LineWeight, PropaneOutlined, Remove, TypeSpecimen } from '@mui/icons-material';
 import Footer from '../../components/shared/Footer/Footer';
 import SpaOutlinedIcon from '@mui/icons-material/SpaOutlined';
 import TextSnippetOutlinedIcon from '@mui/icons-material/TextSnippetOutlined';
+import cart, { addItemToCart, getCartLoading } from '../../redux/slices/cart';
+import { LoadingButton } from '@mui/lab';
+import { ToastContainer } from 'react-toastify';
 
 var settings = {
     dots: false,
@@ -107,6 +110,8 @@ var settingsBrowse = {
 
 function ProductPage() {
 
+
+    const [itemCount, setItemCount] = useState(1);
     const product = useSelector(getProductsById);
     // const [searchParams, setSearchParams] = useSearchParams();
     // const product = useSelector(getProductsById);
@@ -120,6 +125,8 @@ function ProductPage() {
     const isLoadingCategories = useSelector(getProductsLoading);
     const isErrorCategories = useSelector(getProductsError);
     const isLoadingProducts = useSelector(getProductsLoading);
+    const addItemToCartLoading = useSelector(getCartLoading);
+
     const [selectedVariant, setSelectedVariant] = useState(0);
     // const categoryId = searchParams.get('productType');
 
@@ -153,6 +160,22 @@ function ProductPage() {
         // dispatch(getAllProductsByCategory({ categoryId }))//
 
     }, [])
+
+    const handleAddToCart = () => {
+        const token = localStorage.getItem('jwt');
+        var variant = product?.productVariants?.[selectedVariant];
+        const productId = product?.productId;
+
+        const data = {
+            productId: productId,
+            variant: variant,
+            quantity: itemCount
+        }
+
+        dispatch(addItemToCart({ token, data }));
+
+
+    }
 
 
 
@@ -215,6 +238,8 @@ function ProductPage() {
                     }} className='product-details'>
                         <Typography sx={{ fontWeight: 'bold', fontSize: '2rem', padding: '10px' }}>{product?.productName}</Typography>
                         <Typography sx={{ color: 'grey', fontSize: '1.2 rem', paddingInline: '10px' }}>{product?.productDescription}</Typography>
+                        {/* <Typography sx={{ color: product?.productVariants?.[selectedVariant]?.quantity > 0 ? 'green' : 'red', padding: "12px", paddingBlock: '12px', fontSize: '18px', fontWeight: "bold" }}>{product?.productVariants?.[selectedVariant]?.quantity > 0 ? "In stock" : "Currently not available"}</Typography> */}
+
                         {/* <Divider></Divider> */}
                         <Box
                             sx={{
@@ -228,7 +253,7 @@ function ProductPage() {
                             <Box
                                 sx={{
                                     display: 'flex',
-                                    padding: '5px',
+                                    paddingBlock: '8px',
                                     alignItems: 'center'
                                 }}>
                                 <Typography
@@ -257,6 +282,19 @@ function ProductPage() {
                                     {`${Math.round(product?.productVariants?.[selectedVariant]?.discount * 100 / (product?.productVariants?.[selectedVariant]?.sellingPrice + product?.productVariants?.[selectedVariant]?.discount))}% OFF`}
                                     {/* {`${productVariants?.[selectedVariant]?.discount}% OFF`} */}
                                 </Typography>
+                                <Typography
+                                    sx={{
+                                        color: 'grey',
+                                        textDecoration: 'none',
+                                        marginLeft: '8px',
+                                        marginRight: '8px',
+                                        fontSize: '16px'
+                                    }}>
+                                    {`Incl. all taxes`}
+                                </Typography>
+                                {/* <Typography sx={{ color: 'black', paddingInline: "5px", paddingBlock: '0px', fontSize: '16  px', fontWeight: "" }}>{"|"}</Typography>
+                                <Typography sx={{ color: product?.productVariants?.[selectedVariant]?.quantity > 0 ? 'green' : 'red', paddingInline: "2px", paddingBlock: '0px', fontSize: '16px', fontWeight: "bold" }}>{product?.productVariants?.[selectedVariant]?.quantity > 0 ? "In stock" : "Currently not available"}</Typography> */}
+
                             </Box>
                             {/* <Box sx={{ display: 'flex', padding: '5px', alignItems: 'center' }}>
                                 <Ratings sx={{ color: 'green', fontSize: '16px' }} />
@@ -264,6 +302,7 @@ function ProductPage() {
                             </Box> */}
 
                         </Box>
+
                         {/* <Divider></Divider> */}
                         <Box sx={{ display: 'flex', justifyContent: 'start', gap: '20px', padding: '10px' }}>
                             {
@@ -285,10 +324,11 @@ function ProductPage() {
                             </Card> */}
 
                         </Box>
-                        <Typography sx={{ color: product?.productVariants?.[selectedVariant]?.quantity > 0 ? 'green' : 'red', paddingInline: "12px", paddingBlock: '5px', fontSize: '18px', fontWeight: "bold" }}>{product?.productVariants?.[selectedVariant]?.quantity > 0 ? "In stock" : "Currently not available"}</Typography>
+                        {/* <Typography sx={{ color: product?.productVariants?.[selectedVariant]?.quantity > 0 ? 'green' : 'red', paddingInline: "12px", paddingBlock: '5px', fontSize: '18px', fontWeight: "bold" }}>{product?.productVariants?.[selectedVariant]?.quantity > 0 ? "In stock" : "Currently not available"}</Typography> */}
 
                         <Box sx={{ display: '' }}>
                             <Card variant='' sx={{ margin: '10px' }}>
+
                                 {/* <SpaOutlinedIcon /> */}
                                 <Typography sx={{ paddingInline: "0px", paddingBlock: '5px', fontSize: '18px', fontWeight: "bold" }}>Benefits</Typography>
                                 {/* <Divider></Divider> */}
@@ -301,6 +341,7 @@ function ProductPage() {
 
                                     <Chip sx={{ borderRadius: '10px' }} icon={<HealthAndSafety />} variant='outlined' clickable label='Anti Oxidant'></Chip>
                                     <Chip sx={{ borderRadius: '10px' }} icon={<LineWeight />} variant='outlined' clickable label='High Protien'></Chip>
+                                    <Chip sx={{ borderRadius: '10px' }} icon={<LineWeight />} variant='outlined' clickable label='Fibre'></Chip>
                                     {/* </Box> */}
                                 </Box>
 
@@ -324,6 +365,7 @@ function ProductPage() {
                                     <Chip sx={{ borderRadius: '10px' }} variant='outlined' clickable label='Protien : 20g'></Chip>
                                     <Chip sx={{ borderRadius: '10px' }} variant='outlined' clickable label='Fat : 10g'></Chip>
                                     <Chip sx={{ borderRadius: '10px' }} variant='outlined' clickable label='Fibre : 10g'></Chip>
+                                    <Chip sx={{ borderRadius: '10px' }} variant='outlined' clickable label='Salt : 1g'></Chip>
                                     {/* </Box> */}
                                 </Box>
 
@@ -334,15 +376,86 @@ function ProductPage() {
                                 </Box> */}
                             </Card>
                         </Box>
+
                         {
                             product?.productVariants?.[selectedVariant]?.quantity > 0 ?
                                 <div className='buy-actions' style={{
                                     display: 'flex',
-                                    justifyContent: "space-around",
+                                    justifyContent: "start",
+                                    gap: '20px',
+                                    marginInline: '10px',
+                                    alignItems: "center"
+                                }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                        <Box sx={{ marginBlock: '12px', marginInline: "0px", height: '35px !important', border: '0.8px solid rgb(189, 189, 189)', borderRadius: '10px', display: 'flex', alignItems: 'center' }}>
+                                            <IconButton onClick={() => { if (itemCount > 1) setItemCount(prev => prev - 1) }} sx={{ paddingInline: '15px' }}>
+                                                <Remove sx={{ color: '#808080b3' }} />
+                                            </IconButton>
+                                            <Box sx={{ minWidth: '23px', borderRadius: '20px', border: '0px solid #8080806e', paddingInline: '20px', paddingBlock: '15px' }}>
+                                                <Typography sx={{ fontWeight: 'bold', color: 'orange', fontSize: '17px' }} >{` ${itemCount < 10 ? 0 : ''}${itemCount}`}</Typography>
+                                            </Box>
+                                            <IconButton onClick={() => { setItemCount(prev => prev + 1) }} sx={{ paddingInline: '12px' }}>
+                                                <Add sx={{ color: '#808080b3' }} />
+                                            </IconButton>
+                                        </Box>
+
+
+
+                                    </Box>
+
+                                    <Typography sx={{ textDecoration: 'underline', color: product?.productVariants?.[selectedVariant]?.quantity > 0 ? 'green' : 'red', padding: "12px", paddingBlock: '12px', fontSize: '18px', fontWeight: "bold" }}>{product?.productVariants?.[selectedVariant]?.quantity > 0 ? "In stock" : "Currently not available"}</Typography>
+
+
+                                </div>
+                                : <></>
+                        }
+                        {
+                            product?.productVariants?.[selectedVariant]?.quantity > 0 ? <></> :
+                                <Typography sx={{ color: 'red', paddingInline: "12px", paddingBlock: '5px', fontSize: '18px', fontWeight: "bold" }}>{"Currently not available"}</Typography>
+                        }
+
+                        {
+                            product?.productVariants?.[selectedVariant]?.quantity > 0 ?
+                                <div className='buy-actions' style={{
+                                    display: 'flex',
+                                    justifyContent: "start",
                                     gap: '20px',
                                     marginInline: '10px'
                                 }}>
-                                    <Button sx={{
+                                    {/* <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                        <Box sx={{ maxWidth: 'fit-content', marginBlock: '15px', marginInline: "0px", height: '35px !important', border: '0.5px solid #8080806e', borderRadius: '5px', display: 'flex', alignItems: 'center' }}>
+                                            <IconButton>
+                                                <Remove sx={{ color: '#808080b3' }} />
+                                            </IconButton>
+                                            <Box sx={{ minWidth: '20px', borderRadius: '10px', border: '0px solid #8080806e', padding: '0px' }}>
+                                                <Typography sx={{ fontWeight: 'bold', color: 'orange', fontSize: '17px' }} >{`01`}</Typography>
+                                            </Box>
+                                            <IconButton>
+                                                <Add sx={{ color: '#808080b3' }} />
+                                            </IconButton>
+                                        </Box>
+
+                                    </Box> */}
+                                    <LoadingButton
+                                        loading={addItemToCartLoading}
+                                        onClick={handleAddToCart}
+                                        sx={{
+                                            // margin: '10px',
+                                            background: 'green',
+                                            width: "100%",
+                                            marginBlock: '12px',
+                                            color: 'white',
+                                            fontSize: '17px',
+                                            fontWeight: 'bold',
+                                            borderRadius: '15px',
+                                            borderColor: 'Orange',
+                                            ':hover': {
+                                                backgroundColor: 'green', color: 'white', borderColor: 'white'
+                                            }
+                                        }} variant='contained' endIcon={<ShoppingBag sx={{ fontSize: "24px !important" }} />}>
+                                        Add to bag
+                                    </LoadingButton>
+                                    <LoadingButton sx={{
                                         // margin: '10px',
                                         background: 'orange',
                                         width: "100%",
@@ -357,23 +470,9 @@ function ProductPage() {
                                         }
                                     }} variant='contained' endIcon={<BuyNow sx={{ fontSize: "24px !important" }} />}>
                                         Buy Now
-                                    </Button>
-                                    <Button sx={{
-                                        // margin: '10px',
-                                        background: 'green',
-                                        width: "100%",
-                                        marginBlock: '12px',
-                                        color: 'white',
-                                        fontSize: '17px',
-                                        fontWeight: 'bold',
-                                        borderRadius: '15px',
-                                        borderColor: 'Orange',
-                                        ':hover': {
-                                            backgroundColor: 'green', color: 'white', borderColor: 'white'
-                                        }
-                                    }} variant='contained' endIcon={<ShoppingBag sx={{ fontSize: "24px !important" }} />}>
-                                        Add to bag
-                                    </Button>
+                                    </LoadingButton>
+                                    <ToastContainer></ToastContainer>
+
                                 </div>
                                 : <></>
                         }
@@ -387,12 +486,13 @@ function ProductPage() {
                     }}></Divider>
                     {
                         categoryItems?.length <= 0 ? <></> : <Box sx={{
+                            marginBlock: '25px',
                             marginInline: '5px', maxWidth: {
                                 md: '20vw !important'
                             }
                         }} className='product-details'>
                             {/* <Typography sx={{ fontWeight: '', fontSize: '1.5rem', paddingInline: '30px', paddingBlock: '10px' }}>{"Browse More"}</Typography> */}
-                            <Typography className='heading'>
+                            <Typography sx={{ fontWeight: 'bold', marginInline: '60px', }}>
                                 Browse more in category
                             </Typography>
                             {/* <Typography sx={{ color: 'grey', fontSize: '1.2 rem', paddingInline: '10px' }}>{product?.productDescription}</Typography> */}
