@@ -15,6 +15,7 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import { getUser, getUserLoading, getUserProfile, loginUser } from '../../redux/slices/user';
 import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
+import { getCart, getUserCart } from '../../redux/slices/cart';
 
 const Login = ({ setAuthForm }) => {
 
@@ -104,8 +105,12 @@ const Login = ({ setAuthForm }) => {
             dispatch(loginUser(userData));
             if (jwt) {
                 dispatch(getUserProfile(jwt))
+
                 // navigate(-1)
             }
+
+
+
 
 
         }

@@ -15,9 +15,10 @@ import { Add, BrandingWatermark, ChevronLeft, ChevronRight, EnergySavingsLeaf, E
 import Footer from '../../components/shared/Footer/Footer';
 import SpaOutlinedIcon from '@mui/icons-material/SpaOutlined';
 import TextSnippetOutlinedIcon from '@mui/icons-material/TextSnippetOutlined';
-import cart, { addItemToCart, getCartLoading } from '../../redux/slices/cart';
+import cart, { addItemToCart, getCart, getCartLoading } from '../../redux/slices/cart';
 import { LoadingButton } from '@mui/lab';
 import { ToastContainer } from 'react-toastify';
+// import { ProgressBar } from 'react-toastify/dist/components';
 
 var settings = {
     dots: false,
@@ -146,6 +147,7 @@ function ProductPage() {
         setSelectedVariant(0);
         setProductVariants(product.productVariants);
         console.log(productVariants);
+        setItemCount(1);
 
         // setCategoryId(product.productCategoryId);
         // dispatch(getAllProductsByCategory({ categoryId }))
@@ -173,6 +175,8 @@ function ProductPage() {
         }
 
         dispatch(addItemToCart({ token, data }));
+        // dispatch(getCart()); 
+        // setItemCount(1);
 
 
     }
@@ -419,7 +423,7 @@ function ProductPage() {
                                 <div className='buy-actions' style={{
                                     display: 'flex',
                                     justifyContent: "start",
-                                    gap: '20px',
+                                    gap: '10px',
                                     marginInline: '10px'
                                 }}>
                                     {/* <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -437,10 +441,12 @@ function ProductPage() {
 
                                     </Box> */}
                                     <LoadingButton
+                                        // loadingIndicator={<LinearProgress />}
                                         loading={addItemToCartLoading}
                                         onClick={handleAddToCart}
                                         sx={{
                                             // margin: '10px',
+
                                             background: 'green',
                                             width: "100%",
                                             marginBlock: '12px',
@@ -453,7 +459,7 @@ function ProductPage() {
                                                 backgroundColor: 'green', color: 'white', borderColor: 'white'
                                             }
                                         }} variant='contained' endIcon={<ShoppingBag sx={{ fontSize: "24px !important" }} />}>
-                                        Add to bag
+                                        {addItemToCartLoading ? 'Adding...' : "Add to bag"}
                                     </LoadingButton>
                                     <LoadingButton sx={{
                                         // margin: '10px',
@@ -471,7 +477,18 @@ function ProductPage() {
                                     }} variant='contained' endIcon={<BuyNow sx={{ fontSize: "24px !important" }} />}>
                                         Buy Now
                                     </LoadingButton>
-                                    <ToastContainer></ToastContainer>
+                                    <ToastContainer
+                                        position="top-right"
+                                        autoClose={1000}
+                                        hideProgressBar={false}
+                                        newestOnTop={false}
+                                        closeOnClick
+                                        rtl={false}
+                                        pauseOnFocusLoss
+                                        draggable
+                                        pauseOnHover={false}
+                                        theme="light"
+                                    />
 
                                 </div>
                                 : <></>

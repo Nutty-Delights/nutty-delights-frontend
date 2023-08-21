@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import Cart from './pages/Cart';
+import Cart from './pages/Cart-Checkout/Cart';
 import { ThemeProvider } from '@emotion/react';
 import theme from './theme/theme'
 import Offers from './pages/Offers';
@@ -24,6 +24,7 @@ import Register from './pages/Auth/Register';
 import Login from './pages/Auth/Login';
 import UserAccount from './pages/UserAccount/UserAccount';
 import Home from './pages/Home/Home';
+import Checkout from './pages/Cart-Checkout/Checkout';
 
 
 
@@ -39,7 +40,13 @@ const router = createBrowserRouter([
       },
       {
         path: 'cart',
-        element: <Cart />
+        element: <Cart />,
+
+      },
+      {
+        path: 'checkout',
+        element: <Checkout />
+
       },
       {
         path: 'categories',

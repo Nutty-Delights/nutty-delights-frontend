@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { URLs } from "../../services/base_urls/constant";
 import UserService from '../../services/user.service';
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
 
 
 
@@ -11,6 +12,7 @@ const initialState = {
     isError: false
 };
 const userUrl = URLs.users;
+
 
 //async reducers
 export const registerUser = createAsyncThunk(
@@ -34,6 +36,9 @@ export const loginUser = createAsyncThunk(
         if (user.jwt) {
             localStorage.setItem("jwt", user.jwt);
         }
+
+
+        // dispatch(getCart(localStorage.getItem('jwt')));
 
         return res.data;
     }
@@ -221,6 +226,8 @@ const userSlice = createSlice({
 
             }
             console.log("newState", newState);
+            localStorage.setItem("userFirstName", user?.firstName);
+            // localStorage.setItem()
             // toast.success("User Registered Sucessfully")
             return newState;
         })
@@ -256,6 +263,8 @@ const userSlice = createSlice({
                 user: null,
                 token: null
             }
+
+
             console.log("newState", newState);
             // toast.success("Logged Out",);
             // toast.success('See you soon!', {

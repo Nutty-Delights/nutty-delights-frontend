@@ -302,6 +302,32 @@ const AdminProducts = () => {
                                         </FormControl>
 
                                     </Box> */}
+                                    <List sx={{ width: '21vw', }}>
+
+
+                                        <Divider></Divider>
+                                        {
+                                            isLoading ? <Box sx={{ alignItems: 'center', justifyContent: 'center', display: 'flex' }}><Typography>{"Loading...."}</Typography></Box> :
+                                                products?.map((item, i) => (
+                                                    <ListItem key={item?.productId} disablePadding >
+                                                        <Box height={'50px'} width={5} sx={{ background: item?.productVariants[0]?.quantity > 0 ? "green" : 'red' }}></Box>
+                                                        <ListItemButton onClick={(e) => { handleProductSelection(e, i, item) }} sx={{ backgroundColor: selected === i ? '#ffa5001f' : 'white' }} >
+                                                            <ListItemAvatar>
+                                                                <Avatar alt="Remy Sharp" src={item.productImageUrl} />
+                                                            </ListItemAvatar>
+                                                            <ListItemText
+                                                                sx={{ fontWeight: selected === i ? 'bold !important' : '400', color: item.productStockCount === 0 ? "red" : 'green' }}
+                                                                primary={`${i + 1}. ${item?.productName}`}
+                                                            // secondary={`selling price :₹ ${item.productPrice} | discount : ₹${item.productDiscount} | stock : ${item.productStockCount}`}
+                                                            />
+                                                            {/* <Box sx={{}} height={'50px'} width={5} sx={{ background: item.productStockCount > 0 ? "green" : 'red' }}></Box> */}
+
+                                                        </ListItemButton>
+
+                                                    </ListItem>
+                                                ))
+                                        }
+                                    </List>
                                 </Box>
 
                             </Paper>

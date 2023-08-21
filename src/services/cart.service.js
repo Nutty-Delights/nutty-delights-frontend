@@ -21,6 +21,20 @@ class CartDataService {
             }
         });
     }
+    updateCartItem(token, data) {
+        return http.put(`/${this.cartUrl}/add`, data, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+    }
+    removeItem(token, data) {
+        return http.delete(`/${this.cartUrl}/delete/${data}`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+    }
 
     // deleteCategory(id) {
     //     return http.delete(`/${this.cartUrl}/deleteCategory/${id}`);

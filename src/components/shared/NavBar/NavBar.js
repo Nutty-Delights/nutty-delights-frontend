@@ -29,7 +29,7 @@ import useScrollTrigger from '@mui/material/useScrollTrigger';
 // import { ShopOutlined, ShoppingBasketOutlined } from '@mui/icons-material';
 import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
 import ShoppingBasketOutlined from '@mui/icons-material/ShoppingBasketOutlined';
-import { getCart, getUserCart } from '../../../redux/slices/cart';
+import { clearCart, getCart, getUserCart } from '../../../redux/slices/cart';
 
 // import { Login } from '@mui/icons-material';
 
@@ -117,6 +117,8 @@ const NavBar = (props) => {
   const handleClose = () => {
     setAnchorEl(null);
     setAuthForm(false);
+    dispatch(getCart(localStorage.getItem('jwt')));
+
   }
 
   const handleEmailClose = () => {
@@ -137,6 +139,7 @@ const NavBar = (props) => {
   const handleLogout = () => {
 
     setAnchorEl(null);
+    dispatch(clearCart());
     dispatch(logoutUser());
     navigate('/')
 
@@ -152,6 +155,7 @@ const NavBar = (props) => {
   const handleDialog = () => {
     setOpen(false);
     setAuthForm(false);
+    dispatch(getCart(localStorage.getItem('jwt')));
 
   }
   const handleEmailDialog = () => {
@@ -169,6 +173,15 @@ const NavBar = (props) => {
   const user = useSelector(getUser);
   const cart = useSelector(getUserCart);
   const success = useSelector((state) => state?.user?.success)
+  const [cartState, setCartState] = useState(cart?.cartTotalItems);
+  console.log("In the nav bar", cart)
+
+  useEffect(() => {
+    // if (cart?.cartTotalItems !== cartState) {
+    dispatch(getCart(localStorage.getItem('jwt')));
+    // setLength(cart?.cartItems.length)    
+    // }
+  }, [cartState])
   console.log("User", user);
   useEffect(() => {
 
@@ -199,14 +212,14 @@ const NavBar = (props) => {
 
 
 
-
-    dispatch(getCart(localStorage.getItem('jwt')))
+    if (!cart)
+      dispatch(getCart(localStorage.getItem('jwt')))
     // setCart(cartStore);
 
 
 
 
-  }, [])
+  }, [cart])
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{}}>
       <Image style={{ padding: '10px' }} duration={0} src={logo} fit='cover' height='60px' width='130px' />
@@ -281,9 +294,9 @@ const NavBar = (props) => {
                       vertical: 'top',
                       horizontal: 'right',
                     }}
-                    showZero
+                    showZero={false}
                     badgeContent={cart?.cartTotalItems || 0}
-                    sx={{ margin: cart?.cartTotalItems ? '10px' : 0 }}
+                    sx={{ margin: cart?.cartTotalItems ? '2px' : '2px' }}
                     color='success'
                   >
                     <ShoppingCartIcon />
@@ -309,22 +322,23 @@ const NavBar = (props) => {
                           onClick={handleClick}
                           style={{ color: 'black', textDecoration: "none", }
                           }>
-                          <Badge
+                          {<Badge
 
-                            // variant='dot'
+                            variant='dot'
                             invisible={true && user?.isEnabled}
                             anchorOrigin={{
                               vertical: 'top',
                               horizontal: 'right',
                             }}
-                            badgeContent={"1"}
+                            showZero={false}
+                            // badgeContent={"0"}
                             color="error"
                           >
                             <AccountIcon />
-                          </Badge>
+                          </Badge>}
 
-                          <Typography sx={{ fontWeight: 'bold', ml: user?.isEnabled ? "2px" : '10px' }}>
-                            {user ? `${user?.firstName}` : "User"}
+                          <Typography sx={{ fontWeight: 'bold', ml: user?.isEnabled ? "2px" : '2px' }}>
+                            {localStorage.getItem('userFirstName') ? localStorage.getItem('userFirstName') : user ? `${user?.firstName}` : "User"}
                           </Typography>
 
 
