@@ -104,6 +104,31 @@ const Cart = () => {
                     }, borderWidth: '1px', marginBlock: '20px', marginInline: '20px'
                 }}></Divider> */}
 
+                    <Box sx={{ marginBlock: '10px' }}>
+                        <Button
+                            disableElevation
+                            onClick={handleProceedToCheckout}
+                            fullWidth
+                            variant='contained'
+                            sx={{
+                                display: {
+                                    xs: 'block',
+                                    sm: 'block',
+                                    md: 'none'
+                                },
+                                fontWeight: 'bold',
+                                background: 'orange',
+                                color: 'white',
+                                fontSize: '20px',
+                                ':hover': {
+                                    background: 'orange',
+                                    color: 'white',
+                                    fontSize: '20px',
+                                }
+                            }}>
+                            Proceed to checkout
+                        </Button>
+                    </Box>
 
                     <Card variant='outlined' sx={{
                         width: {
@@ -403,6 +428,11 @@ const Cart = () => {
                             fullWidth
                             variant='contained'
                             sx={{
+                                display: {
+                                    xs: 'none',
+                                    sm: 'none',
+                                    md: 'block'
+                                },
                                 fontWeight: 'bold',
                                 background: 'orange',
                                 color: 'white',
