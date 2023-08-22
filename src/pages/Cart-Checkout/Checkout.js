@@ -1,4 +1,4 @@
-import { Autocomplete, Avatar, Box, Breadcrumbs, Button, Card, CardContent, Checkbox, Collapse, Divider, FormControl, FormControlLabel, FormGroup, InputAdornment, InputLabel, LinearProgress, List, ListItem, ListItemAvatar, ListItemText, MenuItem, Paper, Select, TextField, Typography, } from '@mui/material'
+import { Autocomplete, Avatar, Box, Breadcrumbs, Button, Card, CardContent, Checkbox, Collapse, Divider, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel, InputAdornment, InputLabel, LinearProgress, List, ListItem, ListItemAvatar, ListItemText, MenuItem, Paper, Radio, RadioGroup, Select, TextField, Typography, } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { Link, NavLink } from 'react-router-dom';
@@ -33,6 +33,22 @@ const Checkout = () => {
     const [city, setCity] = useState("");
     const [state, setState] = useState("");
     const [mobNo, setMobNo] = useState("");
+    const [shippingMethod, setShippingMethod] = React.useState('prepaid');
+    const [shippingCharge, setShippingCharge] = useState(0);
+
+    const handleShippingMethod = (event) => {
+        setShippingMethod(event.target.value);
+
+        if (event.target.value === 'cod')
+            setShippingCharge(50)
+
+        else {
+            setShippingCharge(0)
+        }
+        // setHelperText(' ');
+        // setError(false);
+    };
+
 
 
     const handleFirstName = (e) => {
@@ -623,7 +639,79 @@ const Checkout = () => {
                                     </Box>
 
                                 </Box>
-                            </CardContent> : <CardContent></CardContent>
+                            </CardContent> : <CardContent sx={{ padding: '24px' }}>
+                                <Card variant='outlined'>
+                                    <CardContent>
+                                        <Box gap={"25px"} display={"flex"}>
+                                            <Typography sx={{ fontWeight: 'bold', minWidth: '55px' }} >Contact</Typography>
+                                            <Typography sx={{ fontSize: "14px" }}>{`${user?.firstName} ${user?.lastName}, ${user?.email}, ${user?.mobileNumber}`}</Typography>
+                                        </Box>
+                                        <Divider sx={{ marginBlock: '10px' }}></Divider>
+                                        <Box gap={"25px"} display={"flex"}>
+                                            <Typography sx={{ fontWeight: 'bold', minWidth: '55px' }}>Ship to</Typography>
+                                            <Typography sx={{ fontSize: "14px" }}>{`${houseNo}, ${address}, ${pinCode}, ${city}, ${state}, ${country}`}</Typography>
+                                        </Box>
+                                    </CardContent>
+                                </Card>
+                                <Box sx={{ margin: '10px' }}>
+                                    <Typography sx={{ fontWeight: 'bold' }}>Shipping Method</Typography>
+
+                                </Box>
+                                <Card variant='outlined'>
+                                    <CardContent>
+                                        <form >
+                                            <FormControl sx={{ m: 1 }} variant="standard">
+                                                {/* <FormLabel id="demo-error-radios">Pop quiz: MUI is...</FormLabel> */}
+                                                <RadioGroup
+                                                    sx={{
+                                                        '&, &.Mui-checked': {
+                                                            // color: 'magenta',
+                                                            fontSize: '14px'
+                                                        },
+                                                    }}
+                                                    aria-labelledby="demo-error-radios"
+                                                    name="quiz"
+                                                    value={shippingMethod}
+                                                    onChange={handleShippingMethod}
+                                                >
+                                                    <FormControlLabel value="prepaid" control={
+                                                        <Radio
+                                                            size='small'
+
+                                                            sx={{
+                                                                '&, &.Mui-checked': {
+                                                                    color: 'orange',
+                                                                },
+                                                            }} />
+                                                    } label={<Typography sx={{ fontSize: '15px' }}>{"Prepaid - Net banking, UPI, Debit/Credit Card"}</Typography>} />
+
+                                                    <FormControlLabel value="cod" control={
+                                                        <Radio
+                                                            size='small'
+                                                            sx={{
+                                                                '&, &.Mui-checked': {
+                                                                    color: 'orange',
+                                                                    fontSize: '14px'
+                                                                },
+                                                            }} />
+                                                    } label={<Box
+                                                        gap={"20px"}
+                                                        sx={{
+                                                            width: '100%',
+                                                            display: 'flex',
+                                                            justifyContent: 'space-between'
+                                                        }}>
+                                                        <Typography sx={{ fontSize: '15px' }}>{"Pay on delivery"}</Typography>
+                                                        <Typography sx={{ fontSize: '15px' }}>{"( Shipping charge : ₹ 50 )"}</Typography>
+                                                    </Box>} />
+                                                </RadioGroup>
+                                                {/* <FormHelperText>{"45"}</FormHelperText> */}
+
+                                            </FormControl>
+                                        </form>
+                                    </CardContent>
+                                </Card>
+                            </CardContent>
                         }
                     </Card>
                 </Box>
@@ -812,15 +900,15 @@ const Checkout = () => {
 
                                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                             <Box>
-                                                <Typography sx={{ fontSize: '17px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{`Subtotal (${cart?.cartTotalItems} items)`}</Typography>
-                                                <Typography sx={{ fontSize: '17px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{`Taxes (GST)`}</Typography>
-                                                <Typography sx={{ fontSize: '17px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{`Discounts & Offers (-)`}</Typography>
+                                                <Typography sx={{ fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{`Subtotal (${cart?.cartTotalItems} items)`}</Typography>
+                                                <Typography sx={{ fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{`Taxes (GST)`}</Typography>
+                                                <Typography sx={{ fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{`Discounts & Offers (-)`}</Typography>
                                                 {/* <Typography sx={{ fontSize: '18px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>{`Total (incl. all taxes )`}</Typography> */}
                                             </Box>
                                             <Box>
-                                                <Typography sx={{ fontSize: '17px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{` ₹ ${Math.round(cart ? cart?.cartTotalPrice * 100 / 105 : 0)}`}</Typography>
-                                                <Typography sx={{ fontSize: '17px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{` ₹ ${Math.round(cart ? cart?.cartTotalPrice * 5 / 105 : 0)}`}</Typography>
-                                                <Typography sx={{ textDecoration: 'none', color: 'green', fontSize: '17px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{`₹ ${0}`}</Typography>
+                                                <Typography sx={{ fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{` ₹ ${Math.round(cart ? cart?.cartTotalPrice * 100 / 105 : 0)}`}</Typography>
+                                                <Typography sx={{ fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{` ₹ ${Math.round(cart ? cart?.cartTotalPrice * 5 / 105 : 0)}`}</Typography>
+                                                <Typography sx={{ textDecoration: 'none', color: 'green', fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{`₹ ${0}`}</Typography>
                                             </Box>
 
 
@@ -831,14 +919,15 @@ const Checkout = () => {
                                                 <Box>
                                                     {/* <Typography sx={{ fontSize: '18px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>{`Subtotal (${cart?.cartTotalItems} items)`}</Typography>
                                         <Typography sx={{ fontSize: '18px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>{`Taxes ( GST )`}</Typography> */}
-                                                    <Typography sx={{ fontSize: '17px', fontWeight: '', marginInline: '10px', marginTop: '0px' }}>{`Total`}</Typography>
-                                                    <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '11px', marginInline: '10px', }} >(Excluding shipping charges)</Typography>
+                                                    <Typography sx={{ fontSize: '16px', fontWeight: '', marginInline: '10px', marginTop: '0px' }}>{`Total`}</Typography>
+                                                    <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '11px', marginInline: '10px', }} >{`Including shipping charges : ${shippingMethod === "cod" ? `₹50` : `free`}`}</Typography>
+                                                    <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '11px', marginInline: '10px', }} >{`${shippingMethod === 'cod' ? 'Pay On Delivery' : 'Prepaid Delivery'}`}</Typography>
 
                                                 </Box>
                                                 <Box>
                                                     {/* <Typography sx={{ fontSize: '18px', fontWeight: 'bold', marginInline: '20px', marginTop: '10px' }}>{`₹ ${Math.round(cart?.cartTotalPrice * 100 / 105)}`}</Typography>
                                         <Typography sx={{ fontSize: '18px', fontWeight: 'bold', marginInline: '20px', marginTop: '10px' }}>{`₹ ${Math.round(cart?.cartTotalPrice * 5 / 105)}`}</Typography> */}
-                                                    <Typography sx={{ color: 'orange', fontSize: '17px', fontWeight: 'bold', marginInline: '10px', marginTop: '10px' }}>{`₹ ${cart ? cart?.cartTotalPrice : 0}`}</Typography>
+                                                    <Typography sx={{ color: 'orange', fontSize: '16px', fontWeight: 'bold', marginInline: '10px', marginTop: '10px' }}>{`₹ ${cart ? cart?.cartTotalPrice + shippingCharge : 0}`}</Typography>
                                                 </Box>
                                             </Box>
 
@@ -856,14 +945,14 @@ const Checkout = () => {
                                         fontWeight: 'bold',
                                         background: 'orange',
                                         color: 'white',
-                                        fontSize: '22px',
+                                        fontSize: '20px',
                                         ':hover': {
                                             background: 'orange',
                                             color: 'white',
-                                            fontSize: '22px',
+                                            fontSize: '20px',
                                         }
                                     }}>
-                                    Proceed to Payment
+                                    {shippingMethod === 'cod' ? "Place Order" : "Proceed to Payment"}
                                 </Button>
 
                                 {/* <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '14px' }} >Shipping charges will calculated at checkout</Typography> */}

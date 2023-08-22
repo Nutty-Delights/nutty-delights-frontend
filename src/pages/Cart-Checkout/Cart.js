@@ -436,11 +436,11 @@ const Cart = () => {
                                 fontWeight: 'bold',
                                 background: 'orange',
                                 color: 'white',
-                                fontSize: '22px',
+                                fontSize: '20px',
                                 ':hover': {
                                     background: 'orange',
                                     color: 'white',
-                                    fontSize: '22px',
+                                    fontSize: '20px',
                                 }
                             }}>
                             Proceed to checkout

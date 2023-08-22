@@ -25,6 +25,7 @@ import Login from './pages/Auth/Login';
 import UserAccount from './pages/UserAccount/UserAccount';
 import Home from './pages/Home/Home';
 import Checkout from './pages/Cart-Checkout/Checkout';
+import PaymentSuccess from './pages/Payments/PaymentSuccess';
 
 
 
@@ -52,10 +53,10 @@ const router = createBrowserRouter([
         path: 'categories',
         element: <Categories />
       },
-      // {
-      //   path: '/products',
-      //   element: <Offers />
-      // },
+      {
+        path: 'payment/:orderId',
+        element: <PaymentSuccess />
+      },
       {
         path: 'bulk-orders',
         element: <BulkOrder />

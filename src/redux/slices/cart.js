@@ -4,6 +4,7 @@ import CartDataService from '../../services/cart.service';
 import { toast } from "react-toastify";
 import { act } from "react-dom/test-utils";
 import { Difference } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 
 const initialState = {
@@ -303,7 +304,10 @@ const cartSlice = createSlice({
                 }
 
                 if (status) {
-                    toast.success("Item Added to cart");
+                    toast.success("Item Added to cart", {
+                        action: <button onClick={() => { useNavigate("/cart") }}>dismiss</button>,
+
+                    });
                 }
                 else {
                     toast.error("Something went wrong ! try again")
