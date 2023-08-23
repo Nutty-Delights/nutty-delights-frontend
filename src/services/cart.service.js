@@ -36,13 +36,7 @@ class CartDataService {
         });
     }
 
-    // deleteCategory(id) {
-    //     return http.delete(`/${this.cartUrl}/deleteCategory/${id}`);
-    // }
 
-    // getAllCategories() {
-    //     return http.get(`/${this.cartUrl}/getAllCategories`);
-    // }
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
