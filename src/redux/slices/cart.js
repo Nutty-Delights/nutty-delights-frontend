@@ -2,8 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { URLs } from "../../services/base_urls/constant";
 import CartDataService from '../../services/cart.service';
 import { toast } from "react-toastify";
-import { act } from "react-dom/test-utils";
-import { Difference } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
 
@@ -16,26 +14,6 @@ const initialState = {
 };
 const cartUrl = URLs.cart;
 
-//async reducers
-
-// export const updateCart = createAsyncThunk(
-//     `${CartUrl}/updateCart`,
-//     async ({ id, data }) => {
-
-//         const res = await CartDataService.updateCart(id, data);
-//         console.log("inside update Cart", res);
-//         // alert("updated in database");
-//         return res.data;
-//     }
-// );
-// export const deleteCart = createAsyncThunk(
-//     `${CartUrl}/deleteCart/:id`,
-//     async (id) => {
-//         const res = await CartDataService.deleteCart(id);
-//         console.log(res);
-//         return res.data;
-//     }
-// );
 
 export const getCart = createAsyncThunk(
     `${cartUrl}/getCart`,

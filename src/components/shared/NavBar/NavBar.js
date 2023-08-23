@@ -30,6 +30,8 @@ import useScrollTrigger from '@mui/material/useScrollTrigger';
 import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
 import ShoppingBasketOutlined from '@mui/icons-material/ShoppingBasketOutlined';
 import { clearCart, getCart, getUserCart } from '../../../redux/slices/cart';
+import { CardGiftcardSharp } from '@mui/icons-material';
+import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 
 // import { Login } from '@mui/icons-material';
 
@@ -75,16 +77,17 @@ const NavBar = (props) => {
       icon: (color = 'black') => <DealsIcons sx={{ color: color }} />
     },
     {
-      name: "Bulk Order",
-      link: '/bulk-orders',
-      icon: (color = 'black') => <BulkOrderIcon sx={{ color: color }} />
-    },
-    {
-      name: "Delivery",
-      link: '/delivery',
-      icon: (color = 'black') => <DeliveryIcon sx={{ color: color }} />
+      name: "Gifts",
+      link: '/gifts',
+      icon: (color = 'black') => <CardGiftcardSharp sx={{ color: color }} />
 
     },
+    {
+      name: "Wholesale",
+      link: '/bulk-orders',
+      icon: (color = 'black') => <ReceiptLongOutlinedIcon sx={{ color: color }} />
+    },
+
 
   ];
 

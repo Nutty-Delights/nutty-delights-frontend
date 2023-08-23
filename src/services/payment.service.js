@@ -6,7 +6,7 @@ import { URLs } from './base_urls/constant';
 class PaymentDataService {
 
     paymentUrl = URLs.payment;
-    getPayment(paymentId, orderId) {
+    updatePayment(paymentId, orderId) {
         return http.get(`/${this.paymentUrl}/payments?payment_id=${paymentId}&order_id=${orderId}`, {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem('jwt')}`

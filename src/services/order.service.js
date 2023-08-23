@@ -21,10 +21,10 @@ class OrderDataService {
             }
         });
     }
-    getUserOrders(token, data) {
+    getUserOrders() {
         return http.get(`/${this.orderUrl}/user`, {
             headers: {
-                "Authorization": `Bearer ${token}`
+                "Authorization": `Bearer ${localStorage.getItem('jwt')}`
             }
         });
     }

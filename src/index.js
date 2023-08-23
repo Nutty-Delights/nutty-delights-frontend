@@ -6,9 +6,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Cart from './pages/Cart-Checkout/Cart';
 import { ThemeProvider } from '@emotion/react';
 import theme from './theme/theme'
-import Offers from './pages/Offers';
 import BulkOrder from './pages/BulkOrder';
-import Delivery from './pages/Delivery';
 import Categories from './pages/Categories/Categories';
 import ProductList from './pages/ProductList/ProductList';
 import ProductPage from './pages/Product/ProductPage';
@@ -20,12 +18,11 @@ import AdminProducts from './pages/Admin/AdminProducts';
 import AdminApis from './pages/Admin/AdminApis';
 import AdminOrders from './pages/Admin/AdminOrders';
 import AdminPayments from './pages/Admin/AdminPayments';
-import Register from './pages/Auth/Register';
-import Login from './pages/Auth/Login';
 import UserAccount from './pages/UserAccount/UserAccount';
 import Home from './pages/Home/Home';
 import Checkout from './pages/Cart-Checkout/Checkout';
 import PaymentSuccess from './pages/Payments/PaymentSuccess';
+import Gifts from './pages/Gifts';
 
 
 
@@ -62,8 +59,8 @@ const router = createBrowserRouter([
         element: <BulkOrder />
       },
       {
-        path: 'delivery',
-        element: <Delivery />
+        path: 'gifts',
+        element: <Gifts />
       },
       {
         path: 'user/account',
