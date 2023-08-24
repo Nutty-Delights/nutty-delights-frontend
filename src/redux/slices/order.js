@@ -26,7 +26,7 @@ export const createOrder = createAsyncThunk(
 
 export const getOrder = createAsyncThunk(
     `${orderUrl}/getOrder`,
-    async ({ orderId }) => {
+    async (orderId) => {
 
         const res = await OrderDataService.getOrder(orderId);
         console.log("inside get Order", res);

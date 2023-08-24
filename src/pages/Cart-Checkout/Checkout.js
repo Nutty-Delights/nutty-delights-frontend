@@ -12,7 +12,7 @@ import axios from 'axios';
 import { Country, State, City } from 'country-state-city';
 import { createOrder, getCreatedOrder, getOrderError, getOrderLoading } from '../../redux/slices/order';
 import { LoadingButton } from '@mui/lab';
-import { createPaymentLink } from '../../redux/slices/payment';
+import { createPaymentLink, getPaymentError, getPaymentLoading } from '../../redux/slices/payment';
 
 
 
@@ -41,14 +41,17 @@ const Checkout = () => {
     const [shippingAddress, setShippingAddress] = useState("");
     const [data, setData] = useState();
     const createdOrderLoading = useSelector(getOrderLoading);
+    const paymentLoading = useSelector(getPaymentLoading);
     const createdOrderError = useSelector(getOrderError);
+    const paymentError = useSelector(getPaymentError);
     const order = useSelector(getCreatedOrder);
 
 
 
     useEffect(() => {
-
-    },)
+        if (order)
+            setStep(2)
+    }, [order])
     const handleShippingMethod = (event) => {
         setShippingMethod(event.target.value);
 
@@ -126,11 +129,14 @@ const Checkout = () => {
 
     const handleCreateOrder = () => {
         dispatch(createOrder(data));
+
+        // if (createdOrderLoading === false)
+        //     setStep(2);
     }
 
     const handleProceedToPayment = () => {
         //creating the order
-        handleCreateOrder();
+        // handleCreateOrder();
 
         dispatch(createPaymentLink(order?.id))
 
@@ -196,6 +202,9 @@ const Checkout = () => {
         //     Shipping
         // </NavLink>,
         <NavLink onClick={() => { setStep(1) }} style={{ textDecoration: 'none', color: step === 1 ? 'orange' : 'grey', fontWeight: step === 1 ? 'bold' : 'normal' }} >
+            Order Review
+        </NavLink>,
+        <NavLink onClick={() => { setStep(2) }} style={{ textDecoration: 'none', color: step === 2 ? 'orange' : 'grey', fontWeight: step === 2 ? 'bold' : 'normal' }} >
             Payments
         </NavLink>,
 
@@ -668,79 +677,85 @@ const Checkout = () => {
                                     </Box>
 
                                 </Box>
-                            </CardContent> : <CardContent sx={{ padding: '24px' }}>
-                                <Card variant='outlined'>
-                                    <CardContent>
-                                        <Box gap={"25px"} display={"flex"}>
-                                            <Typography sx={{ fontWeight: 'bold', minWidth: '55px' }} >Contact</Typography>
-                                            <Typography sx={{ fontSize: "14px" }}>{`${user?.firstName} ${user?.lastName}, ${user?.email}, ${user?.mobileNumber}`}</Typography>
-                                        </Box>
-                                        <Divider sx={{ marginBlock: '10px' }}></Divider>
-                                        <Box gap={"25px"} display={"flex"}>
-                                            <Typography sx={{ fontWeight: 'bold', minWidth: '55px' }}>Ship to</Typography>
-                                            <Typography sx={{ fontSize: "14px" }}>{shippingAddress}</Typography>
-                                        </Box>
-                                    </CardContent>
-                                </Card>
-                                <Box sx={{ margin: '10px' }}>
-                                    <Typography sx={{ fontWeight: 'bold' }}>Shipping Method</Typography>
+                            </CardContent> :
+                            step === 1 ?
+                                <CardContent sx={{ padding: '24px' }}>
+                                    <Card variant='outlined'>
+                                        <CardContent>
+                                            <Box gap={"25px"} display={"flex"}>
+                                                <Typography sx={{ fontWeight: 'bold', minWidth: '55px' }} >Contact</Typography>
+                                                <Typography sx={{ fontSize: "14px" }}>{`${user?.firstName} ${user?.lastName}, ${user?.email}, ${user?.mobileNumber}`}</Typography>
+                                            </Box>
+                                            <Divider sx={{ marginBlock: '10px' }}></Divider>
+                                            <Box gap={"25px"} display={"flex"}>
+                                                <Typography sx={{ fontWeight: 'bold', minWidth: '55px' }}>Ship to</Typography>
+                                                <Typography sx={{ fontSize: "14px" }}>{shippingAddress}</Typography>
+                                            </Box>
+                                        </CardContent>
+                                    </Card>
 
-                                </Box>
-                                <Card variant='outlined'>
-                                    <CardContent>
-                                        <form >
-                                            <FormControl sx={{ m: 1 }} variant="standard">
-                                                {/* <FormLabel id="demo-error-radios">Pop quiz: MUI is...</FormLabel> */}
-                                                <RadioGroup
-                                                    sx={{
-                                                        '&, &.Mui-checked': {
-                                                            // color: 'magenta',
-                                                            fontSize: '14px'
-                                                        },
-                                                    }}
-                                                    aria-labelledby="demo-error-radios"
-                                                    name="quiz"
-                                                    value={shippingMethod}
-                                                    onChange={handleShippingMethod}
-                                                >
-                                                    <FormControlLabel value="prepaid" control={
-                                                        <Radio
-                                                            size='small'
+                                </CardContent> :
 
-                                                            sx={{
-                                                                '&, &.Mui-checked': {
-                                                                    color: 'orange',
-                                                                },
-                                                            }} />
-                                                    } label={<Typography sx={{ fontSize: '15px' }}>{"Prepaid - Net banking, UPI, Debit/Credit Card"}</Typography>} />
+                                <CardContent>
+                                    <Box sx={{ margin: '10px' }}>
+                                        <Typography sx={{ fontWeight: 'bold' }}>Shipping Method</Typography>
 
-                                                    <FormControlLabel value="cod" control={
-                                                        <Radio
-                                                            size='small'
-                                                            sx={{
-                                                                '&, &.Mui-checked': {
-                                                                    color: 'orange',
-                                                                    fontSize: '14px'
-                                                                },
-                                                            }} />
-                                                    } label={<Box
-                                                        gap={"20px"}
+                                    </Box>
+                                    <Card variant='outlined'>
+                                        <CardContent>
+                                            <form >
+                                                <FormControl sx={{ m: 1 }} variant="standard">
+                                                    {/* <FormLabel id="demo-error-radios">Pop quiz: MUI is...</FormLabel> */}
+                                                    <RadioGroup
                                                         sx={{
-                                                            width: '100%',
-                                                            display: 'flex',
-                                                            justifyContent: 'space-between'
-                                                        }}>
-                                                        <Typography sx={{ fontSize: '15px' }}>{"Pay on delivery"}</Typography>
-                                                        <Typography sx={{ fontSize: '15px' }}>{"( Shipping charge : ₹ 50 )"}</Typography>
-                                                    </Box>} />
-                                                </RadioGroup>
-                                                {/* <FormHelperText>{"45"}</FormHelperText> */}
+                                                            '&, &.Mui-checked': {
+                                                                // color: 'magenta',
+                                                                fontSize: '14px'
+                                                            },
+                                                        }}
+                                                        aria-labelledby="demo-error-radios"
+                                                        name="quiz"
+                                                        value={shippingMethod}
+                                                        onChange={handleShippingMethod}
+                                                    >
+                                                        <FormControlLabel value="prepaid" control={
+                                                            <Radio
+                                                                size='small'
 
-                                            </FormControl>
-                                        </form>
-                                    </CardContent>
-                                </Card>
-                            </CardContent>
+                                                                sx={{
+                                                                    '&, &.Mui-checked': {
+                                                                        color: 'orange',
+                                                                    },
+                                                                }} />
+                                                        } label={<Typography sx={{ fontSize: '15px' }}>{"Prepaid - Net banking, UPI, Debit/Credit Card"}</Typography>} />
+
+                                                        <FormControlLabel value="cod" control={
+                                                            <Radio
+                                                                size='small'
+                                                                sx={{
+                                                                    '&, &.Mui-checked': {
+                                                                        color: 'orange',
+                                                                        fontSize: '14px'
+                                                                    },
+                                                                }} />
+                                                        } label={<Box
+                                                            gap={"20px"}
+                                                            sx={{
+                                                                width: '100%',
+                                                                display: 'flex',
+                                                                justifyContent: 'space-between'
+                                                            }}>
+                                                            <Typography sx={{ fontSize: '15px' }}>{"Pay on delivery"}</Typography>
+                                                            <Typography sx={{ fontSize: '15px' }}>{"( Shipping charge : ₹ 50 )"}</Typography>
+                                                        </Box>} />
+                                                    </RadioGroup>
+                                                    {/* <FormHelperText>{"45"}</FormHelperText> */}
+
+                                                </FormControl>
+                                            </form>
+                                        </CardContent>
+                                    </Card>
+                                </CardContent>
                         }
                     </Card>
                 </Box>
@@ -771,30 +786,55 @@ const Checkout = () => {
                                 }}>
                                 Proceed
                             </LoadingButton>
-                            : <LoadingButton
-                                loading={createdOrderLoading}
-                                onClick={handleProceedToPayment}
-                                fullWidth
-                                variant='contained'
-                                sx={{
-                                    margin: '0px',
-                                    display: {
-                                        xs: 'block',
-                                        sm: 'block',
-                                        md: 'none',
-                                    },
-                                    fontWeight: 'bold',
-                                    background: 'orange',
-                                    color: 'white',
-                                    fontSize: '18px',
-                                    ':hover': {
+                            : step === 1 ?
+                                <LoadingButton
+                                    loading={createdOrderLoading}
+                                    onClick={handleCreateOrder}
+                                    fullWidth
+                                    variant='contained'
+                                    sx={{
+                                        margin: '0px',
+                                        display: {
+                                            xs: 'block',
+                                            sm: 'block',
+                                            md: 'none',
+                                        },
+                                        fontWeight: 'bold',
                                         background: 'orange',
                                         color: 'white',
-                                        fontSize: '18',
-                                    }
-                                }}>
-                                Proceed to Payment
-                            </LoadingButton>
+                                        fontSize: '18px',
+                                        ':hover': {
+                                            background: 'orange',
+                                            color: 'white',
+                                            fontSize: '18',
+                                        }
+                                    }}>
+                                    Proceed
+                                </LoadingButton>
+                                : <LoadingButton
+                                    loading={paymentLoading}
+                                    onClick={handleProceedToPayment}
+                                    fullWidth
+                                    variant='contained'
+                                    sx={{
+                                        margin: '0px',
+                                        display: {
+                                            xs: 'block',
+                                            sm: 'block',
+                                            md: 'none',
+                                        },
+                                        fontWeight: 'bold',
+                                        background: 'orange',
+                                        color: 'white',
+                                        fontSize: '18px',
+                                        ':hover': {
+                                            background: 'orange',
+                                            color: 'white',
+                                            fontSize: '18',
+                                        }
+                                    }}>
+                                    Proceed to Payment
+                                </LoadingButton>
                     }
 
                 </Box>
@@ -995,25 +1035,7 @@ const Checkout = () => {
 
 
                                 {
-                                    step === 1 ?
-                                        <LoadingButton
-                                            loading={createdOrderLoading}
-                                            onClick={handleProceedToPayment}
-                                            fullWidth
-                                            variant='contained'
-                                            sx={{
-                                                fontWeight: 'bold',
-                                                background: 'orange',
-                                                color: 'white',
-                                                fontSize: '20px',
-                                                ':hover': {
-                                                    background: 'orange',
-                                                    color: 'white',
-                                                    fontSize: '20px',
-                                                }
-                                            }}>
-                                            {"Proceed to Payment"}
-                                        </LoadingButton> :
+                                    step === 0 ?
                                         <LoadingButton
                                             // loading={isLoading}
                                             onClick={handleShipping}
@@ -1031,7 +1053,47 @@ const Checkout = () => {
                                                 }
                                             }}>
                                             {"Proceed"}
-                                        </LoadingButton>
+                                        </LoadingButton> :
+
+                                        step === 1 ?
+                                            <LoadingButton
+                                                loading={createdOrderLoading}
+                                                // loading={isLoading}
+                                                onClick={handleCreateOrder}
+                                                fullWidth
+                                                variant='contained'
+                                                sx={{
+                                                    fontWeight: 'bold',
+                                                    background: 'orange',
+                                                    color: 'white',
+                                                    fontSize: '20px',
+                                                    ':hover': {
+                                                        background: 'orange',
+                                                        color: 'white',
+                                                        fontSize: '20px',
+                                                    }
+                                                }}>
+                                                {"Proceed"}
+                                            </LoadingButton> :
+                                            <LoadingButton
+                                                onClick={handleProceedToPayment}
+                                                loading={paymentLoading}
+                                                fullWidth
+                                                variant='contained'
+                                                sx={{
+                                                    fontWeight: 'bold',
+                                                    background: 'orange',
+                                                    color: 'white',
+                                                    fontSize: '20px',
+                                                    ':hover': {
+                                                        background: 'orange',
+                                                        color: 'white',
+                                                        fontSize: '20px',
+                                                    }
+                                                }}>
+                                                {"Proceed to Payment"}
+                                            </LoadingButton>
+
                                 }
 
                                 {/* <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '14px' }} >Shipping charges will calculated at checkout</Typography> */}

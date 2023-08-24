@@ -40,7 +40,7 @@ export const updatePayment = createAsyncThunk(
 
 const orderSlice = createSlice({
     initialState: initialState,
-    name: 'order',
+    name: 'payment',
     extraReducers: (builder) => {
 
         //create order
@@ -112,5 +112,8 @@ const orderSlice = createSlice({
 
     }
 });
+
+export const getPaymentLoading = (state) => state.payment.isLoading;
+export const getPaymentError = (state) => state.payment.isError;
 
 export default orderSlice.reducer;;

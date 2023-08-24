@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { getCreatedOrder, getOrder } from '../../redux/slices/order';
 import { updatePayment } from '../../redux/slices/payment';
+import { Box, Card, Divider, Typography } from '@mui/material';
+import tick from '../../assets/images/tick.jpg'
+import Image from 'mui-image';
 
 const PaymentSuccess = () => {
 
@@ -28,16 +31,63 @@ const PaymentSuccess = () => {
   useEffect(() => {
     if (paymentId && paymentStatus === "paid") {
       const data = { orderId, paymentId, jwt };
+      console.log("payment data", data);
       dispatch(updatePayment(data));
-      dispatch(getOrder(orderId));
+      dispatch(getOrder(data.orderId));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId, paymentId]);
 
   return (
-    <div>
+    <Box>
+      <Divider></Divider>
+      <Box
+        sx={{
+          display: {
+            md: 'block'
+          },
+          justifyContent: 'center',
+          padding: '40px'
+        }}>
+        <Box
+          gap={'10px'}
+          sx={{
+            display: {
+              md: 'flex'
+            },
+            // justifyContent: 'center',
+            alignItems: 'center',
+            paddingBlock: '0px'
+          }}>
+          <Image duration={0} height={50} width={50} src={tick} alt='tick'></Image>
+          <Typography sx={{ fontSize: '26px', fontWeight: 'bold', color: 'orange' }}>Thank You, Your Order Has Been Placed !</Typography>
+        </Box>
+        <Box sx={{ paddingLeft: '60px' }}>
+          <Typography sx={{ fontSize: '15px', fontWeight: 'normal', color: 'grey' }}>Order updates will be sent on your email.</Typography>
 
-    </div>
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          display: {
+            md: 'flex'
+          },
+          justifyContent: 'center',
+          padding: '20px'
+        }}
+      >
+        {/* <Card
+          sx={{
+            width: {
+              md: '50vw'
+            }
+          }}
+          variant='outlined'
+        >
+
+        </Card> */}
+      </Box>
+    </Box >
   )
 }
 
