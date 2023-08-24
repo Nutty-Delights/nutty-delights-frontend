@@ -53,12 +53,15 @@ const orderSlice = createSlice({
         //create order
         builder.addCase(createOrder.pending, (state, action) => {
 
+
             let newState = {
                 ...state,
                 isLoading: true,
                 isError: false
             }
+            console.log(newState);
             return newState;
+
         })
 
         builder.addCase(createOrder.fulfilled, (state, action) => {
@@ -147,5 +150,13 @@ const orderSlice = createSlice({
         })
     }
 });
+
+export const getCreatedOrder = (state) => state.order.order;
+export const getAllOrders = (state) => state.order.orders;
+export const getOrderLoading = (state) => state.order.isLoading;
+export const getOrderError = (state) => state.order.isError;
+
+
+
 
 export default orderSlice.reducer;;

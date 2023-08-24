@@ -15,7 +15,7 @@ class PaymentDataService {
     }
 
     createPaymentLink(orderId) {
-        return http.post(`/${this.paymentUrl}/payments/${orderId}`, {
+        return http.post(`/${this.paymentUrl}/payments/${orderId}`, orderId, {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem('jwt')}`
             }

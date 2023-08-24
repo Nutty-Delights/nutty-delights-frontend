@@ -3,6 +3,8 @@ import categoriesReducer from './slices/categories';
 import productReducer from './slices/products';
 import userReducer from './slices/user';
 import cartReducer from './slices/cart';
+import orderReducer from './slices/order';
+import paymentReducer from './slices/payment';
 
 
 const store = configureStore({
@@ -10,7 +12,10 @@ const store = configureStore({
         categories: categoriesReducer,
         products: productReducer,
         user: userReducer,
-        cart: cartReducer
+        cart: cartReducer,
+        order: orderReducer,
+        payment: paymentReducer
+
     },
     devTools: true
 });

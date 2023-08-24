@@ -10,6 +10,9 @@ import Address from '@mui/icons-material/AddHomeOutlined';
 // import http from '../../http-common'
 import axios from 'axios';
 import { Country, State, City } from 'country-state-city';
+import { createOrder, getCreatedOrder, getOrderError, getOrderLoading } from '../../redux/slices/order';
+import { LoadingButton } from '@mui/lab';
+import { createPaymentLink } from '../../redux/slices/payment';
 
 
 
@@ -35,7 +38,17 @@ const Checkout = () => {
     const [mobNo, setMobNo] = useState("");
     const [shippingMethod, setShippingMethod] = React.useState('prepaid');
     const [shippingCharge, setShippingCharge] = useState(0);
+    const [shippingAddress, setShippingAddress] = useState("");
+    const [data, setData] = useState();
+    const createdOrderLoading = useSelector(getOrderLoading);
+    const createdOrderError = useSelector(getOrderError);
+    const order = useSelector(getCreatedOrder);
 
+
+
+    useEffect(() => {
+
+    },)
     const handleShippingMethod = (event) => {
         setShippingMethod(event.target.value);
 
@@ -87,21 +100,43 @@ const Checkout = () => {
 
     const handleShipping = () => {
         const data = {
+            userId: localStorage.getItem("jwt"),
             firstName: firstName,
             lastName: lastName,
-            address: address,
+            addressLine: address,
             houseNo: houseNo,
             pinCode: pinCode,
             country: country,
             state: state,
             city: city,
-            mobNo: mobNo
+            mobNumber: mobNo
         }
 
-        console.log("Shipping Details", data);
+        let houseNumber = houseNo ? houseNo + ", " : "";
+        let deliveryAddress = houseNumber + address + ", " + pinCode + ", " + city + ", " + state + ", " + country;
+        console.log(deliveryAddress);
+        setData(data);
+        setShippingAddress(deliveryAddress)
+        // console.log("Shipping Details", data);
         setStep(1);
     }
 
+    console.log("Order", order);
+
+
+    const handleCreateOrder = () => {
+        dispatch(createOrder(data));
+    }
+
+    const handleProceedToPayment = () => {
+        //creating the order
+        handleCreateOrder();
+
+        dispatch(createPaymentLink(order?.id))
+
+
+
+    }
 
 
 
@@ -130,12 +165,6 @@ const Checkout = () => {
 
 
     }
-
-    // useEffect(() => {
-
-    // }, [])
-    // const navigate = useNavigate();
-
 
 
     useEffect(() => {
@@ -649,7 +678,7 @@ const Checkout = () => {
                                         <Divider sx={{ marginBlock: '10px' }}></Divider>
                                         <Box gap={"25px"} display={"flex"}>
                                             <Typography sx={{ fontWeight: 'bold', minWidth: '55px' }}>Ship to</Typography>
-                                            <Typography sx={{ fontSize: "14px" }}>{`${houseNo}, ${address}, ${pinCode}, ${city}, ${state}, ${country}`}</Typography>
+                                            <Typography sx={{ fontSize: "14px" }}>{shippingAddress}</Typography>
                                         </Box>
                                     </CardContent>
                                 </Card>
@@ -716,29 +745,57 @@ const Checkout = () => {
                     </Card>
                 </Box>
                 <Box sx={{ padding: '10px' }}>
-                    <Button
-                        onClick={handleShipping}
-                        fullWidth
-                        variant='contained'
-                        sx={{
-                            margin: '0px',
-                            display: {
-                                xs: 'block',
-                                sm: 'block',
-                                md: 'none',
-                            },
-                            fontWeight: 'bold',
-                            background: 'orange',
-                            color: 'white',
-                            fontSize: '18px',
-                            ':hover': {
-                                background: 'orange',
-                                color: 'white',
-                                fontSize: '18',
-                            }
-                        }}>
-                        Proceed to Payment
-                    </Button>
+                    {
+                        step === 0 ?
+                            <LoadingButton
+                                // loading={createdOrderLoading}
+                                onClick={handleShipping}
+                                fullWidth
+                                variant='contained'
+                                sx={{
+                                    margin: '0px',
+                                    display: {
+                                        xs: 'block',
+                                        sm: 'block',
+                                        md: 'none',
+                                    },
+                                    fontWeight: 'bold',
+                                    background: 'orange',
+                                    color: 'white',
+                                    fontSize: '18px',
+                                    ':hover': {
+                                        background: 'orange',
+                                        color: 'white',
+                                        fontSize: '18',
+                                    }
+                                }}>
+                                Proceed
+                            </LoadingButton>
+                            : <LoadingButton
+                                loading={createdOrderLoading}
+                                onClick={handleProceedToPayment}
+                                fullWidth
+                                variant='contained'
+                                sx={{
+                                    margin: '0px',
+                                    display: {
+                                        xs: 'block',
+                                        sm: 'block',
+                                        md: 'none',
+                                    },
+                                    fontWeight: 'bold',
+                                    background: 'orange',
+                                    color: 'white',
+                                    fontSize: '18px',
+                                    ':hover': {
+                                        background: 'orange',
+                                        color: 'white',
+                                        fontSize: '18',
+                                    }
+                                }}>
+                                Proceed to Payment
+                            </LoadingButton>
+                    }
 
                 </Box>
                 <Box
@@ -937,23 +994,45 @@ const Checkout = () => {
                                 </Card>
 
 
-                                <Button
-                                    onClick={handleShipping}
-                                    fullWidth
-                                    variant='contained'
-                                    sx={{
-                                        fontWeight: 'bold',
-                                        background: 'orange',
-                                        color: 'white',
-                                        fontSize: '20px',
-                                        ':hover': {
-                                            background: 'orange',
-                                            color: 'white',
-                                            fontSize: '20px',
-                                        }
-                                    }}>
-                                    {shippingMethod === 'cod' ? "Place Order" : "Proceed to Payment"}
-                                </Button>
+                                {
+                                    step === 1 ?
+                                        <LoadingButton
+                                            loading={createdOrderLoading}
+                                            onClick={handleProceedToPayment}
+                                            fullWidth
+                                            variant='contained'
+                                            sx={{
+                                                fontWeight: 'bold',
+                                                background: 'orange',
+                                                color: 'white',
+                                                fontSize: '20px',
+                                                ':hover': {
+                                                    background: 'orange',
+                                                    color: 'white',
+                                                    fontSize: '20px',
+                                                }
+                                            }}>
+                                            {"Proceed to Payment"}
+                                        </LoadingButton> :
+                                        <LoadingButton
+                                            // loading={isLoading}
+                                            onClick={handleShipping}
+                                            fullWidth
+                                            variant='contained'
+                                            sx={{
+                                                fontWeight: 'bold',
+                                                background: 'orange',
+                                                color: 'white',
+                                                fontSize: '20px',
+                                                ':hover': {
+                                                    background: 'orange',
+                                                    color: 'white',
+                                                    fontSize: '20px',
+                                                }
+                                            }}>
+                                            {"Proceed"}
+                                        </LoadingButton>
+                                }
 
                                 {/* <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '14px' }} >Shipping charges will calculated at checkout</Typography> */}
                             </Box>
