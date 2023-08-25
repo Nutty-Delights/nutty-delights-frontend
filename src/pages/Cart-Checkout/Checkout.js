@@ -47,9 +47,12 @@ const Checkout = () => {
     const order = useSelector(getCreatedOrder);
 
 
+    // useEffect(() => {
+    //     setStep(0);
+    // }, [])
 
     useEffect(() => {
-        if (order)
+        if (order?.orderId === null)
             setStep(2)
     }, [order])
     const handleShippingMethod = (event) => {
@@ -112,7 +115,7 @@ const Checkout = () => {
             country: country,
             state: state,
             city: city,
-            mobNumber: mobNo
+            mobileNumber: mobNo
         }
 
         let houseNumber = houseNo ? houseNo + ", " : "";
@@ -138,8 +141,10 @@ const Checkout = () => {
         //creating the order
         // handleCreateOrder();
 
-        dispatch(createPaymentLink(order?.id))
+        dispatch(createPaymentLink(order?.id));
 
+        if (paymentLoading)
+            setStep(0);
 
 
     }

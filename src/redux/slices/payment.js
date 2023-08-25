@@ -28,9 +28,9 @@ export const createPaymentLink = createAsyncThunk(
 
 export const updatePayment = createAsyncThunk(
     `${paymentUrl}/updatePayment`,
-    async ({ paymentId, orderId }) => {
+    async ({ payId, orderId }) => {
 
-        const res = await PaymentDataService.updatePayment(paymentId, orderId);
+        const res = await PaymentDataService.updatePayment(payId, orderId);
         console.log("inside update payment ", res);
         // alert("updated in database");
         return res.data;
@@ -92,7 +92,7 @@ const orderSlice = createSlice({
                 ...state,
                 isLoading: false,
                 isError: false,
-                payment: action.payload
+                payment: action.payload?.status
             }
             return newState;
         })
@@ -115,5 +115,7 @@ const orderSlice = createSlice({
 
 export const getPaymentLoading = (state) => state.payment.isLoading;
 export const getPaymentError = (state) => state.payment.isError;
+export const getPaymentStatus = (state) => state.payment.payment;
+
 
 export default orderSlice.reducer;;

@@ -8,6 +8,7 @@ const initialState = {
 
     orders: [],
     order: null,
+    placedOrder: null,
     isLoading: false,
     isError: false,
 
@@ -48,6 +49,16 @@ export const getUserOrders = createAsyncThunk(
 const orderSlice = createSlice({
     initialState: initialState,
     name: 'order',
+    reducers: {
+        clearCreatedOrder(state, action) {
+            let newState = {
+                ...state,
+                order: null,
+            }
+
+            return newState;
+        }
+    },
     extraReducers: (builder) => {
 
         //create order
@@ -98,7 +109,10 @@ const orderSlice = createSlice({
             let newState = {
                 ...state,
                 isLoading: false,
-                isError: false
+                isError: false,
+                order: action.payload,
+                placedOrder: action.payload
+
             }
             return newState;
         })
@@ -152,10 +166,12 @@ const orderSlice = createSlice({
 });
 
 export const getCreatedOrder = (state) => state.order.order;
+export const getPlacedOrder = (state) => state.order.placedOrder;
 export const getAllOrders = (state) => state.order.orders;
 export const getOrderLoading = (state) => state.order.isLoading;
 export const getOrderError = (state) => state.order.isError;
 
+export const { clearCreatedOrder } = orderSlice.actions
 
 
 
