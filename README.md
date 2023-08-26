@@ -1,4 +1,5 @@
 # Nutty Delights: An Ecommerce platform for selling dry fruits online.
+## Desktop View
 ![image](https://github.com/Nutty-Delights/nutty-delights-frontend/assets/76203573/796ec65f-2a6e-46af-b4ac-4379ad3a29d7)
 ![image](https://github.com/Nutty-Delights/nutty-delights-frontend/assets/76203573/b124c375-9bb2-42e0-b65b-787332389838)
 
@@ -30,16 +31,12 @@
 ## Order Confirmation Page
 ![image](https://github.com/Nutty-Delights/nutty-delights-frontend/assets/76203573/8506267c-f2f6-4d9b-bdff-bc7f397bfbce)
 
-
-
-
-
-
-
-
 ## Admin Dashbaord
 ![image](https://github.com/Nutty-Delights/nutty-delights-frontend/assets/76203573/043fd9b3-4e80-48a9-af57-9acbb00f495f)
 ![image](https://github.com/Nutty-Delights/nutty-delights-frontend/assets/76203573/8322d031-c73a-44c9-8df6-08d53af5a349)
+
+## User account
+![image](https://github.com/Nutty-Delights/nutty-delights-frontend/assets/76203573/b7257d14-955a-467d-a407-0cbb9691315b)
 
 
 
