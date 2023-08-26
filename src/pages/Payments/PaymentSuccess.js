@@ -311,7 +311,7 @@ const PaymentSuccess = () => {
                 justifyContent: 'space-between',
                 alignItems: 'center'
               }}>
-                <Typography sx={{ fontWeight: 'bold' }}>{`Delivery Address`}</Typography>
+                <Typography sx={{ fontWeight: 'bold', fontSize: '14px' }}>{`Delivery Address`}</Typography>
                 <IconButton>
                   <Location />
                 </IconButton>
@@ -360,13 +360,15 @@ const PaymentSuccess = () => {
             </Box>
 
             <Divider sx={{ marginBlock: '10px' }} ></Divider>
-            <Typography sx={{ fontWeight: 'bold' }}>{`Payment Summary`}</Typography>
+            <Typography sx={{ fontWeight: 'bold', fontSize: '14px' }}>{`Payment Summary`}</Typography>
 
 
             <Box sx={{ marginBlock: "10px" }}>
               <Box
+
                 gap={'5px'}
                 sx={{
+                  fontSize: '14px',
                   display: {
                     md: 'block',
                   },
@@ -383,11 +385,11 @@ const PaymentSuccess = () => {
 
             <Divider sx={{ marginBlock: '10px' }}></Divider>
 
-            <Typography sx={{ fontWeight: 'bold' }}>{`Order Summary`}</Typography>
+            <Typography sx={{ fontWeight: 'bold', fontSize: '14px' }}>{`Order Summary`}</Typography>
 
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBlock: '10px' }}>
-              <Box>
+              <Box sx={{ fontSize: '14px' }}>
                 <Typography sx={{ fontSize: '14px', fontWeight: '', marginInline: '0px', marginTop: '0px', color: 'grey' }}>{`Subtotal (${order?.totalItems} items)`}</Typography>
                 <Typography sx={{ fontSize: '14px', fontWeight: '', marginInline: '0px', marginTop: '0px', color: 'grey' }}>{`Taxes (GST)`}</Typography>
                 <Typography sx={{ fontSize: '14px', fontWeight: '', marginInline: '0px', marginTop: '0px', color: 'grey' }}>{`Discounts & Offers (-)`}</Typography>
@@ -395,7 +397,7 @@ const PaymentSuccess = () => {
               </Box>
               <Box>
                 <Typography sx={{ fontSize: '14px', fontWeight: '', marginInline: '0px', marginTop: '0px', color: 'grey' }}>{` ₹ ${Math.round(order ? order?.totalPrice * 100 / 105 : 0)}`}</Typography>
-                <Typography sx={{ fontSize: '15px', fontWeight: '', marginInline: '0px', marginTop: '0px', color: 'grey' }}>{` ₹ ${Math.round(order ? order?.totalPrice * 5 / 105 : 0)}`}</Typography>
+                <Typography sx={{ fontSize: '14px', fontWeight: '', marginInline: '0px', marginTop: '0px', color: 'grey' }}>{` ₹ ${Math.round(order ? order?.totalPrice * 5 / 105 : 0)}`}</Typography>
                 <Typography sx={{ textDecoration: 'none', color: 'green', fontSize: '14px', fontWeight: '', color: 'grey', marginInline: '0px', marginTop: '0px' }}>{`₹ ${0}`}</Typography>
               </Box>
 

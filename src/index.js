@@ -23,6 +23,7 @@ import Home from './pages/Home/Home';
 import Checkout from './pages/Cart-Checkout/Checkout';
 import PaymentSuccess from './pages/Payments/PaymentSuccess';
 import Gifts from './pages/Gifts';
+import Order from './pages/UserOrder/Order';
 
 
 
@@ -64,7 +65,13 @@ const router = createBrowserRouter([
       },
       {
         path: 'user/account',
-        element: <UserAccount />
+        element: <UserAccount />,
+
+      },
+      {
+        path: 'user/orders/:orderId',
+        element: <Order />,
+
       },
       // {
       //   path: 'products/',

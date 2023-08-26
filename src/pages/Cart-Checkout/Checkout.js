@@ -331,36 +331,7 @@ const Checkout = () => {
 
                                     }
                                 </Box>
-                                {/* <Divider sx={{ mt: '10px' }}></Divider> */}
-                                {/* <Box
 
-                                    justifyContent="space-between"
-                                    sx={{
-                                        marginInline: '10px',
-                                        display: {
-                                            xs: 'block',
-                                            sm: 'block',
-                                            md: 'flex'
-                                        }
-                                    }}>
-                                    <Box display='flex' sx={{ gap: "10px" }}>
-                                        <Address sx={{
-                                            marginBlock: {
-                                                xs: '10px',
-                                                sm: '10px',
-                                                md: '10px'
-                                            }
-                                        }} />
-                                        <Typography sx={{
-                                            fontWeight: 'bold', marginBlock: {
-                                                xs: '10px',
-                                                sm: '10px',
-                                                md: '10px'
-                                            }
-                                        }}>Shipping Address</Typography>
-                                    </Box>
-                                </Box> */}
-                                {/* <Divider></Divider> */}
                                 <Box sx={{ padding: '5px' }}>
                                     {/* <Typography sx={{ margin: '15px', fontWeight: 'bold' }}>{"Update Product"}</Typography> */}
                                     <Box sx={{ gap: '10px', }}>

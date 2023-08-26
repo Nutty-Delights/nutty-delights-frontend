@@ -1,198 +1,767 @@
-import React, { useEffect } from 'react'
-import { Box, TextField } from '@mui/material'
+import React, { useEffect, useState } from 'react'
+import { Accordion, AccordionDetails, AccordionSummary, Avatar, AvatarGroup, Badge, Box, Card, CardContent, Chip, Divider, FormControl, FormGroup, IconButton, InputAdornment, LinearProgress, List, ListItem, ListItemAvatar, ListItemText, TextField, Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUser, getUserProfile, logoutUser } from '../../redux/slices/user';
-
+import { getAllOrders, getOrderLoading, getUserOrders } from '../../redux/slices/order';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { Add, ChevronRightRounded, Edit, EditOutlined, ExpandMoreOutlined, LocationCity, LocationCityOutlined, LocationOnOutlined } from '@mui/icons-material';
+import axios from 'axios';
 const UserAccount = () => {
 
 
     const user = useSelector(getUser);
     const dispatch = useDispatch();
-    const token = localStorage.getItem("jwt")
+    const token = localStorage.getItem("jwt");
+    const orders = useSelector(getAllOrders);
+    const ordersLoading = useSelector(getOrderLoading);
+    const navigate = useNavigate();
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [address, setAddress] = useState("");
+    const [houseNo, setHouseNo] = useState("");
+    const [pinCode, setPinCode] = useState("");
+    const [country, setCountry] = useState("");
+    const [city, setCity] = useState("");
+    const [state, setState] = useState("");
+    const [mobNo, setMobNo] = useState("");
+    const [shippingMethod, setShippingMethod] = React.useState('prepaid');
+    const [shippingCharge, setShippingCharge] = useState(0);
+    const [shippingAddress, setShippingAddress] = useState("");
+
+
+    const getPincode = async (pincode) => {
+        const config = {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": "true",
+                "Access-Control-Max-Age": "1800",
+                "Access-Control-Allow-Headers": "content-type"
+                // "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+            }
+        };
+        // const res = await axios.get (`http://www.postalpincode.in/api/pincode/474001`, config);
+        axios.get("https://api.postalpincode.in/pincode/" + pincode).then(res => {
+            var data = res.data;
+            setCountry(data?.[0]?.PostOffice?.[0]?.Country || "");
+            setCity(data?.[0]?.PostOffice?.[0]?.District || "");
+            setState(data?.[0]?.PostOffice?.[0]?.State || "");
+            // console.log("data_1: ", data[0].PostOffice[0].District + " " + data[0].PostOffice[0].State, data[0].PostOffice[0].Country)
+
+
+        }).catch();
+
+
+
+    }
+
+    const handleFirstName = (e) => {
+        setFirstName(e.target.value);
+    }
+    const handleLastName = (e) => {
+        setLastName(e.target.value);
+    }
+    const handleAddress = (e) => {
+        setAddress(e.target.value);
+    }
+    const handleHouseNo = (e) => {
+        setHouseNo(e.target.value);
+    }
+    const handlePincode = (e) => {
+
+        setPinCode(e.target.value);
+        if (e.target.value?.length > 5) {
+            getPincode(e.target.value);
+        }
+    }
+    const handleCountry = (e) => {
+        setCountry(e.target.value);
+    }
+    const handleCity = (e) => {
+        setCity(e.target.value);
+    }
+    const handleState = (e) => {
+        setState(e.target.value);
+    }
+    const handleMob = (e) => {
+        setMobNo(e.target.value);
+    }
 
     useEffect(() => {
-        if (token)
+        if (token) {
             dispatch(getUserProfile());
+            dispatch(getUserOrders())
+        }
+
     }, [])
+
+    const handleNavigate = () => {
+        navigate('/user/orders/1')
+    }
     return (
-        <div>
-            <Box
-                // onSubmit={handleSubmitRegister}
-                component="form"
-                noValidate
-                autoComplete="off"
-            >
-                <Box sx={{ margin: '20px', gap: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'space- evenly' }}>
-                    <TextField size="small"
-                        sx={{
+        <Box>
+            <Divider></Divider>
+            <Box sx={{
+                paddingInline: '12px',
+                paddingBlock: '30px',
+                gap: '20px',
+                display: {
+                    xs: 'block',
+                    sm: 'block',
+                    md: 'flex'
+                },
+                justifyContent: 'center'
+            }}>
+                <Card variant='outlined' sx={{
+                    width: {
+                        xs: 'fit-content',
+                        sm: '100%',
+                        md: '30vw'
+                    }, mb: '10px'
+                }}>
+                    <CardContent>
+
+                        <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+                            {/* <Avatar>
+                            </Avatar> */}
+                            <Typography
+                                sx={{ fontWeight: 'bold' }}
+                            >
+                                User Profile
+                            </Typography>
+                            <IconButton>
+                                <EditOutlined sx={{ color: 'orange' }} />
+                            </IconButton>
+
+                        </Box>
+                        <Divider sx={{ marginBlock: '10px' }}></Divider>
+                        <Box>
+                            <TextField size="small"
+                                disabled
+                                sx={{
 
 
-                            "& .MuiInputLabel-outlined": {
-                                color: "#909090",
-                                "&.MuiInputLabel-shrink": {
-                                    color: "orange"
-                                },
-                            },
-                            "& .MuiOutlinedInput-root": {
-                                "&.Mui-focused fieldset": {
-                                    "borderColor": "orange"
-                                }
+                                    "& .MuiInputLabel-outlined": {
+                                        color: "#909090",
+                                        "&.MuiInputLabel-shrink": {
+                                            color: "orange"
+                                        },
+                                    },
+                                    "& .MuiOutlinedInput-root": {
+                                        "&.Mui-focused fieldset": {
+                                            "borderColor": "orange"
+                                        }
+                                    }
+                                }}
+                                value={user?.firstName + " " + user?.lastName || ""}
+                                // onChange={handleNameChange}
+                                required
+                                fullWidth
+                                margin='dense'
+                                // error={showNameError}
+
+
+                                id="name" label="Name" variant="outlined"
+                            />
+                            <TextField size="small"
+                                disabled
+                                sx={{
+
+
+                                    "& .MuiInputLabel-outlined": {
+                                        color: "#909090",
+                                        "&.MuiInputLabel-shrink": {
+                                            color: "orange"
+                                        },
+                                    },
+                                    "& .MuiOutlinedInput-root": {
+                                        "&.Mui-focused fieldset": {
+                                            "borderColor": "orange"
+                                        }
+                                    }
+                                }}
+                                value={user?.email || ""}
+                                // onChange={handleNameChange}
+                                required
+                                fullWidth
+                                margin='dense'
+                                // error={showNameError}
+
+
+                                id="email" label="email" variant="outlined"
+                            />
+                            <TextField size="small"
+                                disabled
+                                sx={{
+
+
+                                    "& .MuiInputLabel-outlined": {
+                                        color: "#909090",
+                                        "&.MuiInputLabel-shrink": {
+                                            color: "orange"
+                                        },
+                                    },
+                                    "& .MuiOutlinedInput-root": {
+                                        "&.Mui-focused fieldset": {
+                                            "borderColor": "orange"
+                                        }
+                                    }
+                                }}
+                                value={user?.mobileNumber || ""}
+                                // onChange={handleNameChange}
+                                required
+                                fullWidth
+                                margin='dense'
+                                // error={showNameError}
+
+
+                                id="mobNo" label="Mobile Number" variant="outlined"
+                            />
+
+                        </Box>
+                        {/* <Box sx={{ mt: '10px' }} display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+                          
+                            <Typography
+                                sx={{ fontWeight: 'bold' }}
+                            >
+                                Saved Addresses
+                            </Typography>
+
+
+                        </Box> */}
+                        {/* <Divider sx={{ marginBlock: '10px' }}></Divider> */}
+                        <Accordion elevation={0} sx={{
+                            width: 'inherit', ':before': {
+                                top: '0px !important'
                             }
-                        }}
-                        value={user?.firstName + " " + user?.lastName || ""}
-                        // onChange={handleNameChange}
-                        required
-                        fullWidth
-                        margin='dense'
-                        // error={showNameError}
+                        }}>
+                            <AccordionSummary
+
+                                sx={{ fontWeight: 'bold', paddingInline: '0px', paddingBlock: '2px', fontSize: "14px", mt: '8px', minHeight: '10px !important' }}
+                                expandIcon={<Add sx={{ color: 'orange' }} />}
+                                aria-controls="panel1a-content"
+                                id="panel1a-header"
+                            >
+                                <Typography sx={{ color: 'black', fontWeight: 'bold' }}>Saved Address</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails sx={{ padding: '0px' }} >
+                                <Box sx={{ padding: '0px' }}>
+                                    <Typography sx={{ marginInline: '10px', mb: "5px", fontWeight: 'bold', color: 'orange' }}>{"Add address"}</Typography>
+
+                                    <Box sx={{ gap: '10px', }}>
+                                        <FormControl sx={{ width: '100%' }}>
+
+                                            <FormGroup row sx={{ width: 'inherit', flexWrap: 'nowrap' }}>
+                                                <TextField
+                                                    onChange={handleFirstName}
+                                                    value={firstName || ""}
+                                                    fullWidth
+                                                    size='small'
+                                                    // onChange={handleUpdatedNameChange}
+                                                    sx={{
 
 
-                        id="name" label="Name" variant="outlined" />
-                    <TextField
-                        // InputProps={{
-                        //     endAdornment: (
-                        //         <InputAdornment position='end'>
+                                                        "& .MuiInputLabel-outlined": {
+                                                            color: "black",
+                                                            fontSize: '14px',
 
-                        //             {(emailError && email?.length > 0) && <IconButton>
-                        //                 {<Tooltip
-
-                        //                     onClick={handleToolTip}
-                        //                     open={showTooltip}
-                        //                     title={
-                        //                         <Typography sx={{ fontSize: '12px', }}>
-                        //                             Invalid Email Address
-                        //                         </Typography>
-                        //                     }
-                        //                     arrow
-                        //                     placement='bottom' >
-
-                        //                     <Error sx={{ color: 'orange' }} />
-
-                        //                 </Tooltip>}
-
-                        //             </IconButton>}
-                        //             {/* {(!emailError && email?.length > 0) && <IconButton>
-
-
-                        //                             <Right sx={{ color: 'orange' }} />
-
+                                                            "&.MuiInputLabel-shrink": {
+                                                                color: "orange"
+                                                            },
+                                                        },
+                                                        "& .MuiOutlinedInput-root": {
+                                                            "&.Mui-focused fieldset": {
+                                                                "borderColor": "orange"
+                                                            }
+                                                        },
+                                                        margin: '6px'
+                                                    }}
+                                                    // fullWidth
+                                                    required
+                                                    id="outlined-required"
+                                                    label="First Name"
+                                                />
+                                                <TextField
+                                                    onChange={handleLastName}
+                                                    value={"" || lastName}
+                                                    fullWidth
+                                                    size='small'
+                                                    // onChange={handleUpdatedNameChange}
+                                                    sx={{
 
 
-                        //                         </IconButton>} */}
-                        //         </InputAdornment>
-                        //     ),
-                        // }}
-                        sx={{
-                            "& .MuiInputLabel-outlined": {
-                                color: "#909090",
-                                "&.MuiInputLabel-shrink": {
-                                    color: "orange"
-                                },
+                                                        "& .MuiInputLabel-outlined": {
+                                                            color: "black",
+                                                            fontSize: '14px',
+
+                                                            "&.MuiInputLabel-shrink": {
+                                                                color: "orange"
+                                                            },
+                                                        },
+                                                        "& .MuiOutlinedInput-root": {
+                                                            "&.Mui-focused fieldset": {
+                                                                "borderColor": "orange"
+                                                            }
+                                                        },
+                                                        margin: '6px'
+
+                                                    }}
+                                                    // fullWidth
+                                                    required
+                                                    id="outlined-required"
+                                                    label="Last Name"
+
+                                                />
+
+                                            </FormGroup>
+                                            <FormGroup row sx={{ width: 'inherit', flexWrap: 'nowrap' }}>
+                                                <TextField
+                                                    onChange={handleAddress}
+                                                    value={"" || address}
+                                                    size='small'
+                                                    // onChange={handleUpdatedImageChange}
+                                                    sx={{
+
+
+                                                        "& .MuiInputLabel-outlined": {
+                                                            color: "black",
+                                                            fontSize: '14px',
+
+                                                            "&.MuiInputLabel-shrink": {
+                                                                color: "orange"
+                                                            },
+                                                        },
+                                                        "& .MuiOutlinedInput-root": {
+                                                            "&.Mui-focused fieldset": {
+                                                                "borderColor": "orange"
+                                                            }
+                                                        },
+                                                        margin: '6px'
+
+                                                    }}
+                                                    fullWidth
+                                                    required
+                                                    // value={selectedProduct?.productImageUrl || ""}
+                                                    id="outlined-required"
+                                                    label="Address"
+
+                                                />
+                                            </FormGroup>
+
+
+                                            <FormGroup row sx={{ width: 'inherit', flexWrap: 'nowrap' }}>
+
+                                                <TextField
+                                                    onChange={handleHouseNo}
+                                                    value={"" || houseNo}
+                                                    fullWidth
+                                                    size='small'
+                                                    // onChange={handleUpdatedNameChange}
+                                                    sx={{
+
+
+                                                        "& .MuiInputLabel-outlined": {
+                                                            fontSize: '14px',
+                                                            color: "black",
+                                                            "&.MuiInputLabel-shrink": {
+                                                                color: "orange"
+                                                            },
+                                                        },
+                                                        "& .MuiOutlinedInput-root": {
+                                                            "&.Mui-focused fieldset": {
+                                                                "borderColor": "orange"
+                                                            }
+                                                        },
+                                                        margin: '6px'
+                                                    }}
+                                                    // fullWidth
+                                                    // required
+                                                    id="outlined-required"
+                                                    label="House/Flat no. "
+
+                                                />
+                                                <TextField
+                                                    onChange={handlePincode}
+                                                    value={pinCode || ""}
+                                                    fullWidth
+                                                    size='small'
+                                                    sx={{
+
+
+                                                        "& .MuiInputLabel-outlined": {
+                                                            color: "black",
+                                                            fontSize: '14px',
+
+                                                            "&.MuiInputLabel-shrink": {
+                                                                color: "orange"
+                                                            },
+                                                        },
+                                                        "& .MuiOutlinedInput-root": {
+                                                            "&.Mui-focused fieldset": {
+                                                                "borderColor": "orange"
+                                                            }
+                                                        },
+                                                        margin: '6px'
+                                                    }}
+                                                    // fullWidth
+                                                    required
+                                                    id="outlined-required"
+                                                    label="Pin Code"
+
+                                                />
+
+                                            </FormGroup>
+
+                                            <FormGroup row sx={{ width: 'inherit', flexWrap: 'nowrap' }}>
+                                                <TextField
+                                                    onChange={handleCountry}
+                                                    value={country || ""}
+                                                    fullWidth
+                                                    size='small'
+                                                    sx={{
+
+
+                                                        "& .MuiInputLabel-outlined": {
+                                                            color: "black",
+                                                            fontSize: '14px',
+
+                                                            "&.MuiInputLabel-shrink": {
+                                                                color: "orange"
+                                                            },
+                                                        },
+                                                        "& .MuiOutlinedInput-root": {
+                                                            "&.Mui-focused fieldset": {
+                                                                "borderColor": "orange"
+                                                            }
+                                                        },
+                                                        margin: '6px'
+                                                    }}
+                                                    // fullWidth
+                                                    required
+                                                    id="outlined-required"
+                                                    label="Country"
+
+                                                />
+                                                {/* <Autocomplete
+                                                disablePortal
+                                                id="combo-box-demo"
+                                                options={Country.getAllCountries("IN").name}
+                                                sx={{ width: 300 }}
+                                                renderInput={(params) => <TextField {...params} label="Country" />}
+                                            /> */}
+                                                <TextField
+                                                    onChange={handleState}
+                                                    value={"" || state}
+                                                    fullWidth
+                                                    size='small'
+                                                    sx={{
+
+
+                                                        "& .MuiInputLabel-outlined": {
+                                                            color: "black",
+                                                            fontSize: '14px',
+
+                                                            "&.MuiInputLabel-shrink": {
+                                                                color: "orange"
+                                                            },
+                                                        },
+                                                        "& .MuiOutlinedInput-root": {
+                                                            "&.Mui-focused fieldset": {
+                                                                "borderColor": "orange"
+                                                            }
+                                                        },
+                                                        margin: '6px'
+                                                    }}
+                                                    // fullWidth
+                                                    required
+                                                    id="outlined-required"
+                                                    label="State"
+
+                                                />
+
+                                            </FormGroup>
+
+                                            <FormGroup row sx={{ width: 'inherit', flexWrap: 'nowrap' }}>
+                                                <TextField
+                                                    onChange={handleCity}
+                                                    value={"" || city}
+                                                    fullWidth
+                                                    size='small'
+                                                    // onChange={handleUpdatedNameChange}
+                                                    sx={{
+
+
+                                                        "& .MuiInputLabel-outlined": {
+                                                            color: "black",
+                                                            fontSize: '14px',
+
+                                                            "&.MuiInputLabel-shrink": {
+                                                                color: "orange"
+                                                            },
+                                                        },
+                                                        "& .MuiOutlinedInput-root": {
+                                                            "&.Mui-focused fieldset": {
+                                                                "borderColor": "orange"
+                                                            }
+                                                        },
+                                                        margin: '6px'
+                                                    }}
+                                                    // fullWidth
+                                                    required
+                                                    id="outlined-required"
+                                                    label="City"
+
+                                                />
+                                                <TextField
+                                                    onChange={handleMob}
+                                                    InputProps={{
+                                                        sx: {
+                                                            flexDirection: 'row-reverse'
+                                                        },
+                                                        endAdornment:
+                                                            mobNo?.length > 0 ? <InputAdornment sx={{ marginTop: '1px', ml: '12px', }} position='start'>
+
+                                                                {<Typography sx={{ mr: '-15px', }}>
+                                                                    +91
+                                                                </Typography>}
+                                                            </InputAdornment> : <></>
+                                                    }}
+                                                    value={"" || mobNo}
+                                                    fullWidth
+                                                    size='small'
+                                                    // onChange={handleUpdatedNameChange}
+                                                    sx={{
+
+
+                                                        "& .MuiInputLabel-outlined": {
+                                                            color: "black",
+                                                            fontSize: '14px',
+
+                                                            "&.MuiInputLabel-shrink": {
+                                                                color: "orange"
+                                                            },
+                                                        },
+                                                        "& .MuiOutlinedInput-root": {
+                                                            "&.Mui-focused fieldset": {
+                                                                "borderColor": "orange"
+                                                            }
+                                                        },
+                                                        margin: '10px'
+                                                    }}
+                                                    // fullWidth
+                                                    required
+                                                    id="outlined-required"
+                                                    label="Mobile No."
+
+                                                />
+                                            </FormGroup>
+
+
+                                        </FormControl>
+                                    </Box>
+
+                                </Box>
+                                <Box display={'flex'} justifyContent={'end'}>
+                                    <LoadingButton sx={{ fontSize: '15px', color: 'orange', fontWeight: 'bold' }}>
+                                        Save
+                                    </LoadingButton>
+                                </Box>
+                            </AccordionDetails>
+                        </Accordion>
+                        <Divider sx={{ mt: '0px' }}></Divider>
+                        <List sx={{
+                            // minWidth: '30vw',
+                            height: {
+                                // md: '40vh'
                             },
-                            "& .MuiOutlinedInput-root": {
-                                "&.Mui-focused fieldset": {
-                                    "borderColor": "orange"
-                                }
+                            overflow: 'auto'
+                        }}>
+                            {
+                                user?.address?.slice(57, 61)?.map((item, i) => {
+                                    return <Box>
+                                        {<Box sx={{
+                                            margin: '5px',
+                                            mb: '10px',
+
+                                            alignItems: 'center',
+                                            display: {
+                                                xs: 'block',
+                                                sm: 'block',
+                                                md: 'flex'
+                                            }
+                                        }}>
+                                            {<ListItem key={item?.productId} disablePadding >
+
+                                                <Typography sx={{ fontSize: '13px' }}>{`${i + 1}. ${item?.firstName} ${item?.lastName}, ${item?.houseNo}, ${item?.addressLine}, ${item?.pinCode}, ${item?.city}, ${item?.state}`}</Typography>
+
+
+
+                                            </ListItem>}
+
+
+
+
+
+
+
+                                        </Box>
+                                        }
+                                        {/* {i === user?.address?.length - 1 ? <></> : <Divider sx={{ marginBlock: '6px' }} ></Divider>} */}
+                                    </Box>
+                                })
                             }
-                        }}
-                        required
-                        size="small"
-                        margin='dense'
-                        id="email"
-                        type='email'
-                        label="Email"
-                        variant="outlined"
-                        value={user?.email || ""}
+                        </List>
 
-                    // error={showEmailError}
-                    // onChange={handleEmailChange}
 
-                    />
-                    <TextField
-                        sx={{
-                            "& .MuiInputLabel-outlined": {
-                                color: "#909090",
-                                "&.MuiInputLabel-shrink": {
-                                    color: "orange"
-                                },
+
+
+
+                    </CardContent>
+                </Card>
+                <Card sx={{
+                    height: {
+                        md: '60vh',
+                    },
+                    maxheight: {
+                        md: '60vh'
+                    }
+                }} variant='outlined'>
+                    <CardContent>
+                        <Typography
+                            sx={{ fontWeight: 'bold' }}
+                        >
+                            Recent Orders
+                        </Typography>
+                        <Divider sx={{ marginTop: '10px', }}></Divider>
+                        <List sx={{
+                            minWidth: '30vw',
+                            height: {
+                                sm: '60vh',
+                                md: '50vh'
                             },
-                            "& .MuiOutlinedInput-root": {
-                                "&.Mui-focused fieldset": {
-                                    "borderColor": "orange"
-                                }
-                            },
+                            overflow: 'auto'
+                        }}>
+                            {
+                                !ordersLoading ? orders?.map((item, i) => {
+                                    return <Box>
+                                        {<Box sx={{
+
+                                            alignItems: 'center',
+                                            display: {
+                                                xs: 'block',
+                                                sm: 'block',
+                                                md: 'flex'
+                                            }
+                                        }}>
+                                            {<ListItem key={item?.productId} disablePadding >
+                                                {/* <Box height={'50px'} width={5} sx={{ background: item?.productVariants[0]?.quantity > 0 ? "green" : 'red' }}></Box> */}
+                                                {/* <ListItemAvatar sx={{ padding: '10px' }}>
+
+                                                </ListItemAvatar> */}
+                                                <ListItemText
+                                                    primaryTypographyProps={{
+                                                        style: {
+                                                            // textDecoration: 'underline',
+                                                            fontWeight: 'bold',
+                                                            fontSize: '15px',
+                                                            color: 'orange'
+                                                        }
+                                                    }}
+                                                    secondaryTypographyProps={{
+                                                        style: {
+                                                            fontWeight: 'bold',
+                                                            // fontSize: '17px',
+                                                            // color: '#000000d1',
+                                                            color: 'orange'
+                                                        }
+                                                    }}
+                                                    sx={{}}
+                                                    primary={`Order Id : ${item?.orderId?.split("order_")[1]}`}
+                                                    secondary={<Box>
+                                                        <Typography sx={{
+                                                            marginBlock: '5px',
+                                                            fontWeight: 'normal',
+                                                            fontSize: '14px',
+                                                            color: '#000000d1'
+                                                        }}>{`Summary : ₹${item?.totalPrice} | ${new Date(item?.createdAt).toISOString().split('T')[0]}   |   ${item?.paymentDetails?.status === 'COMPLETED' ? "Paid" : "Pay On Delivery"}   `}
+                                                        </Typography>
+
+
+                                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                            {/* <Typography>{item?.totalPrice}</Typography> */}
+                                                            {/* <Chip sx={{ padding: '5px !important', borderColor: item?.orderStatus === "PLACED" ? 'green' : 'orange' }} variant='outlined' label={ */}
+                                                            <Typography sx={{ color: item?.orderStatus === "PLACED" ? 'green' : 'orange', fontSize: '14px' }} >{`Status : ${item?.orderStatus?.charAt(0).toUpperCase() + item?.orderStatus?.substr(1).toLowerCase()}`}</Typography>
+
+                                                            {/* }></Chip> */}
+
+                                                        </Box>
+
+                                                    </Box>}
+
+                                                />
 
 
 
-
-                        }}
-                        // inputProps={{
-                        //     style: {
-                        //         paddingBlock: '16.5px',
-                        //         paddingLeft: mobile ? '0px' : '14px'
-                        //     }
-                        // }}
-                        // InputProps={{
-                        //     sx: {
-                        //         flexDirection: 'row-reverse'
-                        //     },
-                        //     endAdornment: mobile?.length > 0 ?
-                        //         <InputAdornment sx={{ marginTop: '1px', ml: '12px', }} position='start'>
-
-                        //             {(mobile?.length > 0) && <Typography sx={{ mr: '0px', }}>
-                        //                 +91
-                        //             </Typography>}
-                        //         </InputAdornment> : <></>
-                        // }}
-                        required
-                        size="small"
-                        margin='dense'
-                        id="mobileNumber"
-                        type={'tel'}
-                        label=" Mobile No."
-                        variant="outlined"
-                        value={user?.mobileNumber || ''}
-                    // onChange={handleMobileChange}
-                    // error={showMobileError}
-                    />
+                                            </ListItem>}
 
 
+                                            <NavLink style={{ textDecoration: 'none' }} to={`/pid=`}>
+                                                <AvatarGroup variant='circular' max={4} sx={{ fontSize: '14px !important', justifyContent: 'start', padding: '8px' }}>
+                                                    {
+                                                        item?.orderItems?.map((av, ind) => (
 
-                </Box>
-                {/* <Box sx={{ m: "15px", display: 'flex', justifyContent: 'center' }}>
-                                <Typography sx={{ textDecoration: 'none', fontSize: '15px', color: "orange", fontWeight: 'normal' }} >
-                                    {isError ? "Something went wrong" : ""}
-                                </Typography>
-                            </Box> */}
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', margin: '20px' }}>
-                    <LoadingButton
+                                                            <Avatar
 
-                        // loading={isLoading}
-                        // onClick={handleSubmitRegister}
-                        disableElevation
-                        size='large'
-                        sx={{
-                            // padding: '12px',
-                            // margin: '20px',
-                            background: 'orange',
-                            fontSize: '1rem',
-                            ':hover': {
-                                padding: '12px',
-                                background: 'orange',
-                                fontSize: '1rem'
+                                                                sx={{
+                                                                    border: '1px solid #ffa5005c !important',
+                                                                    height: {
+                                                                        xs: '50px',
+                                                                        sm: '50px',
+                                                                        md: '50px'
+                                                                    }, width: {
+                                                                        xs: '50px',
+                                                                        sm: '50px',
+                                                                        md: '50px'
+                                                                    }
+                                                                }} alt="abc" src={av?.product?.productImageUrl}
+                                                            />
+                                                        ))
+                                                    }
 
+                                                </AvatarGroup>
+
+
+                                            </NavLink>
+
+                                            <IconButton
+                                                onClick={handleNavigate}
+                                                sx={{
+                                                    display: {
+                                                        xs: 'none',
+                                                        sm: 'none',
+                                                        md: 'flex',
+
+                                                    }
+                                                }}>
+                                                <ChevronRightRounded />
+                                            </IconButton>
+
+
+
+                                        </Box>
+                                        }
+                                        {i === orders?.length - 1 ? <></> : <Divider sx={{ marginBlock: '6px' }} ></Divider>}
+                                    </Box>
+                                }) : <LinearProgress></LinearProgress>
                             }
-                        }} variant='contained' fullWidth>Update Details</LoadingButton>
-
-                    {/* <LoadingButton size='large' startIcon={<Image duration={0} height={25} width={25} src={Google}></Image>} sx={{ padding: '12px', color: 'black', border: '0.5px solid grey', fontSize: '1rem' }} variant='outlined' fullWidth>Sign up with Google</LoadingButton> */}
-                </Box>
-
-
+                        </List>
+                    </CardContent>
+                </Card>
             </Box>
-
-        </div>
+        </Box >
     )
 }
 
 export default UserAccount
+
+

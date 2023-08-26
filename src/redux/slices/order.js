@@ -144,7 +144,7 @@ const orderSlice = createSlice({
             console.log(action);
             let newState = {
                 ...state,
-                orders: action.payload,
+                orders: [...action.payload],
                 isLoading: false,
                 isError: false
             }
