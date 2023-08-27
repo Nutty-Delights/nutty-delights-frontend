@@ -2,7 +2,7 @@ import React from 'react'
 
 const BulkOrder = () => {
     return (
-        <div>
+        <div style={{ padding: '100px' }}>
             Bulk Order Information Shows Here
         </div>
     )

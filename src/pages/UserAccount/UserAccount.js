@@ -641,118 +641,122 @@ const UserAccount = () => {
                             },
                             overflow: 'auto'
                         }}>
+                            {/* {orders?.reverse()} */}
                             {
-                                !ordersLoading ? orders?.map((item, i) => {
-                                    return <Box>
-                                        {<Box sx={{
 
-                                            alignItems: 'center',
-                                            display: {
-                                                xs: 'block',
-                                                sm: 'block',
-                                                md: 'flex'
-                                            }
-                                        }}>
-                                            {<ListItem key={item?.productId} disablePadding >
-                                                {/* <Box height={'50px'} width={5} sx={{ background: item?.productVariants[0]?.quantity > 0 ? "green" : 'red' }}></Box> */}
-                                                {/* <ListItemAvatar sx={{ padding: '10px' }}>
+                                !ordersLoading ?
+                                    orders?.map((item, i) => {
+
+                                        return <Box>
+                                            {<Box sx={{
+
+                                                alignItems: 'center',
+                                                display: {
+                                                    xs: 'block',
+                                                    sm: 'block',
+                                                    md: 'flex'
+                                                }
+                                            }}>
+                                                {<ListItem key={item?.productId} disablePadding >
+                                                    {/* <Box height={'50px'} width={5} sx={{ background: item?.productVariants[0]?.quantity > 0 ? "green" : 'red' }}></Box> */}
+                                                    {/* <ListItemAvatar sx={{ padding: '10px' }}>
 
                                                 </ListItemAvatar> */}
-                                                <ListItemText
-                                                    primaryTypographyProps={{
-                                                        style: {
-                                                            // textDecoration: 'underline',
-                                                            fontWeight: 'bold',
-                                                            fontSize: '15px',
-                                                            color: 'orange'
+                                                    <ListItemText
+                                                        primaryTypographyProps={{
+                                                            style: {
+                                                                // textDecoration: 'underline',
+                                                                fontWeight: 'bold',
+                                                                fontSize: '15px',
+                                                                color: 'orange'
+                                                            }
+                                                        }}
+                                                        secondaryTypographyProps={{
+                                                            style: {
+                                                                fontWeight: 'bold',
+                                                                // fontSize: '17px',
+                                                                // color: '#000000d1',
+                                                                color: 'orange'
+                                                            }
+                                                        }}
+                                                        sx={{}}
+                                                        primary={`Order Id : ${item?.orderId?.split("order_")[1]}`}
+                                                        secondary={<Box>
+                                                            <Typography sx={{
+                                                                marginBlock: '5px',
+                                                                fontWeight: 'normal',
+                                                                fontSize: '14px',
+                                                                color: '#000000d1'
+                                                            }}>{`Summary : ₹${item?.totalPrice} | ${new Date(item?.createdAt).toISOString().split('T')[0]}   |   ${item?.paymentDetails?.status === 'COMPLETED' ? "Paid" : "Pay On Delivery"}   `}
+                                                            </Typography>
+
+
+                                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                                {/* <Typography>{item?.totalPrice}</Typography> */}
+                                                                {/* <Chip sx={{ padding: '5px !important', borderColor: item?.orderStatus === "PLACED" ? 'green' : 'orange' }} variant='outlined' label={ */}
+                                                                <Typography sx={{ color: item?.orderStatus === "PLACED" ? 'green' : 'orange', fontSize: '14px' }} >{`Status : ${item?.orderStatus?.charAt(0).toUpperCase() + item?.orderStatus?.substr(1).toLowerCase()}`}</Typography>
+
+                                                                {/* }></Chip> */}
+
+                                                            </Box>
+
+                                                        </Box>}
+
+                                                    />
+
+
+
+                                                </ListItem>}
+
+
+                                                <NavLink style={{ textDecoration: 'none' }} to={`/pid=`}>
+                                                    <AvatarGroup variant='circular' max={4} sx={{ fontSize: '14px !important', justifyContent: 'start', padding: '8px' }}>
+                                                        {
+                                                            item?.orderItems?.map((av, ind) => (
+
+                                                                <Avatar
+
+                                                                    sx={{
+                                                                        border: '1px solid #ffa5005c !important',
+                                                                        height: {
+                                                                            xs: '50px',
+                                                                            sm: '50px',
+                                                                            md: '50px'
+                                                                        }, width: {
+                                                                            xs: '50px',
+                                                                            sm: '50px',
+                                                                            md: '50px'
+                                                                        }
+                                                                    }} alt="abc" src={av?.product?.productImageUrl}
+                                                                />
+                                                            ))
                                                         }
-                                                    }}
-                                                    secondaryTypographyProps={{
-                                                        style: {
-                                                            fontWeight: 'bold',
-                                                            // fontSize: '17px',
-                                                            // color: '#000000d1',
-                                                            color: 'orange'
+
+                                                    </AvatarGroup>
+
+
+                                                </NavLink>
+
+                                                <IconButton
+                                                    onClick={handleNavigate}
+                                                    sx={{
+                                                        display: {
+                                                            xs: 'none',
+                                                            sm: 'none',
+                                                            md: 'flex',
+
                                                         }
-                                                    }}
-                                                    sx={{}}
-                                                    primary={`Order Id : ${item?.orderId?.split("order_")[1]}`}
-                                                    secondary={<Box>
-                                                        <Typography sx={{
-                                                            marginBlock: '5px',
-                                                            fontWeight: 'normal',
-                                                            fontSize: '14px',
-                                                            color: '#000000d1'
-                                                        }}>{`Summary : ₹${item?.totalPrice} | ${new Date(item?.createdAt).toISOString().split('T')[0]}   |   ${item?.paymentDetails?.status === 'COMPLETED' ? "Paid" : "Pay On Delivery"}   `}
-                                                        </Typography>
-
-
-                                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                                            {/* <Typography>{item?.totalPrice}</Typography> */}
-                                                            {/* <Chip sx={{ padding: '5px !important', borderColor: item?.orderStatus === "PLACED" ? 'green' : 'orange' }} variant='outlined' label={ */}
-                                                            <Typography sx={{ color: item?.orderStatus === "PLACED" ? 'green' : 'orange', fontSize: '14px' }} >{`Status : ${item?.orderStatus?.charAt(0).toUpperCase() + item?.orderStatus?.substr(1).toLowerCase()}`}</Typography>
-
-                                                            {/* }></Chip> */}
-
-                                                        </Box>
-
-                                                    </Box>}
-
-                                                />
+                                                    }}>
+                                                    <ChevronRightRounded />
+                                                </IconButton>
 
 
 
-                                            </ListItem>}
-
-
-                                            <NavLink style={{ textDecoration: 'none' }} to={`/pid=`}>
-                                                <AvatarGroup variant='circular' max={4} sx={{ fontSize: '14px !important', justifyContent: 'start', padding: '8px' }}>
-                                                    {
-                                                        item?.orderItems?.map((av, ind) => (
-
-                                                            <Avatar
-
-                                                                sx={{
-                                                                    border: '1px solid #ffa5005c !important',
-                                                                    height: {
-                                                                        xs: '50px',
-                                                                        sm: '50px',
-                                                                        md: '50px'
-                                                                    }, width: {
-                                                                        xs: '50px',
-                                                                        sm: '50px',
-                                                                        md: '50px'
-                                                                    }
-                                                                }} alt="abc" src={av?.product?.productImageUrl}
-                                                            />
-                                                        ))
-                                                    }
-
-                                                </AvatarGroup>
-
-
-                                            </NavLink>
-
-                                            <IconButton
-                                                onClick={handleNavigate}
-                                                sx={{
-                                                    display: {
-                                                        xs: 'none',
-                                                        sm: 'none',
-                                                        md: 'flex',
-
-                                                    }
-                                                }}>
-                                                <ChevronRightRounded />
-                                            </IconButton>
-
-
-
+                                            </Box>
+                                            }
+                                            {i === orders?.length - 1 ? <></> : <Divider sx={{ marginBlock: '6px' }} ></Divider>}
                                         </Box>
-                                        }
-                                        {i === orders?.length - 1 ? <></> : <Divider sx={{ marginBlock: '6px' }} ></Divider>}
-                                    </Box>
-                                }) : <LinearProgress></LinearProgress>
+                                    }) : <LinearProgress></LinearProgress>
                             }
                         </List>
                     </CardContent>
@@ -761,6 +765,7 @@ const UserAccount = () => {
         </Box >
     )
 }
+
 
 export default UserAccount
 
