@@ -88,6 +88,8 @@ const UserAccount = () => {
     }
 
     useEffect(() => {
+        // window.scrollTo(0, 0);
+
         if (token) {
             dispatch(getUserProfile());
             dispatch(getUserOrders())
@@ -95,8 +97,8 @@ const UserAccount = () => {
 
     }, [])
 
-    const handleNavigate = () => {
-        navigate('/user/orders/1')
+    const handleNavigate = (orderId) => {
+        navigate(`/user/orders/${orderId}`)
     }
     return (
         <Box>
@@ -680,7 +682,25 @@ const UserAccount = () => {
                                                             }
                                                         }}
                                                         sx={{}}
-                                                        primary={`Order Id : ${item?.orderId?.split("order_")[1]}`}
+                                                        //                         <IconButton>
+                                                        //     <ChevronRightRounded />
+                                                        // </IconButton>
+                                                        primary={<Box sx={{ display: 'flex', justifyContent: 'space-between', alignItem: 'center' }}>
+                                                            <Typography>
+                                                                {`Order Id : ${item?.orderId?.split("order_")[1]}`}
+                                                            </Typography>
+                                                            <IconButton
+                                                                onClick={() => { handleNavigate(item?.orderId) }}
+                                                                sx={{
+                                                                    display: {
+                                                                        xs: 'flex',
+                                                                        sm: 'flex',
+                                                                        md: 'none'
+                                                                    }
+                                                                }}>
+                                                                <ChevronRightRounded />
+                                                            </IconButton>
+                                                        </Box>}
                                                         secondary={<Box>
                                                             <Typography sx={{
                                                                 marginBlock: '5px',
@@ -738,7 +758,7 @@ const UserAccount = () => {
                                                 </NavLink>
 
                                                 <IconButton
-                                                    onClick={handleNavigate}
+                                                    onClick={() => { handleNavigate(item?.orderId) }}
                                                     sx={{
                                                         display: {
                                                             xs: 'none',

@@ -30,7 +30,7 @@ import useScrollTrigger from '@mui/material/useScrollTrigger';
 import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
 import ShoppingBasketOutlined from '@mui/icons-material/ShoppingBasketOutlined';
 import { clearCart, getCart, getUserCart } from '../../../redux/slices/cart';
-import { CardGiftcardSharp } from '@mui/icons-material';
+import { CardGiftcardSharp, Person2Outlined, Person2Rounded, PersonOutline, PersonOutlineOutlined } from '@mui/icons-material';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 
 // import { Login } from '@mui/icons-material';
@@ -61,6 +61,11 @@ const NavBar = (props) => {
   const location = useLocation().pathname;
   // const activeColor = '#ffa732';
   const navItems = [
+    {
+      name: "Account",
+      link: '/user/account',
+      icon: (color = 'black') => <PersonOutline sx={{ color: color }} />
+    },
     {
       name: "Shop",
       link: '/',
@@ -225,7 +230,15 @@ const NavBar = (props) => {
   }, [cart])
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{}}>
-      <Image style={{ padding: '10px' }} duration={0} src={logo} fit='cover' height='60px' width='130px' />
+      {/* <Image style={{ padding: '10px' }} duration={0} src={logo} fit='cover' height='60px' width='130px' /> */}
+      <Box display={'flex'} alignItems={'center'} >
+        <Image style={{ padding: '10px' }} duration={0} src={logo} fit='cover' height='60px' width='110px' />
+        {/* <IconButton>
+          <PersonOutlineOutlined />
+        </IconButton> */}
+        <Typography sx={{ fontWeight: 'bold', paddingInline: '0px', paddingBlock: '10px' }}>{`Hello ${user?.firstName}!`}</Typography></Box>
+      {/* <Typography sx={{ fontWeight: 'bold', paddingInline: '20px' }}>{`My Account`}</Typography> */}
+
       <Divider />
       {/* <Box sx={{ display: { xs: 'flex', md: 'flex', sm: 'none' }, }}>
         <SearchBar margin={'10px'} />
@@ -235,6 +248,7 @@ const NavBar = (props) => {
           <ListItem key={index} disablePadding>
             <ListItemButton sx={{}}>
               <NavLink to={item.link} style={{ color: location === item.link ? "#ffa732" : 'black', textDecoration: "none", marginRight: "1.5rem", marginLeft: '6px' }}>
+                {/* {item.icon} */}
                 <Typography sx={{ fontWeight: 'bold' }}>
                   {item.name}
                 </Typography>
@@ -269,7 +283,7 @@ const NavBar = (props) => {
               </Box>
               <Box sx={{ display: { xs: 'none', sm: 'none', md: 'flex' }, flexGrow: 1, }}>
                 {
-                  navItems.map((item, index) => (
+                  navItems.filter(item => item.name !== 'Account').map((item, index) => (
                     <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
                       {item.icon(location === item.link ? "#ffa732" : "black")}
                       <NavLink to={item.link} style={{ color: location === item.link ? "#ffa732" : 'black', textDecoration: "none", marginRight: "1.5rem", marginLeft: '6px' }}>

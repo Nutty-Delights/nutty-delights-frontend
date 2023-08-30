@@ -13,6 +13,13 @@ class OrderDataService {
             }
         })
     }
+    getUserOrder(orderId) {
+        return http.get(`/${this.orderUrl}/user/${orderId}`, {
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem('jwt')}`
+            }
+        })
+    }
 
     createOrder(data) {
         return http.post(`/${this.orderUrl}/`, data, {

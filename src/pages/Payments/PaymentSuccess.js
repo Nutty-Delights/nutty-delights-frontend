@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { NavLink, useParams, useSearchParams } from 'react-router-dom';
+import { NavLink, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { clearCreatedOrder, getCreatedOrder, getOrder, getOrderLoading, getPlacedOrder } from '../../redux/slices/order';
 import payment, { getPaymentLoading, getPaymentStatus, updatePayment } from '../../redux/slices/payment';
 import { Avatar, Box, Card, CardContent, Divider, IconButton, LinearProgress, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material';
@@ -56,6 +56,12 @@ const PaymentSuccess = () => {
   }, [payment]);
 
   // console.log("created order", order)
+
+  const navigate = useNavigate();
+  const handleNavigate = () => {
+    navigate(`/user/orders/${orderId}`)
+
+  }
 
 
   return (
@@ -142,7 +148,7 @@ const PaymentSuccess = () => {
                 alignItems: 'center'
               }}>
                 <Typography sx={{ fontWeight: 'bold' }}>{`Order Id : ${order ? order?.orderId?.split("_")[1] : ""}`}</Typography>
-                <IconButton>
+                <IconButton onClick={handleNavigate}>
                   <Track />
                 </IconButton>
 
@@ -170,7 +176,7 @@ const PaymentSuccess = () => {
                     {/* <IconButton>
                       <Ship sx={{ color: 'green' }} />
                     </IconButton> */}
-                    <Typography sx={{ fontWeight: 'normal', color: 'green', fontSize: '14px' }}>{`Expected delivery date : ${order?.deliveryDate ? order?.deliveryDate : 'to be updated'} `}</Typography>
+                    <Typography sx={{ fontWeight: 'normal', color: 'green', fontSize: '14px' }}>{`Expected delivery date : ${order?.deliveryDate ? new Date(order?.deliveryDate).toLocaleDateString() : 'to be updated'} `}</Typography>
                   </Box>
                 </Box>
               }

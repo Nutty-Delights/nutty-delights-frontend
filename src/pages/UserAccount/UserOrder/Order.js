@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useParams, useSearchParams } from 'react-router-dom';
-import { clearCreatedOrder, getCreatedOrder, getOrder, getOrderLoading, getPlacedOrder, getUserOrder } from '../../redux/slices/order';
+import { clearCreatedOrder, getCreatedOrder, getOrder, getOrderLoading, getPlacedOrder } from '../../redux/slices/order';
 import payment, { getPaymentLoading, getPaymentStatus, updatePayment } from '../../redux/slices/payment';
-import { Avatar, Box, Card, CardContent, Divider, IconButton, LinearProgress, List, ListItem, ListItemAvatar, ListItemText, Step, StepLabel, Stepper, Typography } from '@mui/material';
+import { Avatar, Box, Card, CardContent, Divider, IconButton, LinearProgress, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material';
 import tick from '../../assets/images/tick.jpg'
 import Image from 'mui-image';
 import Track from '@mui/icons-material/GpsFixedOutlined';
 import Ship from '@mui/icons-material/LocalShippingOutlined';
 import Location from '@mui/icons-material/LocationOnOutlined';
 import { getCart, getUserCart } from '../../redux/slices/cart';
-import { ChevronRightRounded } from '@mui/icons-material';
 
 const Order = () => {
 
@@ -21,12 +20,6 @@ const Order = () => {
     const isLoadingPayment = useSelector(getPaymentLoading);
     const isLoadingOrder = useSelector(getOrderLoading);
     const payment = useSelector(getPaymentStatus);
-    const steps = [
-        'Order placed',
-        'Order shipped',
-        'Order delivered',
-    ];
-
 
 
 
@@ -35,8 +28,6 @@ const Order = () => {
     const order = useSelector(getPlacedOrder);
 
     useEffect(() => {
-        window.scrollTo(0, 0);
-
         dispatch(getCart(localStorage.getItem('jwt')));
         console.log("inside first useEffect");
         console.log("orderId", orderId)
@@ -59,11 +50,10 @@ const Order = () => {
         console.log("Payment ID and status", paymentId, paymentStatus);
 
         // if (orderId)
-        dispatch(getUserOrder(orderId));
+        dispatch(getOrder(orderId));
         dispatch(clearCreatedOrder);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [payment]);
-
 
     // console.log("created order", order)
 
@@ -93,31 +83,14 @@ const Order = () => {
                     sx={{
                         display: {
                             xs: 'block',
-                            md: 'block'
+                            md: 'flex'
                         },
                         justifyContent: 'center',
                         alignItems: 'center',
                         paddingBlock: '0px'
                     }}>
-                    {/* <Typography sx={{ fontWeight: 'bold' }}>Order Tracking</Typography> */}
-                    <Box sx={{ width: '100%', marginInline: '0px' }}>
-                        <Stepper sx={{}} activeStep={order?.orderStatus === "PLACED" ? 1 : order?.orderStatus === "SHIPPED" ? 2 : 3} alternativeLabel>
-                            {steps.map((label) => (
-                                <Step sx={{
-                                    '& .MuiStepIcon-root.Mui-active': {
-                                        color: 'orange !important'
-                                    },
-                                    '& .MuiStepIcon-root.Mui-completed': {
-                                        color: 'orange !important'
-                                    }
-                                }} key={label}>
-                                    <StepLabel sx={{ marginInline: '10px' }}>{label}</StepLabel>
-                                </Step>
-                            ))}
-                        </Stepper>
-                    </Box>
-                    {/* <Image duration={0} height={40} width={40} src={tick} alt='tick'></Image> */}
-                    {/* <Typography sx={{ fontSize: '22px', fontWeight: 'bold', color: 'orange' }}>Thank You, Your Order Has Been Placed !</Typography> */}
+                    <Image duration={0} height={40} width={40} src={tick} alt='tick'></Image>
+                    <Typography sx={{ fontSize: '22px', fontWeight: 'bold', color: 'orange' }}>Thank You, Your Order Has Been Placed !</Typography>
                 </Box>
                 <Box sx={{
                     display: {
@@ -126,7 +99,7 @@ const Order = () => {
                     },
                     justifyContent: 'center'
                 }}>
-                    {/* <Typography sx={{ fontSize: '15px', fontWeight: 'normal', color: 'grey' }}>Order updates will be sent on your email.</Typography> */}
+                    <Typography sx={{ fontSize: '15px', fontWeight: 'normal', color: 'grey' }}>Order updates will be sent on your email.</Typography>
 
                 </Box>
             </Box>
@@ -136,7 +109,7 @@ const Order = () => {
                         md: 'flex'
                     },
                     justifyContent: 'center',
-                    paddingInline: '10px'
+                    paddingInline: '20px'
                 }}
             >
                 <Card
@@ -158,11 +131,9 @@ const Order = () => {
                     variant='outlined'
                 >
                     {/* {console.log(order)} */}
-
                     <CardContent>
                         {
                             !order ? <></> : <Box sx={{
-                                paddingBlock: '10px',
                                 display: {
                                     xs: 'flex',
                                     md: 'flex'
@@ -171,14 +142,14 @@ const Order = () => {
                                 alignItems: 'center'
                             }}>
                                 <Typography sx={{ fontWeight: 'bold' }}>{`Order Id : ${order ? order?.orderId?.split("_")[1] : ""}`}</Typography>
-
+                                <IconButton>
+                                    <Track />
+                                </IconButton>
 
                             </Box>}
 
                         <Box sx={{
-                            paddingBlock: '5px',
                             display: {
-
                                 md: 'flex'
                             },
                             justifyContent: 'space-between',
@@ -194,12 +165,12 @@ const Order = () => {
                                         },
                                         alignItems: 'center'
                                     }}>
-                                    <Typography sx={{ fontWeight: 'normal', color: 'grey', fontSize: '14px' }}>{`Order date :  ${order ? new Date(order?.createdAt).toLocaleDateString() : ""}, ${order ? new Date(order?.createdAt).toLocaleTimeString() : ""} |`}</Typography>
+                                    <Typography sx={{ fontWeight: 'normal', color: 'grey', fontSize: '14px' }}>{`Order date :  ${order ? new Date(order?.createdAt).toISOString().split('T')[0] : ""}, ${order ? new Date(order?.createdAt).toLocaleTimeString() : ""} |`}</Typography>
                                     <Box display={'flex'} sx={{ alignItems: 'center' }}>
                                         {/* <IconButton>
                       <Ship sx={{ color: 'green' }} />
                     </IconButton> */}
-                                        <Typography sx={{ fontWeight: 'normal', color: 'green', fontSize: '14px' }}>{`Expected delivery date : ${order?.deliveryDate ? new Date(order?.deliveryDate).toLocaleDateString() : 'to be updated'} `}</Typography>
+                                        <Typography sx={{ fontWeight: 'normal', color: 'green', fontSize: '14px' }}>{`Expected delivery date : ${order?.deliveryDate ? order?.deliveryDate : 'to be updated'} `}</Typography>
                                     </Box>
                                 </Box>
                             }

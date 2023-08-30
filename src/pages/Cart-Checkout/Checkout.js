@@ -125,6 +125,7 @@ const Checkout = () => {
         setShippingAddress(deliveryAddress)
         // console.log("Shipping Details", data);
         setStep(1);
+        window.scrollTo(0, 0);
     }
 
     console.log("Order", order);
@@ -179,6 +180,8 @@ const Checkout = () => {
 
 
     useEffect(() => {
+
+
         if (token)
             dispatch(getUserProfile());
         // if (cartState) {

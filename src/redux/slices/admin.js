@@ -7,8 +7,9 @@ import OrderDataService from '../../services/order.service';
 const initialState = {
 
     orders: [],
-    order: null,
-    placedOrder: null,
+    // order: null,
+    // placedOrder: null,
+
     isLoading: false,
     isError: false,
 
@@ -30,16 +31,6 @@ export const getOrder = createAsyncThunk(
     async (orderId) => {
 
         const res = await OrderDataService.getOrder(orderId);
-        console.log("inside get Order", res);
-        // alert("updated in database");
-        return res.data;
-    }
-);
-export const getUserOrder = createAsyncThunk(
-    `${orderUrl}/getUserOrder`,
-    async (orderId) => {
-
-        const res = await OrderDataService.getUserOrder(orderId);
         console.log("inside get Order", res);
         // alert("updated in database");
         return res.data;
@@ -128,38 +119,6 @@ const orderSlice = createSlice({
         })
 
         builder.addCase(getOrder.rejected, (state, action) => {
-            console.log(action);
-
-            let newState = {
-                ...state,
-                isLoading: false,
-                isError: true,
-                error: action.payload
-            }
-            return newState;
-        })
-        builder.addCase(getUserOrder.pending, (state, action) => {
-            let newState = {
-                ...state,
-                isLoading: true,
-                isError: false
-            }
-            return newState;
-        })
-
-        builder.addCase(getUserOrder.fulfilled, (state, action) => {
-            let newState = {
-                ...state,
-                isLoading: false,
-                isError: false,
-                order: action.payload,
-                placedOrder: action.payload
-
-            }
-            return newState;
-        })
-
-        builder.addCase(getUserOrder.rejected, (state, action) => {
             console.log(action);
 
             let newState = {
