@@ -31,12 +31,13 @@
 ## Order Confirmation Page
 ![image](https://github.com/Nutty-Delights/nutty-delights-frontend/assets/76203573/8506267c-f2f6-4d9b-bdff-bc7f397bfbce)
 
-## Admin Dashbaord
+## Admin Dashbaord ( Dark Theme )
 ### Real Time Order Tracking and Management System
 ![image](https://github.com/Nutty-Delights/nutty-delights-frontend/assets/76203573/fb09fb1b-58df-4566-8c71-e5c923c75cce)
 
 ### Category Management
-![image](https://github.com/Nutty-Delights/nutty-delights-frontend/assets/76203573/043fd9b3-4e80-48a9-af57-9acbb00f495f)
+![image](https://github.com/Nutty-Delights/nutty-delights-frontend/assets/76203573/20bb10ed-f5d5-49fd-85a4-56d268d2d881)
+
 
 ### Products Management
 ![image](https://github.com/Nutty-Delights/nutty-delights-frontend/assets/76203573/8322d031-c73a-44c9-8df6-08d53af5a349)
