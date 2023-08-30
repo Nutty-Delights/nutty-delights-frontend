@@ -405,7 +405,7 @@ const Order = () => {
 
                                 <Typography sx={{ fontWeight: 'normal', color: 'grey', fontSize: '14px' }}>{`Payment Status : ${order?.paymentDetails?.status === 'COMPLETED' ? "Paid" : "Pending"}`}</Typography>
                                 <Typography sx={{ fontWeight: 'normal', color: 'grey', fontSize: '14px' }}>{`Payment Mode : ${order?.paymentDetails?.paymentMethod ? order?.paymentDetails?.paymentMethod?.toLowerCase() : "Pay on delivery"}`}</Typography>
-                                <Typography sx={{ fontWeight: 'normal', color: 'grey', fontSize: '14px' }}>{`Order Status : ${order?.orderStatus === 'PLACED' ? "Confirmed" : "Pending"}`}</Typography>
+                                <Typography sx={{ fontWeight: 'normal', color: 'grey', fontSize: '14px' }}>{`Order Status : ${order?.orderStatus === 'PENDING' ? "Pending" : "Confirmed"}`}</Typography>
 
                             </Box>
                         </Box>
