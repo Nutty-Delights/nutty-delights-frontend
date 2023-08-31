@@ -125,7 +125,8 @@ const NavBar = (props) => {
   const handleClose = () => {
     setAnchorEl(null);
     setAuthForm(false);
-    dispatch(getCart(localStorage.getItem('jwt')));
+    if (localStorage.getItem('jwt'))
+      dispatch(getCart(localStorage.getItem('jwt')));
 
   }
 
@@ -163,7 +164,8 @@ const NavBar = (props) => {
   const handleDialog = () => {
     setOpen(false);
     setAuthForm(false);
-    dispatch(getCart(localStorage.getItem('jwt')));
+    if (localStorage.getItem('jwt'))
+      dispatch(getCart(localStorage.getItem('jwt')));
 
   }
   const handleEmailDialog = () => {
@@ -186,7 +188,10 @@ const NavBar = (props) => {
 
   useEffect(() => {
     // if (cart?.cartTotalItems !== cartState) {
-    dispatch(getCart(localStorage.getItem('jwt')));
+    console.log(localStorage.getItem('jwt'))
+
+    if (localStorage.getItem('jwt'))
+      dispatch(getCart(localStorage.getItem('jwt')));
     // setLength(cart?.cartItems.length)    
     // }
   }, [cartState])
@@ -219,8 +224,8 @@ const NavBar = (props) => {
   useEffect(() => {
 
 
-
-    if (!cart)
+    // console.log("Navbar", localStorage.getItem('jwt').length !== 0);
+    if (!cart && localStorage.getItem('jwt'))
       dispatch(getCart(localStorage.getItem('jwt')))
     // setCart(cartStore);
 
