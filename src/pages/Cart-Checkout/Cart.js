@@ -75,10 +75,10 @@ const Cart = () => {
     return (
 
         !localStorage.getItem('jwt') ? <Box sx={{ color: 'orange', height: '80vh', alignItems: 'center', justifyContent: 'center', display: 'flex', }}>
-            <Typography sx={{ fontSize: '26px', fontWeight: 'bold', }}>{"Nothing In The Cart ! Explore Now"}
+            <Typography sx={{ fontSize: '26px', fontWeight: 'bold', }}>{"Sign in to continue !"}
             </Typography>
         </Box> :
-            isLoading ? <Box sx={{ color: 'orange', height: '80vh', }}>
+            isLoading ? <Box sx={{ color: 'orange', height: '70vh', }}>
                 <LinearProgress />
             </Box>
                 : cart?.cartTotalItems === 0 ?

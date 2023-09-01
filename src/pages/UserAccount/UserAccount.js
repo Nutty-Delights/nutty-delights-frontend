@@ -92,8 +92,11 @@ const UserAccount = () => {
 
         if (token) {
             dispatch(getUserProfile());
-            dispatch(getUserOrders())
+
+
         }
+        if (orders.length === 0)
+            dispatch(getUserOrders())
 
     }, [])
 
@@ -118,7 +121,7 @@ const UserAccount = () => {
                     width: {
                         xs: 'fit-content',
                         sm: '100%',
-                        md: '30vw'
+                        md: '40vw'
                     }, mb: '10px'
                 }}>
                     <CardContent>
@@ -221,17 +224,7 @@ const UserAccount = () => {
                             />
 
                         </Box>
-                        {/* <Box sx={{ mt: '10px' }} display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-                          
-                            <Typography
-                                sx={{ fontWeight: 'bold' }}
-                            >
-                                Saved Addresses
-                            </Typography>
 
-
-                        </Box> */}
-                        {/* <Divider sx={{ marginBlock: '10px' }}></Divider> */}
                         <Accordion elevation={0} sx={{
                             width: 'inherit', ':before': {
                                 top: '0px !important'
@@ -579,7 +572,7 @@ const UserAccount = () => {
                             overflow: 'auto'
                         }}>
                             {
-                                user?.address?.slice(57, 61)?.map((item, i) => {
+                                user?.address?.slice(0, 3)?.map((item, i) => {
                                     return <Box>
                                         {<Box sx={{
                                             margin: '5px',
@@ -621,11 +614,16 @@ const UserAccount = () => {
                     </CardContent>
                 </Card>
                 <Card sx={{
+                    width: {
+                        xs: '100%',
+                        sm: '100%',
+                        md: '45vw'
+                    },
                     height: {
-                        md: '60vh',
+                        md: '69vh',
                     },
                     maxheight: {
-                        md: '60vh'
+                        md: '69vh'
                     }
                 }} variant='outlined'>
                     <CardContent>
@@ -639,7 +637,7 @@ const UserAccount = () => {
                             minWidth: '30vw',
                             height: {
                                 sm: '60vh',
-                                md: '50vh'
+                                md: '60vh'
                             },
                             overflow: 'auto'
                         }}>
@@ -729,11 +727,12 @@ const UserAccount = () => {
                                                 </ListItem>}
 
 
-                                                <NavLink style={{ textDecoration: 'none' }} to={`/pid=`}>
-                                                    <AvatarGroup variant='circular' max={4} sx={{ fontSize: '14px !important', justifyContent: 'start', padding: '8px' }}>
-                                                        {
-                                                            item?.orderItems?.map((av, ind) => (
 
+                                                <AvatarGroup variant='circular' max={4} sx={{ fontSize: '14px !important', justifyContent: 'start', padding: '8px' }}>
+                                                    {
+                                                        item?.orderItems?.map((av, ind) => (
+
+                                                            <NavLink style={{ textDecoration: 'none' }} to={`/pid=${av?.product?.productId}`}>
                                                                 <Avatar
 
                                                                     sx={{
@@ -749,13 +748,13 @@ const UserAccount = () => {
                                                                         }
                                                                     }} alt="abc" src={av?.product?.productImageUrl}
                                                                 />
-                                                            ))
-                                                        }
+                                                            </NavLink>
+                                                        ))
+                                                    }
 
-                                                    </AvatarGroup>
+                                                </AvatarGroup>
 
 
-                                                </NavLink>
 
                                                 <IconButton
                                                     onClick={() => { handleNavigate(item?.orderId) }}

@@ -15,7 +15,7 @@ import { Add, BrandingWatermark, ChevronLeft, ChevronRight, EnergySavingsLeaf, E
 import Footer from '../../components/shared/Footer/Footer';
 import SpaOutlinedIcon from '@mui/icons-material/SpaOutlined';
 import TextSnippetOutlinedIcon from '@mui/icons-material/TextSnippetOutlined';
-import cart, { addItemToCart, getCart, getCartLoading } from '../../redux/slices/cart';
+import cart, { addItemToCart, addItems, getCart, getCartLoading } from '../../redux/slices/cart';
 import { LoadingButton } from '@mui/lab';
 import { ToastContainer } from 'react-toastify';
 // import { ProgressBar } from 'react-toastify/dist/components';
@@ -165,18 +165,30 @@ function ProductPage() {
 
     const handleAddToCart = () => {
         const token = localStorage.getItem('jwt');
-        var variant = product?.productVariants?.[selectedVariant];
-        const productId = product?.productId;
-
-        const data = {
-            productId: productId,
-            variant: variant,
-            quantity: itemCount
+        if (!token) {
+            let variant = product?.productVariants?.[selectedVariant];
+            const productId = product?.productId;
+            const data = {
+                productId: productId,
+                variant: variant,
+                quantity: itemCount
+            }
+            dispatch(addItems({
+                data: data
+            }))
         }
+        else {
+            let variant = product?.productVariants?.[selectedVariant];
+            const productId = product?.productId;
 
-        dispatch(addItemToCart({ token, data }));
-        // dispatch(getCart()); 
-        // setItemCount(1);
+            const data = {
+                productId: productId,
+                variant: variant,
+                quantity: itemCount
+            }
+
+            dispatch(addItemToCart({ token, data }));
+        }
 
 
     }

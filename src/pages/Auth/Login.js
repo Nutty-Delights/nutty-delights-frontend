@@ -92,10 +92,13 @@ const Login = ({ setAuthForm }) => {
 
             const userEmail = email.trim().split(/\s+/);
             // const userPassword = name.trim().split(/\s+/);
+            const localCartItems = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart'))?.cartItems : [];
+
             const userData = {
 
                 email: userEmail[0],
-                password: password
+                password: password,
+                localCartItem: localCartItems
 
             }
 

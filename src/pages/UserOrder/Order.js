@@ -37,22 +37,22 @@ const Order = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
 
-        dispatch(getCart(localStorage.getItem('jwt')));
-        console.log("inside first useEffect");
-        console.log("orderId", orderId)
-        const urlParams = new URLSearchParams(window.location.search);
-        setPaymentId(urlParams.get("razorpay_payment_id"));
-        setReferenceId(urlParams.get("razorpay_payment_link_reference_id"));
-        setPaymentStatus(urlParams.get("razorpay_payment_link_status"));
-        if (urlParams.get("razorpay_payment_id") && urlParams.get("razorpay_payment_link_status") === "paid") {
-            const payId = urlParams.get("razorpay_payment_id");
-            const data = { orderId, payId, jwt };
-            console.log(data);
-            console.log("payment data", data);
-            dispatch(updatePayment(data));
+        // dispatch(getCart(localStorage.getItem('jwt')));
+        // console.log("inside first useEffect");
+        // console.log("orderId", orderId)
+        // const urlParams = new URLSearchParams(window.location.search);
+        // setPaymentId(urlParams.get("razorpay_payment_id"));
+        // setReferenceId(urlParams.get("razorpay_payment_link_reference_id"));
+        // setPaymentStatus(urlParams.get("razorpay_payment_link_status"));
+        // if (urlParams.get("razorpay_payment_id") && urlParams.get("razorpay_payment_link_status") === "paid") {
+        //     const payId = urlParams.get("razorpay_payment_id");
+        //     const data = { orderId, payId, jwt };
+        //     console.log(data);
+        //     console.log("payment data", data);
+        //     dispatch(updatePayment(data));
 
 
-        }
+        // }
     }, []);
 
     useEffect(() => {

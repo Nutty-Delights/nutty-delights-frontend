@@ -123,6 +123,7 @@ const userSlice = createSlice({
                 progress: undefined,
                 theme: "light",
             });
+            localStorage.removeItem('cart');
             // token.jwt !== "" ? toast.success("Login Successfully") : toast.error(token.message)
             return newState;
         })
@@ -180,6 +181,8 @@ const userSlice = createSlice({
                 progress: undefined,
                 theme: "light",
             });
+            localStorage.removeItem('cart');
+
             return newState;
         })
         builder.addCase(registerUser.rejected, (state, action) => {
@@ -190,7 +193,7 @@ const userSlice = createSlice({
                 isError: true,
             }
             // toast.error("Email is already in use !");
-            toast.error("Email is already in use !", {
+            toast.error(" Email or mobile number are already in use !", {
                 position: "top-right",
                 autoClose: 1000,
                 hideProgressBar: false,
@@ -200,6 +203,7 @@ const userSlice = createSlice({
                 progress: undefined,
                 theme: "light",
             });
+
             return newState;
         })
 

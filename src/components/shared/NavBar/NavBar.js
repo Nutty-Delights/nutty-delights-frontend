@@ -102,6 +102,7 @@ const NavBar = (props) => {
   const { window } = props;
   const container = window !== undefined ? () => window().document.body : undefined;
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [invisible, setInvisible] = useState(true);
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
@@ -188,6 +189,7 @@ const NavBar = (props) => {
 
   useEffect(() => {
     // if (cart?.cartTotalItems !== cartState) {
+
     console.log(localStorage.getItem('jwt'))
 
     if (localStorage.getItem('jwt'))
@@ -223,25 +225,29 @@ const NavBar = (props) => {
 
   useEffect(() => {
 
+    if (localStorage.getItem('cart')) {
 
-    // console.log("Navbar", localStorage.getItem('jwt').length !== 0);
+    }
     if (!cart && localStorage.getItem('jwt'))
       dispatch(getCart(localStorage.getItem('jwt')))
-    // setCart(cartStore);
 
-
+    if (user) {
+      setInvisible(user?.isEnabled);
+    }
 
 
   }, [cart])
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{}}>
       {/* <Image style={{ padding: '10px' }} duration={0} src={logo} fit='cover' height='60px' width='130px' /> */}
-      <Box display={'flex'} alignItems={'center'} >
-        <Image style={{ padding: '10px' }} duration={0} src={logo} fit='cover' height='60px' width='110px' />
-        {/* <IconButton>
-          <PersonOutlineOutlined />
-        </IconButton> */}
-        <Typography sx={{ fontWeight: 'bold', paddingInline: '0px', paddingBlock: '10px' }}>{`Hello ${user?.firstName}!`}</Typography></Box>
+      <Box display={'flex'} sx={{ padding: '20px', gap: '10px' }} alignItems={'center'} >
+        {/* <Image style={{ padding: '10px' }} duration={0} src={logo} fit='cover' height='60px' width='110px' /> */}
+        <PersonOutlineOutlined />
+        <Box display={'flex'} gap={'5px'}>
+          <Typography sx={{ fontWeight: 'bold', }}>{`Hello ${user?.firstName ? user?.firstName : "User "}!`}</Typography>
+          {/* <NavLink sx={{ fontWeight: 'bold', color: 'orange !important' }}>{'Login'}</NavLink> */}
+        </Box>
+      </Box>
       {/* <Typography sx={{ fontWeight: 'bold', paddingInline: '20px' }}>{`My Account`}</Typography> */}
 
       <Divider />
@@ -249,11 +255,19 @@ const NavBar = (props) => {
         <SearchBar margin={'10px'} />
       </Box> */}
       <List>
-        {navItems.map((item, index) => (
+        {navItems.filter((item) => {
+          if (localStorage.getItem('jwt')) {
+            return true;
+          }
+
+          else {
+            return item.name !== 'Account'
+          }
+        }).map((item, index) => (
           <ListItem key={index} disablePadding>
             <ListItemButton sx={{}}>
-              <NavLink to={item.link} style={{ color: location === item.link ? "#ffa732" : 'black', textDecoration: "none", marginRight: "1.5rem", marginLeft: '6px' }}>
-                {/* {item.icon} */}
+              <NavLink to={item.link} style={{ display: 'flex', gap: '10px', color: location === item.link ? "#ffa732" : 'black', textDecoration: "none", marginRight: "1.5rem", marginLeft: '6px' }}>
+                {item.icon(location === item.link ? "#ffa732" : 'black')}
                 <Typography sx={{ fontWeight: 'bold' }}>
                   {item.name}
                 </Typography>
@@ -281,12 +295,12 @@ const NavBar = (props) => {
               >
                 <MenuIcon />
               </IconButton>
-              <Box sx={{ marginRight: "10px" }}>
+              <Box sx={{ marginRight: "0px" }}>
                 <NavLink replace={true} to='/'>
-                  <Image style={{ display: { sm: 'none', md: 'flex' }, }} duration={0} src={logo} fit='cover' height='42px' width='124px' />
+                  <Image style={{ display: { sm: 'none', md: 'flex' }, }} duration={0} src={logo} fit='cover' height='42px' width='120px' />
                 </NavLink>
               </Box>
-              <Box sx={{ display: { xs: 'none', sm: 'none', md: 'flex' }, flexGrow: 1, }}>
+              <Box sx={{ display: { xs: 'none', sm: 'none', md: 'flex', marginLeft: '10px !important' }, flexGrow: 1, }}>
                 {
                   navItems.filter(item => item.name !== 'Account').map((item, index) => (
                     <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
@@ -324,15 +338,24 @@ const NavBar = (props) => {
                     <ShoppingCartIcon />
                   </Badge>
 
-                  <NavLink to={'/cart'} style={{ color: 'black', textDecoration: "none", }}>
-                    <Typography sx={{ fontWeight: 'bold' }}>
+                  {localStorage.getItem('jwt') ? <NavLink to={'/cart'} style={{ color: 'black', textDecoration: "none", }}>
+
+                    <Typography sx={{ fontWeight: 'bold', ml: '4px' }}>
                       {"Cart"}
                     </Typography>
 
-                  </NavLink>
-                  <Box sx={{ display: "flex", flex: '1', marginRight: '20px' }}>
+                  </NavLink> :
+                    <NavLink onClick={handleOpenDialog} to={''} style={{ color: 'black', textDecoration: "none", }}>
 
-                  </Box>
+                      <Typography sx={{ fontWeight: 'bold', ml: '4px' }}>
+                        {"Cart"}
+                      </Typography>
+
+                    </NavLink>
+                  }
+                  {/* <Box sx={{ display: "flex", flex: '1', marginRight: '20px' }}>
+
+                  </Box> */}
                   {
                     localStorage.getItem('jwt') ?
                       <Box>
@@ -346,8 +369,10 @@ const NavBar = (props) => {
                           }>
                           {<Badge
 
-                            variant='dot'
-                            invisible={true && user?.isEnabled}
+                            // variant='dot'
+
+                            badgeContent={1}
+                            invisible={invisible}
                             anchorOrigin={{
                               vertical: 'top',
                               horizontal: 'right',
@@ -359,7 +384,7 @@ const NavBar = (props) => {
                             <AccountIcon />
                           </Badge>}
 
-                          <Typography sx={{ fontWeight: 'bold', ml: user?.isEnabled ? "2px" : '2px' }}>
+                          <Typography sx={{ fontWeight: 'bold', ml: user?.isEnabled ? "5px" : '8px', }}>
                             {localStorage.getItem('userFirstName') ? localStorage.getItem('userFirstName') : user ? `${user?.firstName}` : "User"}
                           </Typography>
 
@@ -375,7 +400,7 @@ const NavBar = (props) => {
                           }}
                         >
 
-                          {user?.isEnabled ? <></> : <MenuItem sx={{ color: 'red' }} onClick={handleEmailClose}>
+                          {user?.isEnabled && localStorage.getItem('jwt') ? <></> : <MenuItem sx={{ color: 'red' }} onClick={handleEmailClose}>
                             <Badge
 
                               variant='dot'
@@ -395,10 +420,12 @@ const NavBar = (props) => {
                           <MenuItem onClick={handleLogout}>Logout</MenuItem>
                         </Menu>
                       </Box> :
-                      <Box onClick={handleOpenDialog} style={{ color: 'black', textDecoration: "none", display: 'flex', cursor: 'pointer' }}>
+                      <Box onClick={handleOpenDialog} sx={{
+                        marginLeft: '10px',
+                      }} style={{ color: 'black', textDecoration: "none", display: 'flex', cursor: 'pointer', }}>
                         <AccountIcon />
 
-                        <Typography sx={{ fontWeight: 'bold' }}>
+                        <Typography sx={{ fontWeight: 'bold', ml: '5px', }}>
                           {"Login"}
                         </Typography>
 

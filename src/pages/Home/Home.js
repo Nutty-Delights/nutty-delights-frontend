@@ -26,13 +26,14 @@ import { getAllCategories, getCategories, getCategoriesError, getCategoriesLoadi
 import HomeCategoryCard from './HomeCategoryCard'
 import CategoryIcon from '@mui/icons-material/CategoryTwoTone';
 import { ArrowRight, ChevronLeft, ChevronRight } from '@mui/icons-material'
+import { createCart, getCart, getUserCart, setCart } from '../../redux/slices/cart'
 
 
 var settings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 5,
+    slidesToShow: 6,
     slidesToScroll: 1,
     initialSlide: 0,
     autoplay: true,
@@ -44,6 +45,15 @@ var settings = {
                 slidesToScroll: 1,
                 infinite: true,
                 dots: true,
+                autoplay: true,
+            }
+        },
+        {
+            breakpoint: 900,
+            settings: {
+                slidesToShow: 4,
+                slidesToScroll: 2,
+                initialSlide: 2,
                 autoplay: true,
             }
         },
@@ -61,6 +71,14 @@ var settings = {
             settings: {
                 slidesToShow: 2,
                 slidesToScroll: 2,
+                autoplay: true,
+            }
+        },
+        {
+            breakpoint: 316,
+            settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1,
                 autoplay: true,
             }
         }
@@ -113,6 +131,7 @@ const Home = () => {
     const isLoading = useSelector(getProductsLoading);
     const categories = useSelector(getCategories);
     const isLoadingCategories = useSelector(getCategoriesLoading);
+    const cart = useSelector(getUserCart);
     const isError = useSelector(getCategoriesError);
     const location = useLocation().pathname;
     // const [categories, setCategories] = useState();
@@ -147,6 +166,15 @@ const Home = () => {
         // dispatch(getAllProductsByCategory({ categoryId }))
         if (!categories)
             dispatch(getAllCategories());
+        if (!localStorage.getItem('cart') && !localStorage.getItem('jwt'))
+            dispatch(createCart());
+
+    }, [])
+
+    useEffect(() => {
+        if (localStorage.getItem('cart') && !localStorage.getItem('jwt')) {
+            dispatch(setCart());
+        }
     }, [])
 
     const images = [banner3, banner, banner4];
@@ -300,7 +328,7 @@ const Home = () => {
 
                 }
             }}></Divider>
-            <Image style={{ position: 'relative', marginBlock: '40px' }} height={"26vw"} src={nuts} fit='contain'></Image>
+            <Image style={{ position: 'relative', marginBlock: '40px' }} height={"24vw"} src={nuts} fit='contain'></Image>
 
 
             <Banner />

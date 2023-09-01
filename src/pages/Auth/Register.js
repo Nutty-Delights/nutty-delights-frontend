@@ -6,7 +6,7 @@ import Google from '../../assets/images/googleIcon.png'
 import banner2 from '../../assets/images/banner 2.jpg'
 import login from '../../assets/images/logo.png'
 import Image from 'mui-image';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, json, useNavigate } from 'react-router-dom';
 import validator from 'validator'
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
@@ -137,14 +137,17 @@ const Register = ({ setAuthForm }) => {
 
             }
 
+            const localCartItems = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart'))?.cartItems : [];
+            const data = {
+                user: userData,
+                localCartItems: localCartItems
+            }
 
-            console.log(userData);
-            dispatch(registerUser(userData));
+
+            console.log(data);
+            dispatch(registerUser(data));
 
 
-
-
-            // setLoading(true);
         }
 
     }
