@@ -23,7 +23,7 @@ function ProductList() {
     const products = useSelector(getProductsByCategory);
     const isLoading = useSelector(getProductsLoading);
     const isError = useSelector(getProductsError);
-    const loading = [1, 2, 3, 4, 5, 6];
+    const loading = [1, 2, 3];
 
 
     useEffect(() => {
@@ -39,13 +39,13 @@ function ProductList() {
             {/* <CategoryCarousel /> */}
             <Toolbar></Toolbar>
 
-            <Box className='product-list-box'>
+            {/* <Box className='product-list-box'>
                 <ProductFilter />
             </Box>
 
             <div className='middle-box'>
                 <Typography className='product-list-box-heading'>{`Best for you !`}</Typography>
-            </div>
+            </div> */}
 
             <div style={{ padding: '50px', }} className='product-list'>
                 {

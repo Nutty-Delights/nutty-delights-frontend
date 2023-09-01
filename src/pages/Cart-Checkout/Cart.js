@@ -189,7 +189,7 @@ const Cart = () => {
                     }, borderWidth: '1px', marginBlock: '20px', marginInline: '20px'
                 }}></Divider> */}
 
-                            <Box sx={{ marginBlock: '10px' }}>
+                            <Box sx={{ marginBlock: '20px' }}>
                                 <Button
                                     disableElevation
                                     onClick={handleProceedToCheckout}
@@ -255,8 +255,8 @@ const Cart = () => {
                                     <List sx={{
                                         padding: '0px',
                                         height: {
-                                            xs: '50vh',
-                                            sm: '60vh',
+                                            xs: cart?.cartItems?.length > 3 ? ' 55vh' : 'fit-content !important',
+                                            sm: cart?.cartItems?.length > 3 ? ' 55vh' : 'fit-content !important',
                                             md: cart?.cartItems?.length > 3 ? ' 55vh' : 'fit-content !important',
                                         },
                                         overflow: 'auto'
@@ -509,12 +509,13 @@ const Cart = () => {
                                 </Card>
 
                                 <Button
+                                    disableElevation
                                     onClick={handleProceedToCheckout}
                                     fullWidth
                                     variant='contained'
                                     sx={{
                                         display: {
-                                            xs: 'none',
+                                            xs: 'block',
                                             sm: 'none',
                                             md: 'block'
                                         },
