@@ -3,8 +3,10 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { getCart, getCartError, getCartLoading, getRemoveLoading, getUpdateItemLoading, getUserCart, removeItemFromCart, updateCartItem } from '../../redux/slices/cart'
-import { Add, AddCircle, AddCircleOutline, AddCircleOutlineOutlined, RemoveCircleOutline, Remove, RemoveCircle, Delete, DeleteOutlineOutlined, DeleteTwoTone } from '@mui/icons-material'
+import { Add, AddCircle, AddCircleOutline, AddCircleOutlineOutlined, RemoveCircleOutline, Remove, RemoveCircle, Delete, DeleteOutlineOutlined, DeleteTwoTone, CategoryOutlined } from '@mui/icons-material'
 import EastRoundedIcon from '@mui/icons-material/EastRounded';
+import empty from '../../assets/images/cart.png';
+import Image from 'mui-image'
 const Cart = () => {
 
 
@@ -75,16 +77,89 @@ const Cart = () => {
     return (
 
         !localStorage.getItem('jwt') ? <Box sx={{ color: 'orange', height: '80vh', alignItems: 'center', justifyContent: 'center', display: 'flex', }}>
-            <Typography sx={{ fontSize: '26px', fontWeight: 'bold', }}>{"Sign in to continue !"}
-            </Typography>
+            {/* <Typography sx={{ fontSize: '26px', fontWeight: 'bold', }}>{"Sign in to continue !"}
+            </Typography> */}
+            <Box>
+                <Image src={empty} alt='cart_image'>
+
+                </Image>
+            </Box>
         </Box> :
             isLoading ? <Box sx={{ color: 'orange', height: '70vh', }}>
                 <LinearProgress />
             </Box>
                 : cart?.cartTotalItems === 0 ?
-                    <Box sx={{ color: 'orange', height: '80vh', alignItems: 'center', justifyContent: 'center', display: 'flex', }}>
-                        <Typography sx={{ fontSize: '26px', fontWeight: 'bold', }}>{"Nothing In The Cart ! Explore Now"}
+                    <Box sx={{
+                        color: 'orange', height: {
+                            xs: 'fit-content',
+                            sm: 'fit-contetnt',
+                            md: '60vh'
+                        }, alignItems: 'center', justifyContent: 'center', flexDirection: 'column', display: 'flex',
+                    }}>
+                        <Typography sx={{
+                            padding: '20px',
+                            fontWeight: 'bold',
+                            fontSize: {
+                                xs: '20px',
+                                sm: '18px',
+                                md: '25px'
+                            }
+                        }}>
+                            {"Your Cart is empty"}
                         </Typography>
+
+                        <Box >
+                            <Image height={'200px'} width={'200px'} duration={0} src={empty} alt='cart_image'>
+
+                            </Image>
+
+                        </Box>
+                        <Typography sx={{
+                            padding: '20px',
+                            paddingBottom: '30px',
+                            paddingInline: '20px',
+                            wordBreak: 'break-word',
+                            fontWeight: '',
+                            fontSize: {
+                                xs: '17px',
+                                sm: '16px',
+                                md: '22px'
+                            }
+                        }}>
+                            {"Looks like you have not added anything in the cart"}
+                        </Typography>
+                        {/* <Typography sx={{
+                            // padding: '20px',
+                            paddingInline: '30px',
+                            wordBreak: 'break-word',
+                            fontWeight: '',
+                            fontSize: {
+                                xs: '16px',
+                                sm: '17px',
+                                md: '22px'
+                            }
+                        }}>
+                            {". Go ahead & explore top categories"}
+                        </Typography> */}
+
+
+                        <Button
+                            onClick={() => {
+                                navigate('/categories')
+                            }}
+                            endIcon={<CategoryOutlined />}
+                            disableElevation
+                            variant='contained'
+                            sx={{
+                                fontSize: '16px',
+                                fontWeight: 'bold',
+                                background: 'orange',
+                                ':hover': {
+                                    background: 'orange'
+                                }
+                            }}>
+                            Explore Categories
+                        </Button>
                     </Box> :
                     isError ? <Box sx={{ display: "flex", justifyContent: 'center', padding: '100px' }}>
                         <Typography>Network error or backend error</Typography>

@@ -124,7 +124,7 @@ function ProductList() {
                                             <Typography sx={{ color: "green", marginLeft: '1px', fontSize: '14px' }}>{`${product.productNumberOfReviews} reviews`}</Typography>
                                         </Box>
                                     </Box>
-                                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                                    {/* <Box sx={{ display: 'flex', justifyContent: 'center' }}>
 
                                         {
                                             product.productStockCount <= 0 ?
@@ -157,7 +157,7 @@ function ProductList() {
                                                     Add To Bag
                                                 </Button>
                                         }
-                                    </Box>
+                                    </Box> */}
 
                                 </Box>
                             </Paper>
