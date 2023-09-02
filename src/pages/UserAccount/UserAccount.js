@@ -98,7 +98,7 @@ const UserAccount = () => {
         if (orders.length === 0)
             dispatch(getUserOrders())
 
-    }, [])
+    }, [token])
 
     const handleNavigate = (orderId) => {
         navigate(`/user/orders/${orderId}`)

@@ -59,8 +59,8 @@ const Categories = () => {
                 {
 
                     isLoading ? loading.map((e, i) => (
-                        <Box key={i} width={"300px"} >
-                            <Skeleton variant="rectangular" height={118} />
+                        <Box key={i} width={"380px"} sx={{ padding: '15px' }}>
+                            <Skeleton variant="rectangular" height={125} />
                             <Skeleton animation="wave" />
                             <Skeleton animation="wave" />
                             <Skeleton animation={false} />

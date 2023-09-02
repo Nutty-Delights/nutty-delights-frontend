@@ -366,7 +366,7 @@ const Checkout = () => {
                                                     }}
                                                     // fullWidth
                                                     required
-                                                    id="outlined-required"
+                                                    id="first-name"
                                                     label="First Name"
                                                 />
                                                 <TextField
@@ -396,13 +396,86 @@ const Checkout = () => {
                                                     }}
                                                     // fullWidth
                                                     required
-                                                    id="outlined-required"
+                                                    id="last-name"
                                                     label="Last Name"
 
                                                 />
+                                                <TextField
+                                                    onChange={handleMob}
+                                                    InputProps={{
+                                                        sx: {
+                                                            flexDirection: 'row-reverse'
+                                                        },
+                                                        endAdornment:
+                                                            mobNo?.length > 0 ? <InputAdornment sx={{ marginTop: '1px', ml: '12px', }} position='start'>
+
+                                                                {<Typography sx={{ mr: '-10px', }}>
+                                                                    +91
+                                                                </Typography>}
+                                                            </InputAdornment> : <></>
+                                                    }}
+                                                    value={mobNo || ""}
+                                                    fullWidth
+                                                    size='small'
+                                                    // onChange={handleUpdatedNameChange}
+                                                    sx={{
+
+
+                                                        "& .MuiInputLabel-outlined": {
+                                                            color: "black",
+                                                            fontSize: '14px',
+
+                                                            "&.MuiInputLabel-shrink": {
+                                                                color: "orange"
+                                                            },
+                                                        },
+                                                        "& .MuiOutlinedInput-root": {
+                                                            "&.Mui-focused fieldset": {
+                                                                "borderColor": "orange"
+                                                            }
+                                                        },
+                                                        margin: '10px'
+                                                    }}
+                                                    // fullWidth
+                                                    required
+                                                    id="mobile-number"
+                                                    label="Mobile No."
+
+                                                />
+
 
                                             </FormGroup>
                                             <FormGroup row sx={{ width: 'inherit', flexWrap: 'nowrap' }}>
+                                                {/* <TextField
+
+                                                    onChange={handleHouseNo}
+                                                    value={"" || houseNo}
+                                                    fullWidth
+                                                    size='small'
+                                                    // onChange={handleUpdatedNameChange}
+                                                    sx={{
+
+                                                        width: '30%',
+                                                        "& .MuiInputLabel-outlined": {
+                                                            fontSize: '14px',
+                                                            color: "black",
+                                                            "&.MuiInputLabel-shrink": {
+                                                                color: "orange"
+                                                            },
+                                                        },
+                                                        "& .MuiOutlinedInput-root": {
+                                                            "&.Mui-focused fieldset": {
+                                                                "borderColor": "orange"
+                                                            }
+                                                        },
+                                                        margin: '10px'
+                                                    }}
+                                                    // fullWidth
+                                                    // required
+                                                    id="outlined-required"
+                                                    label="House/Flat no. "
+
+                                                /> */}
                                                 <TextField
                                                     onChange={handleAddress}
                                                     value={"" || address}
@@ -410,7 +483,7 @@ const Checkout = () => {
                                                     // onChange={handleUpdatedImageChange}
                                                     sx={{
 
-
+                                                        width: '85%',
                                                         "& .MuiInputLabel-outlined": {
                                                             color: "black",
                                                             fontSize: '14px',
@@ -430,8 +503,37 @@ const Checkout = () => {
                                                     fullWidth
                                                     required
                                                     // value={selectedProduct?.productImageUrl || ""}
-                                                    id="outlined-required"
+                                                    id="address"
                                                     label="Address"
+
+                                                />
+                                                <TextField
+                                                    onChange={handlePincode}
+                                                    value={pinCode || ""}
+                                                    fullWidth
+                                                    size='small'
+                                                    sx={{
+
+                                                        width: '40%',
+                                                        "& .MuiInputLabel-outlined": {
+                                                            color: "black",
+                                                            fontSize: '14px',
+
+                                                            "&.MuiInputLabel-shrink": {
+                                                                color: "orange"
+                                                            },
+                                                        },
+                                                        "& .MuiOutlinedInput-root": {
+                                                            "&.Mui-focused fieldset": {
+                                                                "borderColor": "orange"
+                                                            }
+                                                        },
+                                                        margin: '10px'
+                                                    }}
+                                                    // fullWidth
+                                                    required
+                                                    id="pincode"
+                                                    label="Pin Code"
 
                                                 />
                                             </FormGroup>
@@ -439,7 +541,7 @@ const Checkout = () => {
 
                                             <FormGroup row sx={{ width: 'inherit', flexWrap: 'nowrap' }}>
 
-                                                <TextField
+                                                {/* <TextField
                                                     onChange={handleHouseNo}
                                                     value={"" || houseNo}
                                                     fullWidth
@@ -467,36 +569,8 @@ const Checkout = () => {
                                                     id="outlined-required"
                                                     label="House/Flat no. "
 
-                                                />
-                                                <TextField
-                                                    onChange={handlePincode}
-                                                    value={pinCode || ""}
-                                                    fullWidth
-                                                    size='small'
-                                                    sx={{
+                                                /> */}
 
-
-                                                        "& .MuiInputLabel-outlined": {
-                                                            color: "black",
-                                                            fontSize: '14px',
-
-                                                            "&.MuiInputLabel-shrink": {
-                                                                color: "orange"
-                                                            },
-                                                        },
-                                                        "& .MuiOutlinedInput-root": {
-                                                            "&.Mui-focused fieldset": {
-                                                                "borderColor": "orange"
-                                                            }
-                                                        },
-                                                        margin: '10px'
-                                                    }}
-                                                    // fullWidth
-                                                    required
-                                                    id="outlined-required"
-                                                    label="Pin Code"
-
-                                                />
 
                                             </FormGroup>
 
@@ -531,7 +605,7 @@ const Checkout = () => {
                                                     }}
                                                     // fullWidth
                                                     required
-                                                    id="outlined-required"
+                                                    id="country"
                                                     label="Country"
 
                                                 />
@@ -567,14 +641,10 @@ const Checkout = () => {
                                                     }}
                                                     // fullWidth
                                                     required
-                                                    id="outlined-required"
+                                                    id="state"
                                                     label="State"
 
                                                 />
-
-                                            </FormGroup>
-
-                                            <FormGroup row sx={{ width: 'inherit', flexWrap: 'nowrap' }}>
                                                 <TextField
                                                     onChange={handleCity}
                                                     value={"" || city}
@@ -601,11 +671,16 @@ const Checkout = () => {
                                                     }}
                                                     // fullWidth
                                                     required
-                                                    id="outlined-required"
+                                                    id="city"
                                                     label="City"
 
                                                 />
-                                                <TextField
+
+                                            </FormGroup>
+
+                                            <FormGroup row sx={{ width: 'inherit', flexWrap: 'nowrap' }}>
+
+                                                {/* <TextField
                                                     onChange={handleMob}
                                                     InputProps={{
                                                         sx: {
@@ -646,7 +721,7 @@ const Checkout = () => {
                                                     id="outlined-required"
                                                     label="Mobile No."
 
-                                                />
+                                                /> */}
                                             </FormGroup>
                                             <FormGroup>
                                                 <FormControlLabel sx={{ marginInline: '0px' }} control={<Checkbox color='success' sx={{}} defaultChecked />} label="Save address for future use" />
@@ -676,14 +751,15 @@ const Checkout = () => {
                                 </CardContent> :
 
                                 <CardContent>
-                                    <Box sx={{ margin: '10px' }}>
-                                        <Typography sx={{ fontWeight: 'bold' }}>Shipping Method</Typography>
+                                    <Divider sx={{ marginBottom: '10px' }}></Divider>
+                                    <Box sx={{ marginInline: '12px' }}>
+                                        <Typography sx={{ fontWeight: 'bold' }}>Payment Method</Typography>
 
                                     </Box>
-                                    <Card variant='outlined'>
+                                    <Card variant=''>
                                         <CardContent>
                                             <form >
-                                                <FormControl sx={{ m: 1 }} variant="standard">
+                                                <FormControl sx={{ m: 0 }} variant="standard">
                                                     {/* <FormLabel id="demo-error-radios">Pop quiz: MUI is...</FormLabel> */}
                                                     <RadioGroup
                                                         sx={{
@@ -706,7 +782,10 @@ const Checkout = () => {
                                                                         color: 'orange',
                                                                     },
                                                                 }} />
-                                                        } label={<Typography sx={{ fontSize: '15px' }}>{"Prepaid - Net banking, UPI, Debit/Credit Card"}</Typography>} />
+                                                        } label={<Box>
+                                                            <Typography sx={{ fontSize: '15px' }}>{"Prepaid - Net banking, UPI, Debit/Credit Card"}</Typography>
+
+                                                        </Box>} />
 
                                                         <FormControlLabel value="cod" control={
                                                             <Radio
@@ -725,7 +804,7 @@ const Checkout = () => {
                                                                 justifyContent: 'space-between'
                                                             }}>
                                                             <Typography sx={{ fontSize: '15px' }}>{"Pay on delivery"}</Typography>
-                                                            <Typography sx={{ fontSize: '15px' }}>{"( Shipping charge : ₹ 50 )"}</Typography>
+                                                            {/* <Typography sx={{ fontSize: '15px' }}>{"( Shipping charge : ₹ 50 )"}</Typography> */}
                                                         </Box>} />
                                                     </RadioGroup>
                                                     {/* <FormHelperText>{"45"}</FormHelperText> */}
@@ -999,8 +1078,10 @@ const Checkout = () => {
                                                     {/* <Typography sx={{ fontSize: '18px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>{`Subtotal (${cart?.cartTotalItems} items)`}</Typography>
                                         <Typography sx={{ fontSize: '18px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>{`Taxes ( GST )`}</Typography> */}
                                                     <Typography sx={{ fontSize: '16px', fontWeight: '', marginInline: '10px', marginTop: '0px' }}>{`Total`}</Typography>
-                                                    <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '11px', marginInline: '10px', }} >{`Including shipping charges : ${shippingMethod === "cod" ? `₹50` : `free`}`}</Typography>
-                                                    <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '11px', marginInline: '10px', }} >{`${shippingMethod === 'cod' ? 'Pay On Delivery' : 'Prepaid Delivery'}`}</Typography>
+                                                    {/* <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '11px', marginInline: '10px', }} >(Excluding shipping charges)</Typography> */}
+
+                                                    <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '11px', marginInline: '10px', }} >{`${step === 1 ? " (Shipping charges to be calculated on next step)" : step === 0 ? '(Excluding shipping charges)' : "Including shipping charges : ₹50"}`}</Typography>
+                                                    <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '11px', marginInline: '10px', }} >{`  ${step === 2 ? shippingMethod === 'cod' ? 'Pay On Delivery' : 'Prepaid Delivery' : ""}`}</Typography>
 
                                                 </Box>
                                                 <Box>

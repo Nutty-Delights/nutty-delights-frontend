@@ -148,9 +148,9 @@ const PaymentSuccess = () => {
                 alignItems: 'center'
               }}>
                 <Typography sx={{ fontWeight: 'bold' }}>{`Order Id : ${order ? order?.orderId?.split("_")[1] : ""}`}</Typography>
-                <IconButton onClick={handleNavigate}>
+                {/* <IconButton onClick={handleNavigate}>
                   <Track />
-                </IconButton>
+                </IconButton> */}
 
               </Box>}
 

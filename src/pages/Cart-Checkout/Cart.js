@@ -225,7 +225,7 @@ const Cart = () => {
                                 {/* <CardHeader> */}
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <Typography sx={{ fontSize: '24px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>Shopping Bag</Typography>
-                                    <Typography sx={{ fontSize: '24px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>{`${cart?.cartTotalItems} Items`}</Typography>
+                                    <Typography sx={{ fontSize: '24px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>{`${cart?.cartTotalItems} Item${cart?.cartTotalItems > 1 ? 's' : ''}`}</Typography>
                                 </Box>
                                 {/* </CardHeader> */}
 

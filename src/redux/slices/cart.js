@@ -324,6 +324,8 @@ const cartSlice = createSlice({
 
 
             }
+            toast.success("Item removed from cart")
+
             return newState;
         })
         builder.addCase(removeItemFromCart.rejected, (state, action) => {
