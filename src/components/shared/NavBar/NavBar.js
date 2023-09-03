@@ -68,6 +68,11 @@ const NavBar = (props) => {
     variant: 'popover',
     popupId: 'demoMenu',
   })
+
+  const popupStateAccount = usePopupState({
+    variant: 'popover',
+    popupId: 'demoMenuAccount',
+  })
   const location = useLocation().pathname;
   // const activeColor = '#ffa732';
   const navItems = [
@@ -375,7 +380,7 @@ const NavBar = (props) => {
                     }
 
                     {
-                      location === '/cart' || location === '/checkout' ? <></> :
+                      location === '/cart' || location === '/checkout' || !localStorage.getItem('jwt') || cart?.cartTotalItems === 0 ? <></> :
                         <HoverMenu
                           sx={{
                             display: {
@@ -597,20 +602,14 @@ const NavBar = (props) => {
                   {
                     localStorage.getItem('jwt') ?
                       <Box
-                        onMouseLeave={() => {
-                          setAnchorEl(null);
-                        }}
                       >
                         <Button
 
                           disableRipple
-                          aria-controls={open ? 'basic-menu' : undefined}
-                          aria-haspopup="true"
-                          aria-expanded={open ? 'true' : undefined}
-                          onClick={handleClick}
-                          onMouseOver={handleOpen}
-
-
+                          disableElevation
+                          disableTouchRipple
+                          sx={{ color: 'black' }}
+                          {...bindHover(popupStateAccount)}
 
                           style={{ color: 'black', textDecoration: "none", zIndex: '1301' }
                           }>
@@ -637,22 +636,17 @@ const NavBar = (props) => {
 
 
                         </Button>
-                        <Menu
-                          PaperProps={{
-
-                            onMouseLeave: () => {
-                              setAnchorEl(null);
+                        <HoverMenu
+                          sx={{
+                            display: {
+                              xs: 'none',
+                              sm: 'inherit',
+                              md: 'inherit'
                             }
                           }}
-                          id="basic-menu"
-                          anchorEl={anchorEl}
-                          open={open}
-                          // onMouseOver={handleOpen}
-
-                          onClose={handleClose}
-                          MenuListProps={{
-                            'aria-labelledby': 'basic-button',
-                          }}
+                          {...bindMenu(popupStateAccount)}
+                          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                          transformOrigin={{ vertical: 'top', horizontal: 'left' }}
                         >
 
                           {user?.isEnabled && localStorage.getItem('jwt') ? <></> : <MenuItem sx={{ color: 'red' }} onClick={handleEmailClose}>
@@ -680,7 +674,7 @@ const NavBar = (props) => {
                             {/* <LogoutOutlinedIcon /> */}
                             Logout
                           </MenuItem>
-                        </Menu>
+                        </HoverMenu>
                       </Box> :
                       <Box onClick={handleOpenDialog} sx={{
                         marginLeft: '10px',
