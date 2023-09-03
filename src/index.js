@@ -10,7 +10,7 @@ import BulkOrder from './pages/BulkOrder';
 import Categories from './pages/Categories/Categories';
 import ProductList from './pages/ProductList/ProductList';
 import ProductPage from './pages/Product/ProductPage';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import store from './redux/store';
 import Admin from './pages/Admin/AdminPanel';
 import AdminCategories from './pages/Admin/AdminCategories';
@@ -24,6 +24,7 @@ import Checkout from './pages/Cart-Checkout/Checkout';
 import PaymentSuccess from './pages/Payments/PaymentSuccess';
 import Gifts from './pages/Gifts';
 import Order from './pages/UserOrder/Order';
+import ErrorPage from './pages/ErrorPage';
 
 
 
@@ -44,7 +45,8 @@ const router = createBrowserRouter([
       },
       {
         path: 'checkout',
-        element: <Checkout />
+        element: store.getState().cart?.cart?.cartTotalItems !== 0 ? <Checkout /> : <ErrorPage></ErrorPage>
+
 
       },
       {

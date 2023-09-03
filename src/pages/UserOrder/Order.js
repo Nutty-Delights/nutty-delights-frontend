@@ -136,7 +136,7 @@ const Order = () => {
                         md: 'flex'
                     },
                     justifyContent: 'center',
-                    paddingInline: '10px'
+                    paddingInline: '20px'
                 }}
             >
                 <Card
@@ -162,7 +162,7 @@ const Order = () => {
                     <CardContent>
                         {
                             !order ? <></> : <Box sx={{
-                                paddingBlock: '10px',
+                                paddingBlock: '5px',
                                 display: {
                                     xs: 'flex',
                                     md: 'flex'
@@ -170,7 +170,7 @@ const Order = () => {
                                 justifyContent: 'space-between',
                                 alignItems: 'center'
                             }}>
-                                <Typography sx={{ fontWeight: 'bold' }}>{`Order Id : ${order ? order?.orderId?.split("_")[1] : ""}`}</Typography>
+                                <Typography sx={{ fontWeight: 'bold' }}>{`Order Id : ${order ? order?.orderId?.split("_")[1] : ""} | Total Items : ${order?.orderItems?.length} `}</Typography>
 
 
                             </Box>}
@@ -194,12 +194,12 @@ const Order = () => {
                                         },
                                         alignItems: 'center'
                                     }}>
-                                    <Typography sx={{ fontWeight: 'normal', color: 'grey', fontSize: '14px' }}>{`Order date :  ${order ? new Date(order?.createdAt).toLocaleDateString() : ""}, ${order ? new Date(order?.createdAt).toLocaleTimeString() : ""} |`}</Typography>
+                                    <Typography sx={{ fontWeight: 'normal', color: 'grey', fontSize: '14px', paddingBlock: '5px' }}>{`Order date :  ${order ? new Date(order?.createdAt).toLocaleDateString() : ""}, ${order ? new Date(order?.createdAt).toLocaleTimeString() : ""} |`}</Typography>
                                     <Box display={'flex'} sx={{ alignItems: 'center' }}>
                                         {/* <IconButton>
                       <Ship sx={{ color: 'green' }} />
                     </IconButton> */}
-                                        <Typography sx={{ fontWeight: 'normal', color: 'green', fontSize: '14px' }}>{`Expected delivery date : ${order?.deliveryDate ? new Date(order?.deliveryDate).toLocaleDateString() : 'to be updated'} `}</Typography>
+                                        <Typography sx={{ fontWeight: 'normal', color: 'green', fontSize: '14px' }}>{`Tracking Details  : ${order?.deliveryDate ? new Date(order?.deliveryDate).toLocaleDateString() : 'to be updated'} `}</Typography>
                                     </Box>
                                 </Box>
                             }
@@ -210,7 +210,15 @@ const Order = () => {
                         <Divider sx={{ marginBlock: '5px' }} ></Divider>
 
                         <Box>
-                            <List>
+                            <List sx={{
+                                overflow: 'auto',
+                                height: {
+                                    xs: order?.orderItems?.length > 3 ? '50vh' : 'fit-content',
+                                    // sm: order?.orderItems?.length > 3 ? '50vh' : 'fit-content',
+                                    sm: '50vh',
+                                    md: order?.orderItems?.length > 3 ? '50vh' : 'fit-content',
+                                }
+                            }}>
                                 {
                                     order?.orderItems?.map((item, i) => {
                                         return <Box>

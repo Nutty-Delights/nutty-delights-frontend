@@ -187,7 +187,14 @@ const PaymentSuccess = () => {
             <Divider sx={{ marginBlock: '5px' }} ></Divider>
 
             <Box>
-              <List>
+              <List sx={{
+                overflow: 'auto',
+                height: {
+                  xs: order?.orderItems?.length > 3 ? '50vh' : 'fit-content',
+                  sm: order?.orderItems?.length > 3 ? '50vh' : 'fit-content',
+                  md: '50vh'
+                }
+              }}>
                 {
                   order?.orderItems?.map((item, i) => {
                     return <Box>
