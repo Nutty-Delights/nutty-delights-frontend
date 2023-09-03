@@ -17,7 +17,7 @@ import BulkOrderIcon from '@mui/icons-material/CasesOutlined';
 import CombosIcon from '@mui/icons-material/AcUnitOutlined';
 import DeliveryIcon from '@mui/icons-material/LocalShippingOutlined';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUser, getUserProfile, logoutUser } from '../../../redux/slices/user';
+import { getOpenEmail, getUser, getUserProfile, logoutUser, setOpenEmail } from '../../../redux/slices/user';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Login from '../../../pages/Auth/Login';
@@ -108,8 +108,9 @@ const NavBar = (props) => {
   };
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [openDialog, setOpen] = useState(false);
-  const [openEmailDialog, setOpenEmail] = useState(false);
+  const emailOpen = useSelector(getOpenEmail);
+  const [openDialog, setOpen] = useState(emailOpen);
+  const [openEmailDialog, setOpenEmailDialog] = useState(false);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   // const [anchorElEmail, setAnchorElEmail] = React.useState(null);
@@ -133,7 +134,8 @@ const NavBar = (props) => {
 
   const handleEmailClose = () => {
     setAnchorEl(null);
-    setOpenEmail(true);
+    setOpenEmailDialog(true);
+    dispatch(setOpenEmail({ open: true }));
     // setAuthForm(false);
   }
 
@@ -170,7 +172,8 @@ const NavBar = (props) => {
 
   }
   const handleEmailDialog = () => {
-    setOpenEmail(false);
+    setOpenEmailDialog(false);
+    dispatch(setOpenEmail({ open: false }));
 
 
   }
@@ -191,6 +194,7 @@ const NavBar = (props) => {
     // if (cart?.cartTotalItems !== cartState) {
 
     console.log(localStorage.getItem('jwt'))
+
 
     if (localStorage.getItem('jwt'))
       dispatch(getCart(localStorage.getItem('jwt')));
@@ -440,7 +444,7 @@ const NavBar = (props) => {
 
                     },
                     elevation: 10
-                  }} onClose={handleEmailDialog} open={openEmailDialog}>
+                  }} onClose={handleEmailDialog} open={emailOpen}>
 
                     <VerfiyEmail />
 

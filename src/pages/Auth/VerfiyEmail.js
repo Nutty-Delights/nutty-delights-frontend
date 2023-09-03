@@ -95,7 +95,7 @@ const VerifyEmail = ({ setAuthForm }) => {
 
                         }
                     }} variant='elevation'>
-                    <CardContent sx={{}}>
+                    <CardContent sx={{ paddingBottom: '15px' }}>
                         <Typography sx={{ fontSize: '20px', fontWeight: 'normal', marginTop: '5px' }} >
                             Verfiy your email address
                         </Typography>
@@ -138,9 +138,9 @@ const VerifyEmail = ({ setAuthForm }) => {
                                     disabled
                                     fullWidth label="Email"
                                     variant="outlined"
-                                    value={"" || user.email}
+                                    value={"" || user?.email}
                                 />
-                                <TextField
+                                {otp ? <TextField
                                     sx={{
 
 
@@ -167,7 +167,7 @@ const VerifyEmail = ({ setAuthForm }) => {
                                     onChange={handleCodeChange}
                                 // error={passWordError}
 
-                                />
+                                /> : <></>}
 
 
                             </Box>
@@ -181,7 +181,7 @@ const VerifyEmail = ({ setAuthForm }) => {
 
                         </Box>
 
-                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <Box sx={{ marginBlock: '10px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
 
                             {
                                 otp ? <LoadingButton

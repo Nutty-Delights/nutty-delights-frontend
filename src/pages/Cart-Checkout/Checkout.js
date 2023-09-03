@@ -4,7 +4,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { Link, NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCart, getCartLoading, getUserCart } from '../../redux/slices/cart';
-import { getUser, getUserProfile } from '../../redux/slices/user';
+import { getUser, getUserProfile, setOpenEmail } from '../../redux/slices/user';
 import Contact from '@mui/icons-material/PersonOutlineOutlined';
 import Address from '@mui/icons-material/AddHomeOutlined';
 // import http from '../../http-common'
@@ -13,6 +13,12 @@ import { Country, State, City } from 'country-state-city';
 import { createOrder, getCreatedOrder, getOrderError, getOrderLoading } from '../../redux/slices/order';
 import { LoadingButton } from '@mui/lab';
 import { createPaymentLink, getPaymentError, getPaymentLoading } from '../../redux/slices/payment';
+import Image from 'mui-image';
+import Razorpay from '../../assets/images/razorpay.svg';
+import UPI from '../../assets/images/UPI.png';
+import Visa from '../../assets/images/VisaAndMasterCard.png';
+import PayMethods from '../../assets/images/pay_methods_branding.png';
+import Simpl from '../../assets/images/Simpl.png';
 
 
 
@@ -62,7 +68,7 @@ const Checkout = () => {
             setShippingCharge(50)
 
         else {
-            setShippingCharge(0)
+            setShippingCharge(50)
         }
         // setHelperText(' ');
         // setError(false);
@@ -84,9 +90,17 @@ const Checkout = () => {
     }
     const handlePincode = (e) => {
 
-        setPinCode(e.target.value);
-        if (e.target.value?.length > 5) {
-            getPincode(e.target.value);
+        if (e.target.value.length <= 6) {
+            setPinCode(e.target.value);
+            if (e.target.value?.length > 5) {
+                getPincode(e.target.value);
+            }
+
+            else {
+                setCountry('');
+                setCity('')
+                setState('')
+            }
         }
     }
     const handleCountry = (e) => {
@@ -99,33 +113,69 @@ const Checkout = () => {
         setState(e.target.value);
     }
     const handleMob = (e) => {
-        setMobNo(e.target.value);
+        let c = e.target.value?.[0]
+        if (c === '+' || c === '0') {
+
+            if (c === '+') {
+                setMobNo(e.target.value?.split(c)[1]);
+            }
+
+            else {
+                if (c === '0') {
+                    setMobNo(e.target.value?.substring(1, e.target.value?.length));
+
+                }
+            }
+
+
+
+
+        }
+
+        else {
+            setMobNo(e.target.value);
+
+        }
     }
 
 
 
     const handleShipping = () => {
-        const data = {
-            userId: localStorage.getItem("jwt"),
-            firstName: firstName,
-            lastName: lastName,
-            addressLine: address,
-            houseNo: houseNo,
-            pinCode: pinCode,
-            country: country,
-            state: state,
-            city: city,
-            mobileNumber: mobNo
+
+        if (firstName !== '' && lastName !== "" && mobNo.length === 10 && address !== "" && pinCode.length === 6) {
+            if (user?.isEnabled) {
+                const data = {
+                    userId: localStorage.getItem("jwt"),
+                    firstName: firstName,
+                    lastName: lastName,
+                    addressLine: address,
+                    houseNo: houseNo,
+                    pinCode: pinCode,
+                    country: country,
+                    state: state,
+                    city: city,
+                    mobileNumber: mobNo
+                }
+
+                let houseNumber = houseNo ? houseNo + ", " : "";
+                let deliveryAddress = houseNumber + address + ", " + pinCode + ", " + city + ", " + state + ", " + country;
+                console.log(deliveryAddress);
+                setData(data);
+                setShippingAddress(deliveryAddress)
+                // console.log("Shipping Details", data);
+                setStep(1);
+                window.scrollTo(0, 0);
+            }
+
+            else {
+                dispatch(setOpenEmail({ open: true }));
+            }
         }
 
-        let houseNumber = houseNo ? houseNo + ", " : "";
-        let deliveryAddress = houseNumber + address + ", " + pinCode + ", " + city + ", " + state + ", " + country;
-        console.log(deliveryAddress);
-        setData(data);
-        setShippingAddress(deliveryAddress)
-        // console.log("Shipping Details", data);
-        setStep(1);
-        window.scrollTo(0, 0);
+        else {
+            console.log("not working")
+        }
+
     }
 
     console.log("Order", order);
@@ -209,10 +259,14 @@ const Checkout = () => {
         // <NavLink style={{ textDecoration: 'none', color: step === 1 ? 'orange' : 'grey', fontWeight: step === 1 ? 'bold' : 'normal' }} >
         //     Shipping
         // </NavLink>,
-        <NavLink onClick={() => { setStep(1) }} style={{ textDecoration: 'none', color: step === 1 ? 'orange' : 'grey', fontWeight: step === 1 ? 'bold' : 'normal' }} >
+        <NavLink onClick={() => {
+            if (step === 2) {
+                setStep(1)
+            }
+        }} style={{ textDecoration: 'none', color: step === 1 ? 'orange' : 'grey', fontWeight: step === 1 ? 'bold' : 'normal' }} >
             Order Review
         </NavLink>,
-        <NavLink onClick={() => { setStep(2) }} style={{ textDecoration: 'none', color: step === 2 ? 'orange' : 'grey', fontWeight: step === 2 ? 'bold' : 'normal' }} >
+        <NavLink onClick={() => { }} style={{ textDecoration: 'none', color: step === 2 ? 'orange' : 'grey', fontWeight: step === 2 ? 'bold' : 'normal' }} >
             Payments
         </NavLink>,
 
@@ -242,7 +296,7 @@ const Checkout = () => {
                         gap: '10px',
                         width: {
                             xs: 'fit-content',
-                            sm: 'fit-content',
+                            sm: '98%',
                             md: '50vw'
                         },
                         margin: '10px'
@@ -319,6 +373,7 @@ const Checkout = () => {
 
                                     {
                                         user ? <Box sx={{
+                                            margin: '10px',
                                             gap: '10px',
                                             display: {
                                                 xs: 'block',
@@ -326,8 +381,24 @@ const Checkout = () => {
                                                 md: 'flex'
                                             }
                                         }}>
-                                            <Typography sx={{ color: 'orange' }}>{user?.firstName + " " + user?.lastName + " "}</Typography>
-                                            <Typography>{"(" + user?.email + ")"}</Typography>
+                                            <Typography sx={{ color: 'orange', fontWeight: 'bold' }}>{user?.firstName + " " + user?.lastName + " "}</Typography>
+                                            {/* <Typography sx={{ color: 'orange' }}>
+                                                {user?.firstName + " " + user?.lastName + " "}
+                                            </Typography> */}
+                                            {
+                                                user?.isEnabled ? <Typography>{"(" + user?.email + ")"}</Typography> :
+
+                                                    <Typography onClick={
+                                                        () => {
+                                                            console.log("on lick")
+                                                            dispatch(setOpenEmail({
+                                                                open: true
+                                                            }))
+                                                        }
+                                                    } sx={{ cursor: 'pointer', textDecoration: 'underline', color: 'orange', fontSize: '15px' }}>{" Verify Your Email "}</Typography>
+
+                                            }
+
                                         </Box> :
 
                                             <Typography>Already have an account? <Typography sx={{ color: 'orange' }}>Log In</Typography></Typography>
@@ -339,7 +410,13 @@ const Checkout = () => {
                                     {/* <Typography sx={{ margin: '15px', fontWeight: 'bold' }}>{"Update Product"}</Typography> */}
                                     <Box sx={{ gap: '10px', }}>
                                         <FormControl sx={{ width: '100%' }}>
-                                            <FormGroup row sx={{ width: 'inherit', flexWrap: 'nowrap' }}>
+                                            <FormGroup row sx={{
+                                                width: 'inherit', flexWrap: {
+                                                    xs: 'wrap',
+                                                    sm: 'nowrap',
+                                                    md: 'nowrap'
+                                                }
+                                            }}>
                                                 <TextField
                                                     onChange={handleFirstName}
                                                     value={firstName || ""}
@@ -347,7 +424,6 @@ const Checkout = () => {
                                                     size='small'
                                                     // onChange={handleUpdatedNameChange}
                                                     sx={{
-
 
                                                         "& .MuiInputLabel-outlined": {
                                                             color: "black",
@@ -409,7 +485,7 @@ const Checkout = () => {
                                                         endAdornment:
                                                             mobNo?.length > 0 ? <InputAdornment sx={{ marginTop: '1px', ml: '12px', }} position='start'>
 
-                                                                {<Typography sx={{ mr: '-10px', }}>
+                                                                {<Typography sx={{ mr: '-8px', }}>
                                                                     +91
                                                                 </Typography>}
                                                             </InputAdornment> : <></>
@@ -440,12 +516,19 @@ const Checkout = () => {
                                                     required
                                                     id="mobile-number"
                                                     label="Mobile No."
+                                                // error={mobNo?.length !== 10}
 
                                                 />
 
 
                                             </FormGroup>
-                                            <FormGroup row sx={{ width: 'inherit', flexWrap: 'nowrap' }}>
+                                            <FormGroup row sx={{
+                                                width: 'inherit', flexWrap: {
+                                                    xs: 'wrap',
+                                                    sm: 'nowrap',
+                                                    md: 'nowrap'
+                                                }
+                                            }}>
                                                 {/* <TextField
 
                                                     onChange={handleHouseNo}
@@ -483,7 +566,10 @@ const Checkout = () => {
                                                     // onChange={handleUpdatedImageChange}
                                                     sx={{
 
-                                                        width: '85%',
+                                                        width: {
+                                                            xs: '100%',
+                                                            md: '85%'
+                                                        },
                                                         "& .MuiInputLabel-outlined": {
                                                             color: "black",
                                                             fontSize: '14px',
@@ -514,7 +600,15 @@ const Checkout = () => {
                                                     size='small'
                                                     sx={{
 
-                                                        width: '40%',
+                                                        display: {
+                                                            xs: 'none',
+                                                            sm: 'flex',
+                                                            md: 'flex'
+                                                        },
+                                                        width: {
+                                                            xs: '100%',
+                                                            md: '40%'
+                                                        },
                                                         "& .MuiInputLabel-outlined": {
                                                             color: "black",
                                                             fontSize: '14px',
@@ -539,20 +633,39 @@ const Checkout = () => {
                                             </FormGroup>
 
 
-                                            <FormGroup row sx={{ width: 'inherit', flexWrap: 'nowrap' }}>
 
-                                                {/* <TextField
-                                                    onChange={handleHouseNo}
-                                                    value={"" || houseNo}
+
+
+
+
+
+                                            <FormGroup row sx={{
+                                                width: 'inherit', flexWrap: {
+                                                    xs: 'wrap',
+                                                    sm: 'nowrap',
+                                                    md: 'nowrap'
+                                                }
+                                            }}>
+                                                <TextField
+                                                    onChange={handlePincode}
+                                                    value={pinCode || ""}
                                                     fullWidth
                                                     size='small'
-                                                    // onChange={handleUpdatedNameChange}
                                                     sx={{
 
-
+                                                        display: {
+                                                            xs: 'flex',
+                                                            sm: 'none',
+                                                            md: 'none'
+                                                        },
+                                                        width: {
+                                                            xs: '43%',
+                                                            md: '40%'
+                                                        },
                                                         "& .MuiInputLabel-outlined": {
-                                                            fontSize: '14px',
                                                             color: "black",
+                                                            fontSize: '14px',
+
                                                             "&.MuiInputLabel-shrink": {
                                                                 color: "orange"
                                                             },
@@ -565,28 +678,22 @@ const Checkout = () => {
                                                         margin: '10px'
                                                     }}
                                                     // fullWidth
-                                                    // required
-                                                    id="outlined-required"
-                                                    label="House/Flat no. "
+                                                    required
+                                                    id="pincode"
+                                                    label="Pin Code"
 
-                                                /> */}
-
-
-                                            </FormGroup>
-
-
-
-
-
-
-                                            <FormGroup row sx={{ width: 'inherit', flexWrap: 'nowrap' }}>
+                                                />
                                                 <TextField
+                                                    // disabled
                                                     onChange={handleCountry}
                                                     value={country || ""}
                                                     fullWidth
                                                     size='small'
                                                     sx={{
-
+                                                        width: {
+                                                            xs: '43%',
+                                                            md: '40%'
+                                                        },
 
                                                         "& .MuiInputLabel-outlined": {
                                                             color: "black",
@@ -617,8 +724,9 @@ const Checkout = () => {
                                                 renderInput={(params) => <TextField {...params} label="Country" />}
                                             /> */}
                                                 <TextField
+                                                    // disabled
                                                     onChange={handleState}
-                                                    value={"" || state}
+                                                    value={state || ""}
                                                     fullWidth
                                                     size='small'
                                                     sx={{
@@ -646,8 +754,9 @@ const Checkout = () => {
 
                                                 />
                                                 <TextField
+                                                    // disabled={pinCode}
                                                     onChange={handleCity}
-                                                    value={"" || city}
+                                                    value={city || ""}
                                                     fullWidth
                                                     size='small'
                                                     // onChange={handleUpdatedNameChange}
@@ -723,7 +832,7 @@ const Checkout = () => {
 
                                                 /> */}
                                             </FormGroup>
-                                            <FormGroup>
+                                            <FormGroup sx={{ width: 'fit-content' }}>
                                                 <FormControlLabel sx={{ marginInline: '0px' }} control={<Checkbox color='success' sx={{}} defaultChecked />} label="Save address for future use" />
                                             </FormGroup>
 
@@ -752,12 +861,22 @@ const Checkout = () => {
 
                                 <CardContent>
                                     <Divider sx={{ marginBottom: '10px' }}></Divider>
-                                    <Box sx={{ marginInline: '12px' }}>
-                                        <Typography sx={{ fontWeight: 'bold' }}>Payment Method</Typography>
+                                    <Box display={{
+                                        xs: 'flex',
+                                        md: 'flex'
+                                    }} sx={{ margin: '12px', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <Typography sx={{ fontSize: '17px', fontWeight: 'bold', marginBottom: { xs: '10px', md: '0px' } }}>Payment Method</Typography>
+                                        <img referrerpolicy="origin" src={Razorpay} style={{ height: '48px', width: '118px' }} alt="Razorpay | Payment Gateway | Neobank"></img>
+
 
                                     </Box>
                                     <Card variant=''>
-                                        <CardContent>
+                                        <CardContent sx={{
+                                            paddingBlock: '0px', paddingInline: {
+                                                // xs: '0px',
+
+                                            }
+                                        }}>
                                             <form >
                                                 <FormControl sx={{ m: 0 }} variant="standard">
                                                     {/* <FormLabel id="demo-error-radios">Pop quiz: MUI is...</FormLabel> */}
@@ -773,7 +892,7 @@ const Checkout = () => {
                                                         value={shippingMethod}
                                                         onChange={handleShippingMethod}
                                                     >
-                                                        <FormControlLabel value="prepaid" control={
+                                                        <FormControlLabel sx={{ alignItems: 'start' }} value="prepaid" control={
                                                             <Radio
                                                                 size='small'
 
@@ -782,8 +901,32 @@ const Checkout = () => {
                                                                         color: 'orange',
                                                                     },
                                                                 }} />
-                                                        } label={<Box>
-                                                            <Typography sx={{ fontSize: '15px' }}>{"Prepaid - Net banking, UPI, Debit/Credit Card"}</Typography>
+                                                        } label={<Box display={
+                                                            {
+                                                                xs: 'block',
+                                                                md: 'block'
+                                                            }
+                                                        }>
+                                                            <Typography sx={{ fontSize: '16px', marginBlock: '8px', fontWeight: shippingMethod === "cod" ? 'normal' : 'bold' }}>{"Prepaid - UPI, Debit/Credit Card, Net-Banking, Paylater"}</Typography>
+                                                            {/* <Image width={110} src={Razorpay} duration={0} shiftDuration={0} alt='razorpay' ></Image> */}
+                                                            {/* <img referrerpolicy="origin" src="https://badges.razorpay.com/badge-light.png " style={{ height: '45px', width: '113px' }} alt="Razorpay | Payment Gateway | Neobank"></img> */}
+                                                            <Box display={{
+                                                                xs: 'flex',
+                                                                md: 'flex'
+                                                            }} sx={{ flexWrap: 'wrap', marginBlock: '15px' }}>
+                                                                <Box sx={{ padding: '2px', marginRight: '15px' }}>
+                                                                    {/* <Image height={21} width={78} src={UPI} duration={0} shiftDuration={0} alt='upi' ></Image> */}
+                                                                    <Image src={PayMethods} duration={0} shiftDuration={0} alt='upi' ></Image>
+                                                                </Box>
+                                                                {/* <Box sx={{ padding: '2px', marginRight: '15px' }}>
+                                                                    <Image height={28} width={85} src={Simpl} duration={0} shiftDuration={0} alt='visa' ></Image>
+
+                                                                </Box> */}
+
+                                                                {/* <Image height={29} width={145} src={Visa} duration={0} shiftDuration={0} alt='visa' ></Image> */}
+                                                            </Box>
+                                                            {/* <Image width={110} src={Visa} duration={0} shiftDuration={0} alt='Visa' ></Image> */}
+                                                            {/* <Image width={110} src={Mastercard} duration={0} shiftDuration={0} alt='mastercard' ></Image> */}
 
                                                         </Box>} />
 
@@ -803,7 +946,7 @@ const Checkout = () => {
                                                                 display: 'flex',
                                                                 justifyContent: 'space-between'
                                                             }}>
-                                                            <Typography sx={{ fontSize: '15px' }}>{"Pay on delivery"}</Typography>
+                                                            <Typography sx={{ fontSize: '16px', fontWeight: shippingMethod !== "cod" ? 'normal' : 'bold' }}>{"Pay on delivery"}</Typography>
                                                             {/* <Typography sx={{ fontSize: '15px' }}>{"( Shipping charge : ₹ 50 )"}</Typography> */}
                                                         </Box>} />
                                                     </RadioGroup>
@@ -920,180 +1063,184 @@ const Checkout = () => {
                         //     <LinearProgress /> :
                         <Card sx={{ marginBottom: "10px" }} variant='outlined'>
                             <Collapse in={true} timeout="auto" unmountOnExit>
-                                <List sx={{
-                                    padding: '0px',
-                                    height: {
-                                        xs: cart?.cartItems?.length > 2 ? ' 30vh' : 'fit-content !important',
-                                        sm: cart?.cartItems?.length > 2 ? ' 30vh' : 'fit-content !important',
-                                        md: cart?.cartItems?.length > 4 ? ' 35vh' : 'fit-content !important',
-                                    },
-                                    overflow: 'auto'
-                                }}>
+                                {
+                                    cart ? <List sx={{
+                                        padding: '0px',
+                                        height: {
+                                            xs: cart?.cartItems?.length > 2 ? ' 30vh' : 'fit-content !important',
+                                            sm: cart?.cartItems?.length > 2 ? ' 30vh' : 'fit-content !important',
+                                            md: cart?.cartItems?.length > 4 ? ' 35vh' : 'fit-content !important',
+                                        },
+                                        overflow: 'auto'
+                                    }}>
 
 
 
 
-                                    {
-                                        cart ?
-                                            cart?.cartItems?.map((item, i) => {
-                                                return <Box>
-                                                    {<Box sx={{
-                                                        alignItems: 'center',
-                                                        display: {
-                                                            xs: 'block',
-                                                            sm: 'block',
-                                                            md: 'flex'
-                                                        }
-                                                    }}>
-                                                        {<ListItem key={item?.productId} disablePadding >
-                                                            {/* <Box height={'50px'} width={5} sx={{ background: item?.productVariants[0]?.quantity > 0 ? "green" : 'red' }}></Box> */}
-                                                            <ListItemAvatar sx={{ padding: '10px' }}>
-                                                                <NavLink style={{ textDecoration: 'none' }} to={`/pid=${item?.cartItemProduct?.productId}`}>
-                                                                    <Avatar sx={{
-                                                                        height: {
-                                                                            xs: '50px',
-                                                                            sm: '50px',
-                                                                            md: '50px'
-                                                                        }, width: {
-                                                                            xs: '50px',
-                                                                            sm: '50px',
-                                                                            md: '50px'
-                                                                        }
-                                                                    }} alt="Remy Sharp" src={item?.cartItemProduct?.productImageUrl} />
-                                                                    <Box sx={{
-                                                                        display: {
-                                                                            xs: 'flex',
-                                                                            sm: 'flex',
-                                                                            md: 'none',
-                                                                            lg: 'none'
-                                                                        }, alignItems: 'center'
-                                                                    }}>
-                                                                        <Box sx={{ marginInline: '8px', border: '0px solid #8080806e', borderRadius: '5px', display: 'flex', alignItems: 'center' }}>
+                                        {
+                                            cart ?
+                                                cart?.cartItems?.map((item, i) => {
+                                                    return <Box>
+                                                        {<Box sx={{
+                                                            alignItems: 'center',
+                                                            display: {
+                                                                xs: 'block',
+                                                                sm: 'block',
+                                                                md: 'flex'
+                                                            }
+                                                        }}>
+                                                            {<ListItem key={item?.productId} disablePadding >
+                                                                {/* <Box height={'50px'} width={5} sx={{ background: item?.productVariants[0]?.quantity > 0 ? "green" : 'red' }}></Box> */}
+                                                                <ListItemAvatar sx={{ padding: '10px' }}>
+                                                                    <NavLink style={{ textDecoration: 'none' }} to={`/pid=${item?.cartItemProduct?.productId}`}>
+                                                                        <Avatar sx={{
+                                                                            height: {
+                                                                                xs: '50px',
+                                                                                sm: '50px',
+                                                                                md: '50px'
+                                                                            }, width: {
+                                                                                xs: '50px',
+                                                                                sm: '50px',
+                                                                                md: '50px'
+                                                                            }
+                                                                        }} alt="Remy Sharp" src={item?.cartItemProduct?.productImageUrl} />
+                                                                        <Box sx={{
+                                                                            display: {
+                                                                                xs: 'flex',
+                                                                                sm: 'flex',
+                                                                                md: 'none',
+                                                                                lg: 'none'
+                                                                            }, alignItems: 'center'
+                                                                        }}>
+                                                                            <Box sx={{ marginInline: '8px', border: '0px solid #8080806e', borderRadius: '5px', display: 'flex', alignItems: 'center' }}>
 
-                                                                            <Box sx={{ minWidth: '80px', padding: '0px', display: 'flex', alignItems: 'center' }}>
-                                                                                <Typography sx={{ fontWeight: '', color: '#000000bf ', fontSize: '13px' }} >{`₹ ${item?.cartItemPrice}`}</Typography>
+                                                                                <Box sx={{ minWidth: '80px', padding: '0px', display: 'flex', alignItems: 'center' }}>
+                                                                                    <Typography sx={{ fontWeight: '', color: '#000000bf ', fontSize: '13px' }} >{`₹ ${item?.cartItemPrice}`}</Typography>
 
-                                                                                {/* <Typography sx={{ fontWeight: '', color: '#000000bf ', fontSize: '12px' }} >{`inlusive all taxes`}</Typography> */}
+                                                                                    {/* <Typography sx={{ fontWeight: '', color: '#000000bf ', fontSize: '12px' }} >{`inlusive all taxes`}</Typography> */}
+                                                                                </Box>
+
                                                                             </Box>
 
+
+
                                                                         </Box>
+                                                                    </NavLink>
+                                                                </ListItemAvatar>
+                                                                <ListItemText
+                                                                    primaryTypographyProps={{
+                                                                        style: {
+                                                                            fontWeight: 'bold',
+                                                                            fontSize: '13px',
+                                                                            color: '#000000d1'
+                                                                        }
+                                                                    }}
+                                                                    secondaryTypographyProps={{
+                                                                        style: {
+                                                                            fontWeight: 'bold',
+                                                                            // fontSize: '17px',
+                                                                            color: '#000000d1'
+                                                                        }
+                                                                    }}
+                                                                    sx={{}}
+                                                                    primary={`${item?.cartItemProduct?.productName}`}
+                                                                    secondary={<Box>
+                                                                        <Typography sx={{
+                                                                            marginBlock: '5px',
+                                                                            fontWeight: 'bold',
+                                                                            fontSize: '12px',
+                                                                            color: '#000000d1'
+                                                                        }}>{`${item?.cartItemVariant?.weight}   |   ${item?.cartItemQuantity < 10 ? `0${item?.cartItemQuantity}` : item?.cartItemQuantity} x ₹ ${item?.cartItemVariant?.sellingPrice}  `}</Typography>
 
 
+
+
+                                                                    </Box>}
+
+                                                                />
+
+
+                                                            </ListItem>}
+
+                                                            <Box sx={{
+                                                                display: {
+                                                                    xs: 'none',
+                                                                    sm: 'none',
+                                                                    md: 'flex',
+                                                                    lg: 'block'
+                                                                }, alignItems: 'center'
+                                                            }}>
+                                                                <Box sx={{ marginInline: '15px', border: '0px solid #8080806e', borderRadius: '5px', display: 'flex', alignItems: 'center' }}>
+
+                                                                    <Box sx={{ minWidth: '100px', padding: '8px', display: 'flex', alignItems: 'center' }}>
+                                                                        <Typography sx={{ fontWeight: 'bold', color: '#000000a3', fontSize: '13px' }} >{`₹ ${item?.cartItemPrice}`}</Typography>
 
                                                                     </Box>
-                                                                </NavLink>
-                                                            </ListItemAvatar>
-                                                            <ListItemText
-                                                                primaryTypographyProps={{
-                                                                    style: {
-                                                                        fontWeight: 'bold',
-                                                                        fontSize: '13px',
-                                                                        color: '#000000d1'
-                                                                    }
-                                                                }}
-                                                                secondaryTypographyProps={{
-                                                                    style: {
-                                                                        fontWeight: 'bold',
-                                                                        // fontSize: '17px',
-                                                                        color: '#000000d1'
-                                                                    }
-                                                                }}
-                                                                sx={{}}
-                                                                primary={`${item?.cartItemProduct?.productName}`}
-                                                                secondary={<Box>
-                                                                    <Typography sx={{
-                                                                        marginBlock: '5px',
-                                                                        fontWeight: 'bold',
-                                                                        fontSize: '12px',
-                                                                        color: '#000000d1'
-                                                                    }}>{`${item?.cartItemVariant?.weight}   |   ${item?.cartItemQuantity < 10 ? `0${item?.cartItemQuantity}` : item?.cartItemQuantity} x ₹ ${item?.cartItemVariant?.sellingPrice}  `}</Typography>
-
-
-
-
-                                                                </Box>}
-
-                                                            />
-
-
-                                                        </ListItem>}
-
-                                                        <Box sx={{
-                                                            display: {
-                                                                xs: 'none',
-                                                                sm: 'none',
-                                                                md: 'flex',
-                                                                lg: 'block'
-                                                            }, alignItems: 'center'
-                                                        }}>
-                                                            <Box sx={{ marginInline: '15px', border: '0px solid #8080806e', borderRadius: '5px', display: 'flex', alignItems: 'center' }}>
-
-                                                                <Box sx={{ minWidth: '100px', padding: '8px', display: 'flex', alignItems: 'center' }}>
-                                                                    <Typography sx={{ fontWeight: 'bold', color: '#000000a3', fontSize: '13px' }} >{`₹ ${item?.cartItemPrice}`}</Typography>
 
                                                                 </Box>
+
+
 
                                                             </Box>
 
 
 
-                                                        </Box>
-
-
-
-                                                    </Box>}
-                                                    {i === cart?.cartItems?.length - 1 ? <></> : <Divider></Divider>}
-                                                </Box>
-                                            })
-                                            : <Box height={"30vh"}></Box>
-                                    }
-                                </List >
+                                                        </Box>}
+                                                        {i === cart?.cartItems?.length - 1 ? <></> : <Divider></Divider>}
+                                                    </Box>
+                                                })
+                                                : <Box height={"30vh"}></Box>
+                                        }
+                                    </List > : <></>
+                                }
                             </Collapse>
 
                             <Box>
                                 <Card variant='' sx={{ width: 'inherit', marginBottom: '0px' }}>
-                                    <CardContent>
+                                    {
+                                        cart ? <CardContent>
 
-                                        <Divider sx={{ marginBlock: '0px' }}></Divider>
+                                            <Divider sx={{ marginBlock: '0px' }}></Divider>
 
-                                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                            <Box>
-                                                <Typography sx={{ fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{`Subtotal (${cart?.cartTotalItems} items)`}</Typography>
-                                                <Typography sx={{ fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{`Taxes (GST)`}</Typography>
-                                                <Typography sx={{ fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{`Discounts & Offers (-)`}</Typography>
-                                                {/* <Typography sx={{ fontSize: '18px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>{`Total (incl. all taxes )`}</Typography> */}
-                                            </Box>
-                                            <Box>
-                                                <Typography sx={{ fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{` ₹ ${Math.round(cart ? cart?.cartTotalPrice * 100 / 105 : 0)}`}</Typography>
-                                                <Typography sx={{ fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{` ₹ ${Math.round(cart ? cart?.cartTotalPrice * 5 / 105 : 0)}`}</Typography>
-                                                <Typography sx={{ textDecoration: 'none', color: 'green', fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{`₹ ${0}`}</Typography>
-                                            </Box>
-
-
-                                        </Box>
-                                        <Box>
-                                            <Divider sx={{ marginBlock: '10px' }}></Divider>
                                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                                 <Box>
-                                                    {/* <Typography sx={{ fontSize: '18px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>{`Subtotal (${cart?.cartTotalItems} items)`}</Typography>
-                                        <Typography sx={{ fontSize: '18px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>{`Taxes ( GST )`}</Typography> */}
-                                                    <Typography sx={{ fontSize: '16px', fontWeight: '', marginInline: '10px', marginTop: '0px' }}>{`Total`}</Typography>
-                                                    {/* <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '11px', marginInline: '10px', }} >(Excluding shipping charges)</Typography> */}
-
-                                                    <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '11px', marginInline: '10px', }} >{`${step === 1 ? " (Shipping charges to be calculated on next step)" : step === 0 ? '(Excluding shipping charges)' : "Including shipping charges : ₹50"}`}</Typography>
-                                                    <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '11px', marginInline: '10px', }} >{`  ${step === 2 ? shippingMethod === 'cod' ? 'Pay On Delivery' : 'Prepaid Delivery' : ""}`}</Typography>
-
+                                                    <Typography sx={{ fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{`Subtotal (${cart?.cartTotalItems} items)`}</Typography>
+                                                    <Typography sx={{ fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{`Taxes (GST)`}</Typography>
+                                                    <Typography sx={{ fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{`Discounts & Offers (-)`}</Typography>
+                                                    {/* <Typography sx={{ fontSize: '18px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>{`Total (incl. all taxes )`}</Typography> */}
                                                 </Box>
                                                 <Box>
-                                                    {/* <Typography sx={{ fontSize: '18px', fontWeight: 'bold', marginInline: '20px', marginTop: '10px' }}>{`₹ ${Math.round(cart?.cartTotalPrice * 100 / 105)}`}</Typography>
-                                        <Typography sx={{ fontSize: '18px', fontWeight: 'bold', marginInline: '20px', marginTop: '10px' }}>{`₹ ${Math.round(cart?.cartTotalPrice * 5 / 105)}`}</Typography> */}
-                                                    <Typography sx={{ color: 'orange', fontSize: '16px', fontWeight: 'bold', marginInline: '10px', marginTop: '10px' }}>{`₹ ${cart ? cart?.cartTotalPrice + shippingCharge : 0}`}</Typography>
+                                                    <Typography sx={{ fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{` ₹ ${Math.round(cart ? cart?.cartTotalPrice * 100 / 105 : 0)}`}</Typography>
+                                                    <Typography sx={{ fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{` ₹ ${Math.round(cart ? cart?.cartTotalPrice * 5 / 105 : 0)}`}</Typography>
+                                                    <Typography sx={{ textDecoration: 'none', color: 'green', fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{`₹ ${0}`}</Typography>
                                                 </Box>
+
+
                                             </Box>
+                                            <Box>
+                                                <Divider sx={{ marginBlock: '10px' }}></Divider>
+                                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                    <Box>
+                                                        {/* <Typography sx={{ fontSize: '18px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>{`Subtotal (${cart?.cartTotalItems} items)`}</Typography>
+                                    <Typography sx={{ fontSize: '18px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>{`Taxes ( GST )`}</Typography> */}
+                                                        <Typography sx={{ fontSize: '16px', fontWeight: '', marginInline: '10px', marginTop: '0px' }}>{`Total`}</Typography>
+                                                        {/* <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '11px', marginInline: '10px', }} >(Excluding shipping charges)</Typography> */}
+
+                                                        <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '11px', marginInline: '10px', }} >{`${step === 1 ? " (Shipping charges to be calculated on next step)" : step === 0 ? '(Excluding shipping charges)' : "Including shipping charges : ₹50"}`}</Typography>
+                                                        <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '11px', marginInline: '10px', }} >{`  ${step === 2 ? shippingMethod === 'cod' ? 'Pay On Delivery' : 'Prepaid Delivery' : ""}`}</Typography>
+
+                                                    </Box>
+                                                    <Box>
+                                                        {/* <Typography sx={{ fontSize: '18px', fontWeight: 'bold', marginInline: '20px', marginTop: '10px' }}>{`₹ ${Math.round(cart?.cartTotalPrice * 100 / 105)}`}</Typography>
+                                    <Typography sx={{ fontSize: '18px', fontWeight: 'bold', marginInline: '20px', marginTop: '10px' }}>{`₹ ${Math.round(cart?.cartTotalPrice * 5 / 105)}`}</Typography> */}
+                                                        <Typography sx={{ color: 'orange', fontSize: '16px', fontWeight: 'bold', marginInline: '10px', marginTop: '10px' }}>{`₹ ${cart?.cartTotalPrice + shippingCharge}`}</Typography>
+                                                    </Box>
+                                                </Box>
 
 
-                                        </Box>
-                                    </CardContent>
+                                            </Box>
+                                        </CardContent> : <></>
+                                    }
                                 </Card>
 
 
@@ -1112,6 +1259,8 @@ const Checkout = () => {
                                 fullWidth
                                 variant='contained'
                                 sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
                                     fontWeight: 'bold',
                                     background: 'orange',
                                     color: 'white',
@@ -1123,6 +1272,11 @@ const Checkout = () => {
                                     }
                                 }}>
                                 {"Proceed"}
+                                {/* {
+                                    user?.isEnabled ? <></> :
+                                        <Typography sx={{ marginBlock: '5px', fontWeight: 'bold', color: 'white', fontSize: '12px', marginInline: '10px', }} >{`(Verify Your email to proceed)`}</Typography>
+
+                                } */}
                             </LoadingButton> :
 
                             step === 1 ?
@@ -1165,9 +1319,10 @@ const Checkout = () => {
                                 </LoadingButton>
 
                     }
+
                 </Box>
 
-            </Box>
+            </Box >
 
         </Box >
     )

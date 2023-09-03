@@ -9,7 +9,8 @@ import { useDispatch } from "react-redux";
 const initialState = {
     // user: {},
     isLoading: false,
-    isError: false
+    isError: false,
+    openEmailDialog: false
 };
 const userUrl = URLs.users;
 
@@ -87,7 +88,19 @@ export const verifyEmailCode = createAsyncThunk(
 const userSlice = createSlice({
     name: 'user',
     initialState: initialState,
-    reducers: {},
+    reducers: {
+        setOpenEmail(state, action) {
+            console.log(action.payload);
+            const { open } = action.payload;
+            let newState = {
+                ...state,
+                openEmailDialog: open
+            }
+            console.log(newState)
+            return newState;
+
+        }
+    },
     extraReducers: (builder) => {
 
         //Login User
@@ -381,6 +394,8 @@ export const getUser = (state) => state.user.user;
 export const getUserLoading = (state) => state.user.isLoading;
 export const getUserError = (state) => state.user.isError;
 export const getAuthOtp = (state) => state.user.otp;
+export const getOpenEmail = (state) => state.user.openEmailDialog;
+export const { setOpenEmail } = userSlice.actions;
 
 
 export default userSlice.reducer;;
