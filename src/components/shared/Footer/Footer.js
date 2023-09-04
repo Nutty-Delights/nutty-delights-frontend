@@ -59,39 +59,39 @@ function Footer() {
 
             ]
         },
-        {
-            title: 'Quick Links',
-            children: [
-                {
-                    title: 'Categories',
-                    link: '/categories'
-                },
-                {
-                    title: 'Offers',
-                    link: '/offers'
-                },
-                {
-                    title: 'Bulk Order',
-                    link: '/bulk-order'
-                },
-                {
-                    title: 'Delivery',
-                    link: '/delivery'
-                },
+        // {
+        //     title: 'Quick Links',
+        //     children: [
+        //         {
+        //             title: 'Categories',
+        //             link: '/categories'
+        //         },
+        //         {
+        //             title: 'Offers',
+        //             link: '/offers'
+        //         },
+        //         {
+        //             title: 'Bulk Order',
+        //             link: '/bulk-order'
+        //         },
+        //         {
+        //             title: 'Delivery',
+        //             link: '/delivery'
+        //         },
 
-            ]
-        }
+        //     ]
+        // }
     ]
     return (
         <Box sx={{ display: { xs: 'block', sm: 'block', md: 'flex' }, }} className='footer' >
 
 
             <Box sx={{ display: { xs: 'flex', sm: 'flex', md: 'block' }, alignItems: 'center', marginBottom: '15px' }}>
-                <Image style={{}} duration={0} src={logo} fit='contain' width='170px' height='fit-content' />
+                <Image style={{}} duration={0} src={logo} fit='contain' width='160px' height='fit-content' />
                 <Typography className='content-heading'>Always serving the best.</Typography>
             </Box>
             <Box sx={{ display: { xs: 'flex', sm: 'flex', md: 'block' }, alignItems: 'center', marginBottom: '15px' }}>
-                <Typography className='content-heading'>{"Connect with us"}</Typography>
+                <Typography sx={{ marginBottom: '0px' }} className='content-heading'>{"Connect with us"}</Typography>
 
                 <NavLink target="_blank" to={'https://instagram.com/nutty___delights?igshid=OGQ5ZDc2ODk2ZA=='}>
                     <IconButton >
@@ -100,11 +100,11 @@ function Footer() {
                     </IconButton>
                 </NavLink>
 
-                <IconButton>
+                {/* <IconButton>
 
                     <Facebook sx={{ color: 'white', fontSize: "35px" }} />
 
-                </IconButton>
+                </IconButton> */}
 
             </Box>
             <div className='content'>

@@ -23,7 +23,7 @@ function ProductList() {
     const products = useSelector(getProductsByCategory);
     const isLoading = useSelector(getProductsLoading);
     const isError = useSelector(getProductsError);
-    const loading = [1, 2, 3];
+    const loading = ["1", "2", "3", "4", "5", "6"];
 
 
     useEffect(() => {
@@ -38,33 +38,46 @@ function ProductList() {
             <NavBar />
             {/* <CategoryCarousel /> */}
             <Toolbar></Toolbar>
+            {/* <Divider sx={{ marginBlock: '25px', borderWidth: '0.5px' }}></Divider> */}
 
-            {/* <Box className='product-list-box'>
+            {/* <Box sx={{ display: 'flex', justifyContent: 'center' }} className='product-list-box'>
                 <ProductFilter />
-            </Box>
+            </Box> */}
 
-            <div className='middle-box'>
+            {/* <div className='middle-box'>
                 <Typography className='product-list-box-heading'>{`Best for you !`}</Typography>
             </div> */}
 
-            <div style={{ padding: '50px', }} className='product-list'>
+            <div style={{ padding: '33px', paddingBlock: "40px", display: 'flex', justifyContent: 'center' }} className='product-list'>
                 {
-                    isLoading ? loading.map((e, i) => (
-                        <Box key={i} width={"350px"} >
+                    isLoading ? loading?.map((e, i) => (
+                        <Box key={i} width={"30%"} >
                             <Skeleton variant="rectangular" height={250} />
                             <Skeleton animation="wave" />
                             <Skeleton animation="wave" />
                             <Skeleton animation={false} />
                         </Box>
                     )) : isError ? "Something Went Wrong! \n Please try again" :
+
+
                         products?.map((product, index) => (
-                            <Paper sx={{ borderRadius: '15px !important', }} key={product.productId} elevation={3}>
+                            <Paper variant='outlined' sx={{
+                                borderRadius: '15px !important', width: {
+                                    xs: '100%',
+                                    sm: '44%',
+                                    md: '31%'
+                                }, height: {
+                                    xs: '300px',
+                                    sm: '360px',
+                                    md: '350px'
+                                }
+                            }} key={product.productId} elevation={3}>
                                 <NavLink to={`/pid=${product.productId}`}>
                                     <Image
                                         style={{ padding: '10px' }}
                                         duration={0}
                                         // showLoading
-                                        height={200}
+                                        height={220}
                                         fit='contain'
                                         src={product.productImageUrl}>
 
