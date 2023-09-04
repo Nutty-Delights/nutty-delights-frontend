@@ -45,7 +45,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'checkout',
-        element: store.getState().cart?.cart?.cartTotalItems !== 0 ? <Checkout /> : <ErrorPage></ErrorPage>
+        element: !localStorage.getItem('jwt') ? <Checkout /> : <ErrorPage></ErrorPage>
 
 
       },
@@ -67,7 +67,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'user/account',
-        element: <UserAccount />,
+        element: <UserAccount />
 
       },
       {
@@ -87,42 +87,7 @@ const router = createBrowserRouter([
 
     ]
   },
-  {
-    path: '/admin',
-    element: <Admin />,
-    children: [
-      {
-        path: 'categories',
-        element: <AdminCategories />,
-      },
-      {
-        path: 'orders',
-        element: <AdminOrders />,
-      },
-      {
-        path: 'payments',
-        element: <AdminPayments />,
-      },
-      {
-        path: 'Products',
-        element: <AdminProducts />,
-      },
-      {
-        path: 'apis',
-        element: <AdminApis />,
-      }
-    ]
-  },
-  // {
-  //   path: '/register',
-  //   element: <App />
 
-  // },
-  // {
-  //   path: '/login',
-  //   element: <App />
-
-  // },
   {
     path: '/products/',
     element: <ProductList />,
