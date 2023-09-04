@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllProducts, getAllProductsByCategory, getProduct, getProducts, getProductsByCategory, getProductsById, getProductsError, getProductsLoading } from '../../redux/slices/products'
+import { getAllProducts, getAllProductsByCategory, getProduct, getProducts, getProductsByCategory, getProductsById, getProductsByIdError, getProductsByIdLoading, getProductsError, getProductsLoading } from '../../redux/slices/products'
 import Image from 'mui-image';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useLocation, useParams, useSearchParams } from 'react-router-dom';
 import './productPage.css'
 import { Box, Button, Divider, Skeleton, Typography, Toolbar, CircularProgress, LinearProgress, Card, Chip, IconButton } from '@mui/material';
 import ShoppingBag from '@mui/icons-material/ShoppingBagOutlined';
@@ -18,6 +18,7 @@ import TextSnippetOutlinedIcon from '@mui/icons-material/TextSnippetOutlined';
 import cart, { addItemToCart, addItems, getCart, getCartLoading } from '../../redux/slices/cart';
 import { LoadingButton } from '@mui/lab';
 import { ToastContainer } from 'react-toastify';
+import ErrorPage from '../ErrorPage';
 // import { ProgressBar } from 'react-toastify/dist/components';
 
 var settings = {
@@ -118,6 +119,8 @@ function ProductPage() {
     // const product = useSelector(getProductsById);
     const isLoading = useSelector(getProductsLoading);
     const isError = useSelector(getProductsError);
+    const productLoading = useSelector(getProductsByIdLoading);
+    const productError = useSelector(getProductsByIdError);
     const location = useLocation().pathname.split('/pid=')[1];
     console.log("pid", location)
     const [productId, setProductId] = useState(location);
@@ -138,21 +141,28 @@ function ProductPage() {
         }
     ]);
 
+    const url = useParams();
+    const id = url.productId.split('pid=')[1];
+    console.log("url", id);
+
     // const [searchParams , useSearchParams] = searchParams
     const dispatch = useDispatch();
     useEffect(() => {
 
-        setProductId(location);
+        setProductId(id);
+        console.log("location,productId", location, productId);
+
         dispatch(getProduct({ productId }));
         setSelectedVariant(0);
-        setProductVariants(product.productVariants);
+        setProductVariants(product?.productVariants);
         console.log(productVariants);
         setItemCount(1);
 
         // setCategoryId(product.productCategoryId);
         // dispatch(getAllProductsByCategory({ categoryId }))
+        // this url is fetching on everyRefresh
 
-    }, [location, productId])
+    }, [url, location, productId])
 
     useEffect(() => {
         if (products.length === 0)
@@ -162,6 +172,7 @@ function ProductPage() {
         // dispatch(getAllProductsByCategory({ categoryId }))//
 
     }, [])
+
 
     const handleAddToCart = () => {
         const token = localStorage.getItem('jwt');
@@ -196,13 +207,13 @@ function ProductPage() {
 
 
 
-    const filterCategories = products?.filter((item) => item.productId !== product.productId && item.productCategoryId === product.productCategoryId)
+    const filterCategories = products?.filter((item) => item.productId !== product?.productId && item.productCategoryId === product?.productCategoryId)
     const categoryItems = filterCategories?.map((item) => (
         <div className="">
             <HomeProductCard product={item} />
         </div>
     ));
-    const items = products.filter((item) => item.productId !== product.productId).slice(0, 5)?.map((item) => (
+    const items = products?.filter((item) => item.productId !== product?.productId).slice(0, 5)?.map((item) => (
         <div className="">
             <HomeProductCard product={item} />
         </div>
@@ -212,8 +223,9 @@ function ProductPage() {
 
     return (
 
-        isLoading ? <LinearProgress /> :
-            <div>
+        isLoading || productLoading ? <LinearProgress /> : isError || productError ? <ErrorPage /> :
+
+            < div >
                 <NavBar />
                 <Toolbar />
                 {/* <Toolbar /> */}

@@ -5,6 +5,8 @@ import ProductDataService from '../../services/product.service';
 
 const initialState = {
     currentProduct: {},
+    currentProductError: false,
+    currentProductErrorIsLoading: false,
     products: [],
     adminProducts: [],
     // productsByCategory: [],
@@ -112,8 +114,8 @@ const productSlice = createSlice({
             console.log(state, action);
             let newState = {
                 ...state,
-                isLoading: true,
-                isError: false
+                currentProductErrorIsLoading: true,
+                currentProductError: false
             }
             return newState;
         })
@@ -121,23 +123,24 @@ const productSlice = createSlice({
             console.log(state, action);
             let newState = {
                 ...state,
-                isLoading: false,
-                isError: false,
+                currentProductErrorIsLoading: false,
+                currentProductError: false,
                 currentProduct: {
                     ...action.payload
                 }
 
             }
 
-            console.log(newState);
+            console.log("productState", newState);
             return newState;
         })
         builder.addCase(getProduct.rejected, (state, action) => {
             console.log(state, action);
             let newState = {
                 ...state,
-                isLoading: false,
-                isError: true,
+                currentProduct: null,
+                currentProductErrorIsLoading: false,
+                currentProductError: true,
 
             }
             return newState;
@@ -300,6 +303,8 @@ const productSlice = createSlice({
 export const getProducts = (state) => state.products.products;
 export const getProductsByCategory = (state) => state.products.productsByCategory;
 export const getProductsById = (state) => state.products?.currentProduct;
+export const getProductsByIdLoading = (state) => state.products?.currentProductErrorIsLoading;
+export const getProductsByIdError = (state) => state.products?.currentProductError;
 export const getProductsLoading = (state) => state.products.isLoading;
 export const getProductsError = (state) => state.products.isError;
 
