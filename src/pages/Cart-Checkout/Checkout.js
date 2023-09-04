@@ -994,82 +994,44 @@ const Checkout = () => {
 
                                 </Box>
                                 {
-                                    step === 0 ?
-                                        <LoadingButton
-                                            // loading={isLoading}
-                                            onClick={handleShipping}
-                                            fullWidth
-                                            variant='contained'
-                                            sx={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                fontWeight: 'bold',
+
+                                    <LoadingButton
+                                        // loading={isLoading}
+                                        onClick={handleShipping}
+                                        fullWidth
+                                        variant='contained'
+                                        sx={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            fontWeight: 'bold',
+                                            background: 'orange',
+                                            color: 'white',
+                                            fontSize: '18px',
+                                            ':hover': {
                                                 background: 'orange',
                                                 color: 'white',
-                                                fontSize: '20px',
-                                                ':hover': {
-                                                    background: 'orange',
-                                                    color: 'white',
-                                                    fontSize: '20px',
-                                                }
-                                            }}>
-                                            {"Proceed"}
-                                            {/* {
+                                                fontSize: '18px',
+                                            }
+                                        }}>
+                                        {"Proceed"}
+                                        {/* {
                                     user?.isEnabled ? <></> :
                                         <Typography sx={{ marginBlock: '5px', fontWeight: 'bold', color: 'white', fontSize: '12px', marginInline: '10px', }} >{`(Verify Your email to proceed)`}</Typography>
 
                                 } */}
-                                        </LoadingButton> :
+                                    </LoadingButton>
 
-                                        step === 1 ?
-                                            <LoadingButton
-                                                loading={createdOrderLoading}
-                                                // loading={isLoading}
-                                                onClick={handleCreateOrder}
-                                                fullWidth
-                                                variant='contained'
-                                                sx={{
-                                                    fontWeight: 'bold',
-                                                    background: 'orange',
-                                                    color: 'white',
-                                                    fontSize: '20px',
-                                                    ':hover': {
-                                                        background: 'orange',
-                                                        color: 'white',
-                                                        fontSize: '20px',
-                                                    }
-                                                }}>
-                                                {"Proceed"}
-                                            </LoadingButton> :
-                                            <LoadingButton
-                                                onClick={handleProceedToPayment}
-                                                loading={paymentLoading}
-                                                fullWidth
-                                                variant='contained'
-                                                sx={{
-                                                    fontWeight: 'bold',
-                                                    background: 'orange',
-                                                    color: 'white',
-                                                    fontSize: '20px',
-                                                    ':hover': {
-                                                        background: 'orange',
-                                                        color: 'white',
-                                                        fontSize: '20px',
-                                                    }
-                                                }}>
-                                                {"Proceed to Payment"}
-                                            </LoadingButton>
 
                                 }
 
                             </CardContent> :
                             step === 1 ?
                                 <CardContent sx={{ padding: '24px' }}>
-                                    <Card variant='outlined'>
+                                    <Card variant='outlined' sx={{ marginBottom: '20px' }}>
                                         <CardContent>
                                             <Box gap={"25px"} display={"flex"}>
                                                 <Typography sx={{ fontWeight: 'bold', minWidth: '55px' }} >Contact</Typography>
-                                                <Typography sx={{ fontSize: "14px" }}>{`${user?.firstName} ${user?.lastName}, ${user?.email}, ${user?.mobileNumber}`}</Typography>
+                                                <Typography sx={{ fontSize: "14px" }}>{`${firstName} ${lastName}, ${user?.email}, ${mobNo}`}</Typography>
                                             </Box>
                                             <Divider sx={{ marginBlock: '10px' }}></Divider>
                                             <Box gap={"25px"} display={"flex"}>
@@ -1079,76 +1041,45 @@ const Checkout = () => {
                                         </CardContent>
                                     </Card>
                                     {
-                                        step === 0 ?
-                                            <LoadingButton
-                                                // loading={isLoading}
-                                                onClick={handleShipping}
-                                                fullWidth
-                                                variant='contained'
-                                                sx={{
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    fontWeight: 'bold',
+
+                                        <LoadingButton
+                                            loading={createdOrderLoading}
+                                            // loading={isLoading}
+                                            onClick={handleCreateOrder}
+                                            fullWidth
+                                            variant='contained'
+                                            sx={{
+                                                fontWeight: 'bold',
+                                                background: 'orange',
+                                                color: 'white',
+                                                fontSize: '18px',
+                                                ':hover': {
                                                     background: 'orange',
                                                     color: 'white',
-                                                    fontSize: '20px',
-                                                    ':hover': {
-                                                        background: 'orange',
-                                                        color: 'white',
-                                                        fontSize: '20px',
-                                                    }
-                                                }}>
-                                                {"Proceed"}
-                                                {/* {
-                                    user?.isEnabled ? <></> :
-                                        <Typography sx={{ marginBlock: '5px', fontWeight: 'bold', color: 'white', fontSize: '12px', marginInline: '10px', }} >{`(Verify Your email to proceed)`}</Typography>
+                                                    fontSize: '18px',
+                                                }
+                                            }}>
+                                            {"Proceed"}
+                                        </LoadingButton>
 
-                                } */}
-                                            </LoadingButton> :
-
-                                            step === 1 ?
-                                                <LoadingButton
-                                                    loading={createdOrderLoading}
-                                                    // loading={isLoading}
-                                                    onClick={handleCreateOrder}
-                                                    fullWidth
-                                                    variant='contained'
-                                                    sx={{
-                                                        fontWeight: 'bold',
-                                                        background: 'orange',
-                                                        color: 'white',
-                                                        fontSize: '20px',
-                                                        ':hover': {
-                                                            background: 'orange',
-                                                            color: 'white',
-                                                            fontSize: '20px',
-                                                        }
-                                                    }}>
-                                                    {"Proceed"}
-                                                </LoadingButton> :
-                                                <LoadingButton
-                                                    onClick={handleProceedToPayment}
-                                                    loading={paymentLoading}
-                                                    fullWidth
-                                                    variant='contained'
-                                                    sx={{
-                                                        fontWeight: 'bold',
-                                                        background: 'orange',
-                                                        color: 'white',
-                                                        fontSize: '20px',
-                                                        ':hover': {
-                                                            background: 'orange',
-                                                            color: 'white',
-                                                            fontSize: '20px',
-                                                        }
-                                                    }}>
-                                                    {"Proceed to Payment"}
-                                                </LoadingButton>
 
                                     }
                                 </CardContent> :
 
                                 <CardContent>
+                                    <Card variant='outlined' sx={{ marginBottom: '20px' }}>
+                                        <CardContent>
+                                            <Box gap={"25px"} display={"flex"}>
+                                                <Typography sx={{ fontWeight: 'bold', minWidth: '55px' }} >Contact</Typography>
+                                                <Typography sx={{ fontSize: "14px" }}>{`${firstName} ${lastName}, ${user?.email}, ${mobNo}`}</Typography>
+                                            </Box>
+                                            <Divider sx={{ marginBlock: '10px' }}></Divider>
+                                            <Box gap={"25px"} display={"flex"}>
+                                                <Typography sx={{ fontWeight: 'bold', minWidth: '55px' }}>Ship to</Typography>
+                                                <Typography sx={{ fontSize: "14px" }}>{shippingAddress}</Typography>
+                                            </Box>
+                                        </CardContent>
+                                    </Card>
                                     <Divider sx={{ marginBottom: '10px' }}></Divider>
                                     <Box display={{
                                         xs: 'flex',
@@ -1161,11 +1092,13 @@ const Checkout = () => {
                                     </Box>
                                     <Card variant=''>
                                         <CardContent sx={{
+                                            marginBlock: '10px',
                                             paddingBlock: '0px', paddingInline: {
                                                 // xs: '0px',
 
                                             }
                                         }}>
+
                                             <form >
                                                 <FormControl sx={{ m: 0 }} variant="standard">
                                                     {/* <FormLabel id="demo-error-radios">Pop quiz: MUI is...</FormLabel> */}
@@ -1186,11 +1119,12 @@ const Checkout = () => {
                                                                 size='small'
 
                                                                 sx={{
+                                                                    marginBottom: '10px',
                                                                     '&, &.Mui-checked': {
                                                                         color: 'orange',
                                                                     },
                                                                 }} />
-                                                        } label={<Box display={
+                                                        } label={<Box marginBottom={'10px'} display={
                                                             {
                                                                 xs: 'block',
                                                                 md: 'block'
@@ -1245,160 +1179,35 @@ const Checkout = () => {
                                             </form>
                                         </CardContent>
                                         {
-                                            step === 0 ?
-                                                <LoadingButton
-                                                    // loading={isLoading}
-                                                    onClick={handleShipping}
-                                                    fullWidth
-                                                    variant='contained'
-                                                    sx={{
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        fontWeight: 'bold',
-                                                        background: 'orange',
-                                                        color: 'white',
-                                                        fontSize: '20px',
-                                                        ':hover': {
-                                                            background: 'orange',
-                                                            color: 'white',
-                                                            fontSize: '20px',
-                                                        }
-                                                    }}>
-                                                    {"Proceed"}
-                                                    {/* {
-                                    user?.isEnabled ? <></> :
-                                        <Typography sx={{ marginBlock: '5px', fontWeight: 'bold', color: 'white', fontSize: '12px', marginInline: '10px', }} >{`(Verify Your email to proceed)`}</Typography>
 
-                                } */}
-                                                </LoadingButton> :
 
-                                                step === 1 ?
-                                                    <LoadingButton
-                                                        loading={createdOrderLoading}
-                                                        // loading={isLoading}
-                                                        onClick={handleCreateOrder}
-                                                        fullWidth
-                                                        variant='contained'
-                                                        sx={{
-                                                            fontWeight: 'bold',
-                                                            background: 'orange',
-                                                            color: 'white',
-                                                            fontSize: '20px',
-                                                            ':hover': {
-                                                                background: 'orange',
-                                                                color: 'white',
-                                                                fontSize: '20px',
-                                                            }
-                                                        }}>
-                                                        {"Proceed"}
-                                                    </LoadingButton> :
-                                                    <LoadingButton
-                                                        onClick={handleProceedToPayment}
-                                                        loading={paymentLoading}
-                                                        fullWidth
-                                                        variant='contained'
-                                                        sx={{
-                                                            fontWeight: 'bold',
-                                                            background: 'orange',
-                                                            color: 'white',
-                                                            fontSize: '20px',
-                                                            ':hover': {
-                                                                background: 'orange',
-                                                                color: 'white',
-                                                                fontSize: '20px',
-                                                            }
-                                                        }}>
-                                                        {"Proceed to Payment"}
-                                                    </LoadingButton>
 
                                         }
                                     </Card>
+                                    <LoadingButton
+                                        disableElevation={false}
+                                        onClick={handleProceedToPayment}
+                                        loading={paymentLoading}
+                                        fullWidth
+                                        variant='contained'
+                                        sx={{
+                                            fontWeight: 'bold',
+                                            background: 'orange',
+                                            color: 'white',
+                                            fontSize: '18px',
+                                            ':hover': {
+                                                background: 'orange',
+                                                color: 'white',
+                                                fontSize: '18px',
+                                            }
+                                        }}>
+                                        {"Proceed to Payment"}
+                                    </LoadingButton>
                                 </CardContent>
                         }
                     </Card>
                 </Box>
-                <Box sx={{ padding: '10px' }}>
-                    {
-                        step === 0 ?
-                            <LoadingButton
-                                // loading={createdOrderLoading}
-                                disableElevation
-                                onClick={handleShipping}
-                                fullWidth
-                                variant='contained'
-                                sx={{
-                                    margin: '0px',
-                                    display: {
-                                        xs: 'block',
-                                        sm: 'block',
-                                        md: 'none',
-                                    },
-                                    fontWeight: 'bold',
-                                    background: 'orange',
-                                    color: 'white',
-                                    fontSize: '18px',
-                                    ':hover': {
-                                        background: 'orange',
-                                        color: 'white',
-                                        fontSize: '18',
-                                    }
-                                }}>
-                                Proceed
-                            </LoadingButton>
-                            : step === 1 ?
-                                <LoadingButton
-                                    disableElevation
-                                    loading={createdOrderLoading}
-                                    onClick={handleCreateOrder}
-                                    fullWidth
-                                    variant='contained'
-                                    sx={{
-                                        margin: '0px',
-                                        display: {
-                                            xs: 'block',
-                                            sm: 'block',
-                                            md: 'none',
-                                        },
-                                        fontWeight: 'bold',
-                                        background: 'orange',
-                                        color: 'white',
-                                        fontSize: '18px',
-                                        ':hover': {
-                                            background: 'orange',
-                                            color: 'white',
-                                            fontSize: '18',
-                                        }
-                                    }}>
-                                    Proceed
-                                </LoadingButton>
-                                : <LoadingButton
-                                    disableElevation
-                                    loading={paymentLoading}
-                                    onClick={handleProceedToPayment}
-                                    fullWidth
-                                    variant='contained'
-                                    sx={{
-                                        margin: '0px',
-                                        display: {
-                                            xs: 'block',
-                                            sm: 'block',
-                                            md: 'none',
-                                        },
-                                        fontWeight: 'bold',
-                                        background: 'orange',
-                                        color: 'white',
-                                        fontSize: '18px',
-                                        ':hover': {
-                                            background: 'orange',
-                                            color: 'white',
-                                            fontSize: '18',
-                                        }
-                                    }}>
-                                    Proceed to Payment
-                                </LoadingButton>
-                    }
 
-                </Box>
                 <Box
 
                     sx={{
