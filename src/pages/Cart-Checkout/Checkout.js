@@ -19,7 +19,7 @@ import UPI from '../../assets/images/UPI.png';
 import Visa from '../../assets/images/VisaAndMasterCard.png';
 import PayMethods from '../../assets/images/pay_methods_branding.png';
 import Simpl from '../../assets/images/Simpl.png';
-import { ErrorOutline, FlashOffOutlined, LocalDining, WarningOutlined, WarningRounded } from '@mui/icons-material';
+import { ErrorOutline, FlashOffOutlined, LocalDining, LockOutlined, WarningOutlined, WarningRounded } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 
 
@@ -83,6 +83,7 @@ const Checkout = () => {
         if (order?.orderId === null)
             setStep(2)
     }, [order])
+
     const handleShippingMethod = (event) => {
         setShippingMethod(event.target.value);
 
@@ -358,6 +359,10 @@ const Checkout = () => {
 
         if (token)
             dispatch(getUserProfile());
+        // if (shippingAddress === '') {
+        //     setStep(0);
+        // }
+        setStep(0);
         // if (cartState) {
         // dispatch(getCart(localStorage.getItem('jwt')));
         // setLength(cart?.cartItems.length)    
@@ -400,284 +405,287 @@ const Checkout = () => {
 
 
     return (
-        <Box sx={{ padding: '8px' }}>
+        <Box>
+            <Divider sx={{ margin: '5px' }}></Divider>
+            <Box sx={{ padding: '8px' }}>
 
 
-            <Box sx={{
-                display: {
-                    xs: 'block',
-                    sm: 'block',
-                    md: 'flex',
-                    lg: 'flex'
-                },
-                justifyContent: 'center'
-            }}>
+                <Box sx={{
+                    display: {
+                        xs: 'block',
+                        sm: 'block',
+                        md: 'flex',
+                        lg: 'flex'
+                    },
+                    justifyContent: 'center'
+                }}>
 
 
-                <Box
+                    <Box
 
-                    sx={{
-                        gap: '10px',
-                        width: {
-                            xs: 'fit-content',
-                            sm: '98%',
-                            md: '50vw'
-                        },
-                        margin: '10px'
-                    }}>
-                    <Card sx={{
-                        marginBottom: '10px', display: {
-                            xs: 'block',
-                            sm: 'block',
-                            md: 'none'
-                        }
-                    }} variant='outlined'>
-                        <CardContent>
-                            <Box>
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <Box>
-                                        {/* <Typography sx={{ fontSize: '18px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>{`Subtotal (${cart?.cartTotalItems} items)`}</Typography>
-                                        <Typography sx={{ fontSize: '18px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>{`Taxes ( GST )`}</Typography> */}
-                                        <Typography sx={{ fontSize: '17px', fontWeight: '', marginInline: '10px', marginTop: '0px' }}>{`Total (${cart?.cartTotalItems} items)`}</Typography>
-                                        <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '11px', marginInline: '10px', }} >(Excluding shipping charges)</Typography>
-
-                                    </Box>
-                                    <Box>
-                                        {/* <Typography sx={{ fontSize: '18px', fontWeight: 'bold', marginInline: '20px', marginTop: '10px' }}>{`₹ ${Math.round(cart?.cartTotalPrice * 100 / 105)}`}</Typography>
-                                        <Typography sx={{ fontSize: '18px', fontWeight: 'bold', marginInline: '20px', marginTop: '10px' }}>{`₹ ${Math.round(cart?.cartTotalPrice * 5 / 105)}`}</Typography> */}
-                                        <Typography sx={{ color: 'orange', fontSize: '17px', fontWeight: 'bold', marginInline: '10px', marginTop: '10px' }}>{`₹ ${cart ? cart?.cartTotalPrice : 0}`}</Typography>
-                                    </Box>
-                                </Box>
-
-
-                            </Box>
-                        </CardContent>
-                    </Card>
-                    <Card variant='outlined'>
-                        <Breadcrumbs
-                            sx={{ marginInline: '30px', marginBottom: '0px', marginTop: '20px' }}
-                            separator={<NavigateNextIcon sx={{ color: 'grey' }} fontSize="small" />}
-                            aria-label="breadcrumb"
-                        >
-                            {breadcrumbs}
-                        </Breadcrumbs>
-
-                        {step === 0 ?
+                        sx={{
+                            gap: '10px',
+                            width: {
+                                xs: 'fit-content',
+                                sm: '98%',
+                                md: '50vw'
+                            },
+                            margin: '10px'
+                        }}>
+                        <Card sx={{
+                            height: '100%',
+                            marginBottom: '10px', display: {
+                                xs: 'block',
+                                sm: 'block',
+                                md: 'none'
+                            }
+                        }} variant='outlined'>
                             <CardContent>
-                                <Divider></Divider>
-                                <Box
+                                <Box>
+                                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                        <Box>
+                                            {/* <Typography sx={{ fontSize: '18px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>{`Subtotal (${cart?.cartTotalItems} items)`}</Typography>
+                                        <Typography sx={{ fontSize: '18px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>{`Taxes ( GST )`}</Typography> */}
+                                            <Typography sx={{ fontSize: '17px', fontWeight: '', marginInline: '10px', marginTop: '0px' }}>{`Total (${cart?.cartTotalItems} items)`}</Typography>
+                                            <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '11px', marginInline: '10px', }} >(Excluding shipping charges)</Typography>
 
-                                    justifyContent="space-between"
-
-                                    sx={{
-                                        marginInline: '10px',
-                                        display: {
-                                            xs: 'block',
-                                            sm: 'block',
-                                            md: 'flex'
-                                        },
-                                        alignItems: 'center'
-                                    }}>
-                                    <Box display='flex' sx={{ gap: '10px', }} >
-                                        <Address sx={{
-                                            marginBlock: {
-                                                xs: '10px',
-                                                sm: '10px',
-                                                md: 's0px'
-                                            }
-                                        }} />
-                                        <Typography sx={{
-                                            fontWeight: 'bold', marginBlock: {
-                                                xs: '10px',
-                                                sm: '10px',
-                                                md: '10px'
-                                            }
-                                        }}>Shipping Details</Typography>
+                                        </Box>
+                                        <Box>
+                                            {/* <Typography sx={{ fontSize: '18px', fontWeight: 'bold', marginInline: '20px', marginTop: '10px' }}>{`₹ ${Math.round(cart?.cartTotalPrice * 100 / 105)}`}</Typography>
+                                        <Typography sx={{ fontSize: '18px', fontWeight: 'bold', marginInline: '20px', marginTop: '10px' }}>{`₹ ${Math.round(cart?.cartTotalPrice * 5 / 105)}`}</Typography> */}
+                                            <Typography sx={{ color: 'orange', fontSize: '17px', fontWeight: 'bold', marginInline: '10px', marginTop: '10px' }}>{`₹ ${cart ? cart?.cartTotalPrice : 0}`}</Typography>
+                                        </Box>
                                     </Box>
 
-                                    {
-                                        user ? <Box sx={{
-                                            margin: '10px',
-                                            gap: '10px',
+
+                                </Box>
+                            </CardContent>
+                        </Card>
+                        <Card sx={{}} variant='outlined'>
+                            <Breadcrumbs
+                                sx={{ marginInline: '30px', marginBottom: '0px', marginTop: '20px' }}
+                                separator={<NavigateNextIcon sx={{ color: 'grey' }} fontSize="small" />}
+                                aria-label="breadcrumb"
+                            >
+                                {breadcrumbs}
+                            </Breadcrumbs>
+
+                            {step === 0 ?
+                                <CardContent>
+                                    <Divider></Divider>
+                                    <Box
+
+                                        justifyContent="space-between"
+
+                                        sx={{
+                                            marginInline: '10px',
                                             display: {
                                                 xs: 'block',
                                                 sm: 'block',
                                                 md: 'flex'
-                                            }
+                                            },
+                                            alignItems: 'center'
                                         }}>
-                                            <Typography sx={{ color: 'orange', fontWeight: 'bold' }}>{user?.firstName + " " + user?.lastName + " "}</Typography>
-                                            {/* <Typography sx={{ color: 'orange' }}>
+                                        <Box display='flex' sx={{ gap: '10px', }} >
+                                            <Address sx={{
+                                                marginBlock: {
+                                                    xs: '10px',
+                                                    sm: '10px',
+                                                    md: 's0px'
+                                                }
+                                            }} />
+                                            <Typography sx={{
+                                                fontWeight: 'bold', marginBlock: {
+                                                    xs: '10px',
+                                                    sm: '10px',
+                                                    md: '10px'
+                                                }
+                                            }}>Shipping Details</Typography>
+                                        </Box>
+
+                                        {
+                                            user ? <Box sx={{
+                                                margin: '10px',
+                                                gap: '10px',
+                                                display: {
+                                                    xs: 'block',
+                                                    sm: 'block',
+                                                    md: 'flex'
+                                                }
+                                            }}>
+                                                <Typography sx={{ color: 'orange', fontWeight: 'bold' }}>{user?.firstName + " " + user?.lastName + " "}</Typography>
+                                                {/* <Typography sx={{ color: 'orange' }}>
                                                 {user?.firstName + " " + user?.lastName + " "}
                                             </Typography> */}
-                                            {
-                                                user?.isEnabled ? <Typography>{"(" + user?.email + ")"}</Typography> :
+                                                {
+                                                    user?.isEnabled ? <Typography>{"(" + user?.email + ")"}</Typography> :
 
-                                                    <Typography onClick={
-                                                        () => {
-                                                            console.log("on lick")
-                                                            dispatch(setOpenEmail({
-                                                                open: true
-                                                            }))
-                                                        }
-                                                    } sx={{ cursor: 'pointer', textDecoration: 'underline', color: 'orange', fontSize: '15px' }}>{" Verify Your Email "}</Typography>
+                                                        <Typography onClick={
+                                                            () => {
+                                                                console.log("on lick")
+                                                                dispatch(setOpenEmail({
+                                                                    open: true
+                                                                }))
+                                                            }
+                                                        } sx={{ cursor: 'pointer', textDecoration: 'underline', color: 'orange', fontSize: '15px' }}>{" Verify Your Email "}</Typography>
 
-                                            }
-
-                                        </Box> :
-
-                                            <Typography>Already have an account? <Typography sx={{ color: 'orange' }}>Log In</Typography></Typography>
-
-                                    }
-                                </Box>
-                                <Box marginLeft={'15px'}>
-                                    {
-                                        globalError ? <Typography sx={{ color: 'red', fontWeight: 'bold' }}>{"Fill all the *required fields"}</Typography> :
-                                            <></>
-                                    }
-                                </Box>
-                                <Box sx={{ padding: '5px' }}>
-                                    {/* <Typography sx={{ margin: '15px', fontWeight: 'bold' }}>{"Update Product"}</Typography> */}
-                                    <Box sx={{ gap: '10px', }}>
-                                        <FormControl sx={{ width: '100%' }}>
-                                            <FormGroup row sx={{
-                                                width: 'inherit', flexWrap: {
-                                                    xs: 'wrap',
-                                                    sm: 'nowrap',
-                                                    md: 'nowrap'
                                                 }
-                                            }}>
-                                                <TextField
-                                                    error={showFirstNameError}
-                                                    onChange={handleFirstName}
-                                                    value={firstName || ""}
-                                                    fullWidth
-                                                    size='small'
-                                                    // onChange={handleUpdatedNameChange}
-                                                    sx={{
-                                                        "& .MuiInputLabel-outlined": {
-                                                            color: "black",
-                                                            fontSize: '14px',
 
-                                                            "&.MuiInputLabel-shrink": {
-                                                                color: "orange"
+                                            </Box> :
+
+                                                <Typography>Already have an account? <Typography sx={{ color: 'orange' }}>Log In</Typography></Typography>
+
+                                        }
+                                    </Box>
+                                    <Box marginLeft={'15px'}>
+                                        {
+                                            globalError ? <Typography sx={{ color: 'red', fontWeight: 'bold' }}>{"Fill all the *required fields"}</Typography> :
+                                                <></>
+                                        }
+                                    </Box>
+                                    <Box sx={{ padding: '5px' }}>
+                                        {/* <Typography sx={{ margin: '15px', fontWeight: 'bold' }}>{"Update Product"}</Typography> */}
+                                        <Box sx={{ gap: '10px', }}>
+                                            <FormControl sx={{ width: '100%' }}>
+                                                <FormGroup row sx={{
+                                                    width: 'inherit', flexWrap: {
+                                                        xs: 'wrap',
+                                                        sm: 'nowrap',
+                                                        md: 'nowrap'
+                                                    }
+                                                }}>
+                                                    <TextField
+                                                        error={showFirstNameError}
+                                                        onChange={handleFirstName}
+                                                        value={firstName || ""}
+                                                        fullWidth
+                                                        size='small'
+                                                        // onChange={handleUpdatedNameChange}
+                                                        sx={{
+                                                            "& .MuiInputLabel-outlined": {
+                                                                color: "black",
+                                                                fontSize: '14px',
+
+                                                                "&.MuiInputLabel-shrink": {
+                                                                    color: "orange"
+                                                                },
+                                                                "&.MuiInputLabel-root.Mui-error": {
+                                                                    color: "#d32f2f !important"
+                                                                },
                                                             },
-                                                            "&.MuiInputLabel-root.Mui-error": {
-                                                                color: "#d32f2f !important"
+                                                            "& .MuiOutlinedInput-root": {
+                                                                "&.Mui-focused fieldset": {
+                                                                    "borderColor": "orange"
+                                                                }
                                                             },
-                                                        },
-                                                        "& .MuiOutlinedInput-root": {
-                                                            "&.Mui-focused fieldset": {
-                                                                "borderColor": "orange"
-                                                            }
-                                                        },
-                                                        margin: '10px'
-                                                    }}
-                                                    // fullWidth
-                                                    required
-                                                    id="first-name"
-                                                    label="First Name"
-                                                />
-                                                <TextField
-                                                    error={showLastNameError}
-                                                    onChange={handleLastName}
-                                                    value={"" || lastName}
-                                                    fullWidth
-                                                    size='small'
-                                                    // onChange={handleUpdatedNameChange}
-                                                    sx={{
+                                                            margin: '10px'
+                                                        }}
+                                                        // fullWidth
+                                                        required
+                                                        id="first-name"
+                                                        label="First Name"
+                                                    />
+                                                    <TextField
+                                                        error={showLastNameError}
+                                                        onChange={handleLastName}
+                                                        value={"" || lastName}
+                                                        fullWidth
+                                                        size='small'
+                                                        // onChange={handleUpdatedNameChange}
+                                                        sx={{
 
 
-                                                        "& .MuiInputLabel-outlined": {
-                                                            color: "black",
-                                                            fontSize: '14px',
+                                                            "& .MuiInputLabel-outlined": {
+                                                                color: "black",
+                                                                fontSize: '14px',
 
-                                                            "&.MuiInputLabel-shrink": {
-                                                                color: "orange"
+                                                                "&.MuiInputLabel-shrink": {
+                                                                    color: "orange"
+                                                                },
+                                                                "&.MuiInputLabel-root.Mui-error": {
+                                                                    color: "#d32f2f !important"
+                                                                },
                                                             },
-                                                            "&.MuiInputLabel-root.Mui-error": {
-                                                                color: "#d32f2f !important"
+                                                            "& .MuiOutlinedInput-root": {
+                                                                "&.Mui-focused fieldset": {
+                                                                    "borderColor": "orange"
+                                                                }
                                                             },
-                                                        },
-                                                        "& .MuiOutlinedInput-root": {
-                                                            "&.Mui-focused fieldset": {
-                                                                "borderColor": "orange"
-                                                            }
-                                                        },
-                                                        margin: '10px'
+                                                            margin: '10px'
 
-                                                    }}
-                                                    // fullWidth
-                                                    required
-                                                    id="last-name"
-                                                    label="Last Name"
+                                                        }}
+                                                        // fullWidth
+                                                        required
+                                                        id="last-name"
+                                                        label="Last Name"
 
-                                                />
-                                                <TextField
-                                                    // helperText={mobNo.length !== 10 && mobNo.length > 0 ? "Incorrect entry." : ""}
-                                                    // error={mobNo.length !== 10 && mobNo.length > 0 ? true : false}
-                                                    error={showMobileError}
-                                                    onChange={handleMob}
-                                                    InputProps={{
-                                                        sx: {
-                                                            flexDirection: 'row-reverse'
-                                                        },
-                                                        // startAdornment: mobNo?.length !== 10 && mobNo?.length > 0 ? <InputAdornment sx={{ marginTop: '1px', }} position='end'>
-
-                                                        //     {<LightTooltip title={"Mobile number should be of 10 digits"}>
-                                                        //         <ErrorOutline sx={{ cursor: 'pointer', mr: '-8px', fontSize: '20px', color: 'red' }} />
-                                                        //     </LightTooltip>}
-                                                        // </InputAdornment> : <></>,
-                                                        endAdornment:
-                                                            mobNo?.length > 0 ? <InputAdornment sx={{ marginTop: '1px', ml: '12px', }} position='start'>
-
-                                                                {<Typography sx={{ mr: '-8px', }}>
-                                                                    +91
-                                                                </Typography>}
-                                                            </InputAdornment> : <></>
-                                                    }}
-                                                    value={mobNo || ""}
-                                                    fullWidth
-                                                    size='small'
-                                                    // onChange={handleUpdatedNameChange}
-                                                    sx={{
-
-
-                                                        "& .MuiInputLabel-outlined": {
-                                                            color: "black",
-                                                            fontSize: '14px',
-
-                                                            "&.MuiInputLabel-shrink": {
-                                                                color: "orange"
+                                                    />
+                                                    <TextField
+                                                        // helperText={mobNo.length !== 10 && mobNo.length > 0 ? "Incorrect entry." : ""}
+                                                        // error={mobNo.length !== 10 && mobNo.length > 0 ? true : false}
+                                                        error={showMobileError}
+                                                        onChange={handleMob}
+                                                        InputProps={{
+                                                            sx: {
+                                                                flexDirection: 'row-reverse'
                                                             },
-                                                            "&.MuiInputLabel-root.Mui-error": {
-                                                                color: "#d32f2f !important"
+                                                            // startAdornment: mobNo?.length !== 10 && mobNo?.length > 0 ? <InputAdornment sx={{ marginTop: '1px', }} position='end'>
+
+                                                            //     {<LightTooltip title={"Mobile number should be of 10 digits"}>
+                                                            //         <ErrorOutline sx={{ cursor: 'pointer', mr: '-8px', fontSize: '20px', color: 'red' }} />
+                                                            //     </LightTooltip>}
+                                                            // </InputAdornment> : <></>,
+                                                            endAdornment:
+                                                                mobNo?.length > 0 ? <InputAdornment sx={{ marginTop: '1px', ml: '12px', }} position='start'>
+
+                                                                    {<Typography sx={{ mr: '-8px', }}>
+                                                                        +91
+                                                                    </Typography>}
+                                                                </InputAdornment> : <></>
+                                                        }}
+                                                        value={mobNo || ""}
+                                                        fullWidth
+                                                        size='small'
+                                                        // onChange={handleUpdatedNameChange}
+                                                        sx={{
+
+
+                                                            "& .MuiInputLabel-outlined": {
+                                                                color: "black",
+                                                                fontSize: '14px',
+
+                                                                "&.MuiInputLabel-shrink": {
+                                                                    color: "orange"
+                                                                },
+                                                                "&.MuiInputLabel-root.Mui-error": {
+                                                                    color: "#d32f2f !important"
+                                                                },
                                                             },
-                                                        },
-                                                        "& .MuiOutlinedInput-root": {
-                                                            "&.Mui-focused fieldset": {
-                                                                "borderColor": "orange"
-                                                            }
-                                                        },
-                                                        margin: '10px'
-                                                    }}
-                                                    // fullWidth
-                                                    required
-                                                    id="mobile-number"
-                                                    label="Mobile No."
-                                                // error={mobNo?.length !== 10}
+                                                            "& .MuiOutlinedInput-root": {
+                                                                "&.Mui-focused fieldset": {
+                                                                    "borderColor": "orange"
+                                                                }
+                                                            },
+                                                            margin: '10px'
+                                                        }}
+                                                        // fullWidth
+                                                        required
+                                                        id="mobile-number"
+                                                        label="Mobile No."
+                                                    // error={mobNo?.length !== 10}
 
-                                                />
+                                                    />
 
 
-                                            </FormGroup>
-                                            <FormGroup row sx={{
-                                                width: 'inherit', flexWrap: {
-                                                    xs: 'wrap',
-                                                    sm: 'nowrap',
-                                                    md: 'nowrap'
-                                                }
-                                            }}>
-                                                {/* <TextField
+                                                </FormGroup>
+                                                <FormGroup row sx={{
+                                                    width: 'inherit', flexWrap: {
+                                                        xs: 'wrap',
+                                                        sm: 'nowrap',
+                                                        md: 'nowrap'
+                                                    }
+                                                }}>
+                                                    {/* <TextField
 
                                                     onChange={handleHouseNo}
                                                     value={"" || houseNo}
@@ -707,345 +715,496 @@ const Checkout = () => {
                                                     label="House/Flat no. "
 
                                                 /> */}
-                                                <TextField
-                                                    error={showAddressError}
-                                                    onChange={handleAddress}
-                                                    value={address || ""}
-                                                    size='small'
-                                                    // onChange={handleUpdatedImageChange}
-                                                    sx={{
+                                                    <TextField
+                                                        error={showAddressError}
+                                                        onChange={handleAddress}
+                                                        value={address || ""}
+                                                        size='small'
+                                                        // onChange={handleUpdatedImageChange}
+                                                        sx={{
 
-                                                        width: {
-                                                            xs: '100%',
-                                                            md: '85%'
-                                                        },
-                                                        "& .MuiInputLabel-outlined": {
-                                                            color: "black",
-                                                            fontSize: '14px',
-
-                                                            "&.MuiInputLabel-shrink": {
-                                                                color: "orange"
+                                                            width: {
+                                                                xs: '100%',
+                                                                md: '85%'
                                                             },
-                                                            "&.MuiInputLabel-root.Mui-error": {
-                                                                color: "#d32f2f !important"
+                                                            "& .MuiInputLabel-outlined": {
+                                                                color: "black",
+                                                                fontSize: '14px',
+
+                                                                "&.MuiInputLabel-shrink": {
+                                                                    color: "orange"
+                                                                },
+                                                                "&.MuiInputLabel-root.Mui-error": {
+                                                                    color: "#d32f2f !important"
+                                                                },
                                                             },
-                                                        },
-                                                        "& .MuiOutlinedInput-root": {
-                                                            "&.Mui-focused fieldset": {
-                                                                "borderColor": "orange"
-                                                            }
-                                                        },
-                                                        margin: '10px'
-
-                                                    }}
-                                                    fullWidth
-                                                    required
-                                                    // value={selectedProduct?.productImageUrl || ""}
-                                                    id="address"
-                                                    label="Address"
-
-                                                />
-                                                <TextField
-                                                    error={showPinCodeError}
-                                                    InputProps={{
-                                                        sx: {
-                                                            // flexDirection: 'row-reverse'
-                                                        },
-                                                        endAdornment:
-                                                            isFetching ? <InputAdornment sx={{ marginTop: '1px', ml: '12px', }} position='start'>
-
-                                                                {<CircularProgress sx={{ color: 'orange', padding: '10px' }}></CircularProgress>}
-                                                            </InputAdornment> : pinCode.length !== 6 && pinCode.length > 0 ?
-                                                                <InputAdornment sx={{ marginTop: '1px', ml: '12px', }} position='start'>
-
-                                                                    {<LightTooltip title={"Pin code should be of 6 digits"}>
-                                                                        <ErrorOutline sx={{ cursor: 'pointer', mr: '-8px', fontSize: '20px', color: 'red' }} />
-                                                                    </LightTooltip>}
-                                                                </InputAdornment> : <></>
-                                                    }}
-                                                    onChange={handlePincode}
-                                                    value={pinCode || ""}
-                                                    fullWidth
-                                                    size='small'
-                                                    sx={{
-
-                                                        display: {
-                                                            xs: 'none',
-                                                            sm: 'flex',
-                                                            md: 'flex'
-                                                        },
-                                                        width: {
-                                                            xs: '100%',
-                                                            md: '40%'
-                                                        },
-                                                        "& .MuiInputLabel-outlined": {
-                                                            color: "black",
-                                                            fontSize: '14px',
-
-                                                            "&.MuiInputLabel-shrink": {
-                                                                color: "orange"
+                                                            "& .MuiOutlinedInput-root": {
+                                                                "&.Mui-focused fieldset": {
+                                                                    "borderColor": "orange"
+                                                                }
                                                             },
-                                                            "&.MuiInputLabel-root.Mui-error": {
-                                                                color: "#d32f2f !important"
+                                                            margin: '10px'
+
+                                                        }}
+                                                        fullWidth
+                                                        required
+                                                        // value={selectedProduct?.productImageUrl || ""}
+                                                        id="address"
+                                                        label="Address"
+
+                                                    />
+                                                    <TextField
+                                                        error={showPinCodeError}
+                                                        InputProps={{
+                                                            sx: {
+                                                                // flexDirection: 'row-reverse'
                                                             },
-                                                        },
-                                                        "& .MuiOutlinedInput-root": {
-                                                            "&.Mui-focused fieldset": {
-                                                                "borderColor": "orange"
-                                                            }
-                                                        },
-                                                        margin: '10px'
-                                                    }}
-                                                    // fullWidth
-                                                    required
-                                                    id="pincode"
-                                                    label="Pin Code"
+                                                            endAdornment:
+                                                                isFetching ? <InputAdornment sx={{ marginTop: '1px', ml: '12px', }} position='start'>
 
-                                                />
-                                            </FormGroup>
+                                                                    {<CircularProgress sx={{ color: 'orange', padding: '10px' }}></CircularProgress>}
+                                                                </InputAdornment> : pinCode.length !== 6 && pinCode.length > 0 ?
+                                                                    <InputAdornment sx={{ marginTop: '1px', ml: '12px', }} position='start'>
 
+                                                                        {<LightTooltip title={"Pin code should be of 6 digits"}>
+                                                                            <ErrorOutline sx={{ cursor: 'pointer', mr: '-8px', fontSize: '20px', color: 'red' }} />
+                                                                        </LightTooltip>}
+                                                                    </InputAdornment> : <></>
+                                                        }}
+                                                        onChange={handlePincode}
+                                                        value={pinCode || ""}
+                                                        fullWidth
+                                                        size='small'
+                                                        sx={{
 
-
-
-
-
-
-
-                                            <FormGroup row sx={{
-                                                width: 'inherit', flexWrap: {
-                                                    xs: 'wrap',
-                                                    sm: 'nowrap',
-                                                    md: 'nowrap'
-                                                }
-                                            }}>
-                                                <TextField
-                                                    error={showPinCodeError}
-                                                    onChange={handlePincode}
-                                                    value={pinCode || ""}
-                                                    fullWidth
-                                                    size='small'
-                                                    sx={{
-
-                                                        display: {
-                                                            xs: 'flex',
-                                                            sm: 'none',
-                                                            md: 'none'
-                                                        },
-                                                        width: {
-                                                            xs: '43%',
-                                                            md: '40%'
-                                                        },
-                                                        "& .MuiInputLabel-outlined": {
-                                                            color: "black",
-                                                            fontSize: '14px',
-
-                                                            "&.MuiInputLabel-shrink": {
-                                                                color: "orange"
+                                                            display: {
+                                                                xs: 'none',
+                                                                sm: 'flex',
+                                                                md: 'flex'
                                                             },
-                                                            "&.MuiInputLabel-root.Mui-error": {
-                                                                color: "#d32f2f !important"
+                                                            width: {
+                                                                xs: '100%',
+                                                                md: '40%'
                                                             },
-                                                        },
-                                                        "& .MuiOutlinedInput-root": {
-                                                            "&.Mui-focused fieldset": {
-                                                                "borderColor": "orange"
-                                                            }
-                                                        },
-                                                        margin: '10px'
-                                                    }}
-                                                    // fullWidth
-                                                    required
-                                                    id="pincode"
-                                                    label="Pin Code"
+                                                            "& .MuiInputLabel-outlined": {
+                                                                color: "black",
+                                                                fontSize: '14px',
 
-                                                />
-                                                <TextField
-                                                    // disabled
-                                                    error={showCountryError}
-                                                    onChange={handleCountry}
-                                                    value={country || ""}
-                                                    fullWidth
-                                                    size='small'
-                                                    sx={{
-                                                        width: {
-                                                            xs: '43%',
-                                                            md: '40%'
-                                                        },
-
-                                                        "& .MuiInputLabel-outlined": {
-                                                            color: "black",
-                                                            fontSize: '14px',
-
-                                                            "&.MuiInputLabel-shrink": {
-                                                                color: "orange"
+                                                                "&.MuiInputLabel-shrink": {
+                                                                    color: "orange"
+                                                                },
+                                                                "&.MuiInputLabel-root.Mui-error": {
+                                                                    color: "#d32f2f !important"
+                                                                },
                                                             },
-                                                            "&.MuiInputLabel-root.Mui-error": {
-                                                                color: "#d32f2f !important"
+                                                            "& .MuiOutlinedInput-root": {
+                                                                "&.Mui-focused fieldset": {
+                                                                    "borderColor": "orange"
+                                                                }
                                                             },
-                                                        },
-                                                        "& .MuiOutlinedInput-root": {
-                                                            "&.Mui-focused fieldset": {
-                                                                "borderColor": "orange"
-                                                            }
-                                                        },
-                                                        margin: '10px'
-                                                    }}
-                                                    // fullWidth
-                                                    required
-                                                    id="country"
-                                                    label="Country"
+                                                            margin: '10px'
+                                                        }}
+                                                        // fullWidth
+                                                        required
+                                                        id="pincode"
+                                                        label="Pin Code"
 
-                                                />
-                                                {/* <Autocomplete
+                                                    />
+                                                </FormGroup>
+
+
+
+
+
+
+
+
+                                                <FormGroup row sx={{
+                                                    width: 'inherit', flexWrap: {
+                                                        xs: 'wrap',
+                                                        sm: 'nowrap',
+                                                        md: 'nowrap'
+                                                    }
+                                                }}>
+                                                    <TextField
+                                                        error={showPinCodeError}
+                                                        onChange={handlePincode}
+                                                        value={pinCode || ""}
+                                                        fullWidth
+                                                        size='small'
+                                                        sx={{
+
+                                                            display: {
+                                                                xs: 'flex',
+                                                                sm: 'none',
+                                                                md: 'none'
+                                                            },
+                                                            width: {
+                                                                xs: '43%',
+                                                                md: '40%'
+                                                            },
+                                                            "& .MuiInputLabel-outlined": {
+                                                                color: "black",
+                                                                fontSize: '14px',
+
+                                                                "&.MuiInputLabel-shrink": {
+                                                                    color: "orange"
+                                                                },
+                                                                "&.MuiInputLabel-root.Mui-error": {
+                                                                    color: "#d32f2f !important"
+                                                                },
+                                                            },
+                                                            "& .MuiOutlinedInput-root": {
+                                                                "&.Mui-focused fieldset": {
+                                                                    "borderColor": "orange"
+                                                                }
+                                                            },
+                                                            margin: '10px'
+                                                        }}
+                                                        // fullWidth
+                                                        required
+                                                        id="pincode"
+                                                        label="Pin Code"
+
+                                                    />
+                                                    <TextField
+                                                        // disabled
+                                                        error={showCountryError}
+                                                        onChange={handleCountry}
+                                                        value={country || ""}
+                                                        fullWidth
+                                                        size='small'
+                                                        sx={{
+                                                            width: {
+                                                                xs: '43%',
+                                                                md: '40%'
+                                                            },
+
+                                                            "& .MuiInputLabel-outlined": {
+                                                                color: "black",
+                                                                fontSize: '14px',
+
+                                                                "&.MuiInputLabel-shrink": {
+                                                                    color: "orange"
+                                                                },
+                                                                "&.MuiInputLabel-root.Mui-error": {
+                                                                    color: "#d32f2f !important"
+                                                                },
+                                                            },
+                                                            "& .MuiOutlinedInput-root": {
+                                                                "&.Mui-focused fieldset": {
+                                                                    "borderColor": "orange"
+                                                                }
+                                                            },
+                                                            margin: '10px'
+                                                        }}
+                                                        // fullWidth
+                                                        required
+                                                        id="country"
+                                                        label="Country"
+
+                                                    />
+                                                    {/* <Autocomplete
                                                 disablePortal
                                                 id="combo-box-demo"
                                                 options={Country.getAllCountries("IN").name}
                                                 sx={{ width: 300 }}
                                                 renderInput={(params) => <TextField {...params} label="Country" />}
                                             /> */}
-                                                <TextField
-                                                    // disabled
-                                                    error={showStateError}
-                                                    onChange={handleState}
-                                                    value={state || ""}
-                                                    fullWidth
-                                                    size='small'
-                                                    sx={{
-                                                        width: {
-                                                            xs: '43%',
-                                                            md: '40%'
-                                                        },
-
-                                                        "& .MuiInputLabel-outlined": {
-                                                            color: "black",
-                                                            fontSize: '14px',
-
-                                                            "&.MuiInputLabel-shrink": {
-                                                                color: "orange"
+                                                    <TextField
+                                                        // disabled
+                                                        error={showStateError}
+                                                        onChange={handleState}
+                                                        value={state || ""}
+                                                        fullWidth
+                                                        size='small'
+                                                        sx={{
+                                                            width: {
+                                                                xs: '43%',
+                                                                md: '40%'
                                                             },
-                                                            "&.MuiInputLabel-root.Mui-error": {
-                                                                color: "#d32f2f !important"
+
+                                                            "& .MuiInputLabel-outlined": {
+                                                                color: "black",
+                                                                fontSize: '14px',
+
+                                                                "&.MuiInputLabel-shrink": {
+                                                                    color: "orange"
+                                                                },
+                                                                "&.MuiInputLabel-root.Mui-error": {
+                                                                    color: "#d32f2f !important"
+                                                                },
                                                             },
-                                                        },
-                                                        "& .MuiOutlinedInput-root": {
-                                                            "&.Mui-focused fieldset": {
-                                                                "borderColor": "orange"
-                                                            }
-                                                        },
-                                                        margin: '10px'
-                                                    }}
-                                                    // fullWidth
-                                                    required
-                                                    id="state"
-                                                    label="State"
-
-                                                />
-                                                <TextField
-                                                    // disabled={pinCode}
-                                                    error={showCityError}
-                                                    onChange={handleCity}
-                                                    value={city || ""}
-                                                    fullWidth
-                                                    size='small'
-                                                    // onChange={handleUpdatedNameChange}
-                                                    sx={{
-
-                                                        width: {
-                                                            xs: '43%',
-                                                            md: '40%'
-                                                        },
-                                                        "& .MuiInputLabel-outlined": {
-                                                            color: "black",
-                                                            fontSize: '14px',
-
-                                                            "&.MuiInputLabel-shrink": {
-                                                                color: "orange"
+                                                            "& .MuiOutlinedInput-root": {
+                                                                "&.Mui-focused fieldset": {
+                                                                    "borderColor": "orange"
+                                                                }
                                                             },
-                                                            "&.MuiInputLabel-root.Mui-error": {
-                                                                color: "#d32f2f !important"
+                                                            margin: '10px'
+                                                        }}
+                                                        // fullWidth
+                                                        required
+                                                        id="state"
+                                                        label="State"
+
+                                                    />
+                                                    <TextField
+                                                        // disabled={pinCode}
+                                                        error={showCityError}
+                                                        onChange={handleCity}
+                                                        value={city || ""}
+                                                        fullWidth
+                                                        size='small'
+                                                        // onChange={handleUpdatedNameChange}
+                                                        sx={{
+
+                                                            width: {
+                                                                xs: '43%',
+                                                                md: '40%'
                                                             },
-                                                        },
-                                                        "& .MuiOutlinedInput-root": {
-                                                            "&.Mui-focused fieldset": {
-                                                                "borderColor": "orange"
-                                                            }
-                                                        },
-                                                        margin: '10px'
-                                                    }}
-                                                    // fullWidth
-                                                    required
-                                                    id="city"
-                                                    label="City"
+                                                            "& .MuiInputLabel-outlined": {
+                                                                color: "black",
+                                                                fontSize: '14px',
 
-                                                />
+                                                                "&.MuiInputLabel-shrink": {
+                                                                    color: "orange"
+                                                                },
+                                                                "&.MuiInputLabel-root.Mui-error": {
+                                                                    color: "#d32f2f !important"
+                                                                },
+                                                            },
+                                                            "& .MuiOutlinedInput-root": {
+                                                                "&.Mui-focused fieldset": {
+                                                                    "borderColor": "orange"
+                                                                }
+                                                            },
+                                                            margin: '10px'
+                                                        }}
+                                                        // fullWidth
+                                                        required
+                                                        id="city"
+                                                        label="City"
 
-                                            </FormGroup>
+                                                    />
 
-                                            <FormGroup row sx={{ width: 'inherit', flexWrap: 'nowrap' }}>
+                                                </FormGroup>
+
+                                                <FormGroup row sx={{ width: 'inherit', flexWrap: 'nowrap' }}>
 
 
-                                            </FormGroup>
-                                            <FormGroup sx={{ width: 'fit-content' }}>
-                                                <FormControlLabel sx={{ marginInline: '0px' }} control={<Checkbox color='success' sx={{}} defaultChecked />} label="Save address for future use" />
-                                            </FormGroup>
+                                                </FormGroup>
+                                                <FormGroup sx={{ width: 'fit-content' }}>
+                                                    <FormControlLabel sx={{ marginInline: '0px' }} control={<Checkbox color='success' sx={{}} defaultChecked />} label="Save address for future use" />
+                                                </FormGroup>
 
-                                        </FormControl>
+                                            </FormControl>
+                                        </Box>
+
                                     </Box>
+                                    {
 
-                                </Box>
-                                {
-
-                                    <LoadingButton
-                                        // loading={isLoading}
-                                        onClick={handleShipping}
-                                        fullWidth
-                                        variant='contained'
-                                        sx={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            fontWeight: 'bold',
-                                            background: 'orange',
-                                            color: 'white',
-                                            fontSize: '18px',
-                                            ':hover': {
+                                        <LoadingButton
+                                            // loading={isLoading}
+                                            onClick={handleShipping}
+                                            fullWidth
+                                            variant='contained'
+                                            sx={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                fontWeight: 'bold',
                                                 background: 'orange',
                                                 color: 'white',
                                                 fontSize: '18px',
-                                            }
-                                        }}>
-                                        {"Proceed"}
-                                        {/* {
+                                                ':hover': {
+                                                    background: 'orange',
+                                                    color: 'white',
+                                                    fontSize: '18px',
+                                                }
+                                            }}>
+                                            {"Proceed"}
+                                            {/* {
                                     user?.isEnabled ? <></> :
                                         <Typography sx={{ marginBlock: '5px', fontWeight: 'bold', color: 'white', fontSize: '12px', marginInline: '10px', }} >{`(Verify Your email to proceed)`}</Typography>
 
                                 } */}
-                                    </LoadingButton>
+                                        </LoadingButton>
 
 
-                                }
+                                    }
 
-                            </CardContent> :
-                            step === 1 ?
-                                <CardContent sx={{ padding: '24px' }}>
-                                    <Card variant='outlined' sx={{ marginBottom: '20px' }}>
-                                        <CardContent>
-                                            <Box gap={"25px"} display={"flex"}>
-                                                <Typography sx={{ fontWeight: 'bold', minWidth: '55px' }} >Contact</Typography>
-                                                <Typography sx={{ fontSize: "14px" }}>{`${firstName} ${lastName}, ${user?.email}, ${mobNo}`}</Typography>
+                                </CardContent> :
+                                step === 1 ?
+                                    <CardContent sx={{ padding: '24px' }}>
+                                        <Card variant='outlined' sx={{ marginBottom: '20px' }}>
+                                            <CardContent>
+                                                <Box gap={"25px"} display={"flex"}>
+                                                    <Typography sx={{ fontWeight: 'bold', minWidth: '55px' }} >Contact</Typography>
+                                                    <Typography sx={{ fontSize: "14px" }}>{`${firstName} ${lastName}, ${user?.email}, ${mobNo}`}</Typography>
+                                                </Box>
+                                                <Divider sx={{ marginBlock: '10px' }}></Divider>
+                                                <Box gap={"25px"} display={"flex"}>
+                                                    <Typography sx={{ fontWeight: 'bold', minWidth: '55px' }}>Ship to</Typography>
+                                                    <Typography sx={{ fontSize: "14px" }}>{shippingAddress}</Typography>
+                                                </Box>
+                                            </CardContent>
+                                        </Card>
+                                        {
+
+                                            <LoadingButton
+                                                loading={createdOrderLoading}
+                                                // loading={isLoading}
+                                                onClick={handleCreateOrder}
+                                                fullWidth
+                                                variant='contained'
+                                                sx={{
+                                                    fontWeight: 'bold',
+                                                    background: 'orange',
+                                                    color: 'white',
+                                                    fontSize: '18px',
+                                                    ':hover': {
+                                                        background: 'orange',
+                                                        color: 'white',
+                                                        fontSize: '18px',
+                                                    }
+                                                }}>
+                                                {"Proceed"}
+                                            </LoadingButton>
+
+
+                                        }
+                                    </CardContent> :
+
+                                    <CardContent>
+                                        <Card variant='outlined' sx={{ marginBottom: '20px' }}>
+                                            <CardContent>
+                                                <Box gap={"25px"} display={"flex"}>
+                                                    <Typography sx={{ fontWeight: 'bold', minWidth: '60px' }} >Contact</Typography>
+                                                    <Typography sx={{ fontSize: "14px" }}>{`${firstName} ${lastName}, ${user?.email}, ${mobNo}`}</Typography>
+                                                </Box>
+                                                <Divider sx={{ marginBlock: '10px' }}></Divider>
+                                                <Box gap={"25px"} display={"flex"}>
+                                                    <Typography sx={{ fontWeight: 'bold', minWidth: '60px' }}>Ship to</Typography>
+                                                    <Typography sx={{ fontSize: "14px" }}>{shippingAddress}</Typography>
+                                                </Box>
+                                            </CardContent>
+                                        </Card>
+                                        <Divider sx={{ marginBottom: '10px' }}></Divider>
+                                        <Box display={{
+                                            xs: 'flex',
+                                            md: 'flex'
+                                        }} sx={{ margin: '15px', justifyContent: 'space-between', alignItems: 'center' }}>
+                                            <Typography sx={{ fontSize: '17px', fontWeight: 'bold', marginBottom: { xs: '10px', md: '0px' } }}>Payment Method</Typography>
+                                            <Box gap={'0px'} display={{
+                                                md: 'flex',
+                                            }} alignItems={{
+                                                md: 'center'
+                                            }} >
+                                                <LockOutlined sx={{ color: 'grey', fontSize: '18px' }} />
+                                                <Typography sx={{ marginRight: '10px', marginLeft: '5px', fontSize: '14px', fontWeight: 'bold', color: 'grey', marginBottom: { xs: '10px', md: '0px' } }}>Secured By</Typography>
+
+                                                <img referrerpolicy="origin" src={Razorpay} style={{ height: '23px', width: '118px' }} alt="Razorpay | Payment Gateway | Neobank"></img>
                                             </Box>
-                                            <Divider sx={{ marginBlock: '10px' }}></Divider>
-                                            <Box gap={"25px"} display={"flex"}>
-                                                <Typography sx={{ fontWeight: 'bold', minWidth: '55px' }}>Ship to</Typography>
-                                                <Typography sx={{ fontSize: "14px" }}>{shippingAddress}</Typography>
-                                            </Box>
-                                        </CardContent>
-                                    </Card>
-                                    {
 
+
+                                        </Box>
+                                        <Card variant=''>
+                                            <CardContent sx={{
+                                                marginBlock: '10px',
+                                                paddingBlock: '0px', paddingInline: {
+                                                    // xs: '0px',
+
+                                                }
+                                            }}>
+
+                                                <form >
+                                                    <FormControl sx={{ m: 0 }} variant="standard">
+                                                        {/* <FormLabel id="demo-error-radios">Pop quiz: MUI is...</FormLabel> */}
+                                                        <RadioGroup
+                                                            sx={{
+                                                                '&, &.Mui-checked': {
+                                                                    // color: 'magenta',
+                                                                    fontSize: '14px'
+                                                                },
+                                                            }}
+                                                            aria-labelledby="demo-error-radios"
+                                                            name="quiz"
+                                                            value={shippingMethod}
+                                                            onChange={handleShippingMethod}
+                                                        >
+                                                            <FormControlLabel sx={{ alignItems: 'start' }} value="prepaid" control={
+                                                                <Radio
+                                                                    size='small'
+
+                                                                    sx={{
+                                                                        marginBottom: '10px',
+                                                                        '&, &.Mui-checked': {
+                                                                            color: 'orange',
+                                                                        },
+                                                                    }} />
+                                                            } label={<Box marginBottom={'10px'} display={
+                                                                {
+                                                                    xs: 'block',
+                                                                    md: 'block'
+                                                                }
+                                                            }>
+                                                                <Typography sx={{ fontSize: '16px', marginBlock: '8px', fontWeight: shippingMethod === "cod" ? 'normal' : 'bold' }}>{"Prepaid - UPI, Debit/Credit Card, Net-Banking, Paylater"}</Typography>
+                                                                {/* <Image width={110} src={Razorpay} duration={0} shiftDuration={0} alt='razorpay' ></Image> */}
+                                                                {/* <img referrerpolicy="origin" src="https://badges.razorpay.com/badge-light.png " style={{ height: '45px', width: '113px' }} alt="Razorpay | Payment Gateway | Neobank"></img> */}
+                                                                <Box display={{
+                                                                    xs: 'flex',
+                                                                    md: 'flex'
+                                                                }} sx={{ flexWrap: 'wrap', marginBlock: '15px' }}>
+                                                                    <Box sx={{ padding: '2px', marginRight: '15px' }}>
+                                                                        {/* <Image height={21} width={78} src={UPI} duration={0} shiftDuration={0} alt='upi' ></Image> */}
+                                                                        <Image src={PayMethods} duration={0} shiftDuration={0} alt='upi' ></Image>
+                                                                    </Box>
+                                                                    {/* <Box sx={{ padding: '2px', marginRight: '15px' }}>
+                                                                    <Image height={28} width={85} src={Simpl} duration={0} shiftDuration={0} alt='visa' ></Image>
+
+                                                                </Box> */}
+
+                                                                    {/* <Image height={29} width={145} src={Visa} duration={0} shiftDuration={0} alt='visa' ></Image> */}
+                                                                </Box>
+                                                                {/* <Image width={110} src={Visa} duration={0} shiftDuration={0} alt='Visa' ></Image> */}
+                                                                {/* <Image width={110} src={Mastercard} duration={0} shiftDuration={0} alt='mastercard' ></Image> */}
+
+                                                            </Box>} />
+
+                                                            <FormControlLabel value="cod" control={
+                                                                <Radio
+                                                                    size='small'
+                                                                    sx={{
+                                                                        '&, &.Mui-checked': {
+                                                                            color: 'orange',
+                                                                            fontSize: '14px'
+                                                                        },
+                                                                    }} />
+                                                            } label={<Box
+                                                                gap={"20px"}
+                                                                sx={{
+                                                                    width: '100%',
+                                                                    display: 'flex',
+                                                                    justifyContent: 'space-between'
+                                                                }}>
+                                                                <Typography sx={{ fontSize: '16px', fontWeight: shippingMethod !== "cod" ? 'normal' : 'bold' }}>{"Pay on delivery"}</Typography>
+                                                                {/* <Typography sx={{ fontSize: '15px' }}>{"( Shipping charge : ₹ 50 )"}</Typography> */}
+                                                            </Box>} />
+                                                        </RadioGroup>
+                                                        {/* <FormHelperText>{"45"}</FormHelperText> */}
+
+                                                    </FormControl>
+                                                </form>
+                                            </CardContent>
+                                            {
+
+
+
+                                            }
+                                        </Card>
                                         <LoadingButton
-                                            loading={createdOrderLoading}
-                                            // loading={isLoading}
-                                            onClick={handleCreateOrder}
+                                            disableElevation={false}
+                                            onClick={handleProceedToPayment}
+                                            loading={paymentLoading}
                                             fullWidth
                                             variant='contained'
                                             sx={{
@@ -1059,373 +1218,234 @@ const Checkout = () => {
                                                     fontSize: '18px',
                                                 }
                                             }}>
-                                            {"Proceed"}
+                                            {paymentLoading ? 'Redirecting...' : "Proceed to Payment"}
+
                                         </LoadingButton>
+                                    </CardContent>
+                            }
+                        </Card>
+                    </Box>
 
+                    <Box
 
-                                    }
-                                </CardContent> :
+                        sx={{
 
-                                <CardContent>
-                                    <Card variant='outlined' sx={{ marginBottom: '20px' }}>
-                                        <CardContent>
-                                            <Box gap={"25px"} display={"flex"}>
-                                                <Typography sx={{ fontWeight: 'bold', minWidth: '60px' }} >Contact</Typography>
-                                                <Typography sx={{ fontSize: "14px" }}>{`${firstName} ${lastName}, ${user?.email}, ${mobNo}`}</Typography>
-                                            </Box>
-                                            <Divider sx={{ marginBlock: '10px' }}></Divider>
-                                            <Box gap={"25px"} display={"flex"}>
-                                                <Typography sx={{ fontWeight: 'bold', minWidth: '60px' }}>Ship to</Typography>
-                                                <Typography sx={{ fontSize: "14px" }}>{shippingAddress}</Typography>
-                                            </Box>
-                                        </CardContent>
-                                    </Card>
-                                    <Divider sx={{ marginBottom: '10px' }}></Divider>
-                                    <Box display={{
-                                        xs: 'flex',
-                                        md: 'flex'
-                                    }} sx={{ margin: '12px', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <Typography sx={{ fontSize: '17px', fontWeight: 'bold', marginBottom: { xs: '10px', md: '0px' } }}>Payment Method</Typography>
-                                        <img referrerpolicy="origin" src={Razorpay} style={{ height: '48px', width: '118px' }} alt="Razorpay | Payment Gateway | Neobank"></img>
-
-
-                                    </Box>
-                                    <Card variant=''>
-                                        <CardContent sx={{
-                                            marginBlock: '10px',
-                                            paddingBlock: '0px', paddingInline: {
-                                                // xs: '0px',
-
-                                            }
+                            display: {
+                                xs: 'none',
+                                sm: 'none',
+                                md: 'block'
+                            },
+                            width: {
+                                xs: 'fit-content',
+                                sm: 'fit-content',
+                                md: '30vw'
+                            },
+                            margin: '10px'
+                        }}>
+                        {
+                            // isLoading ?
+                            //     <LinearProgress /> :
+                            <Card sx={{ marginBottom: "10px", height: '100%' }} variant='outlined'>
+                                <Typography sx={{ fontSize: '22px', fontWeight: '', margin: '15px', }}>Cart Summary</Typography>
+                                <Divider sx={{ marginBlock: '10px' }}></Divider>
+                                <Collapse in={true} timeout="auto" unmountOnExit>
+                                    {
+                                        cart ? <List sx={{
+                                            padding: '0px',
+                                            height: {
+                                                xs: cart?.cartItems?.length > 2 ? ' 30vh' : 'fit-content !important',
+                                                sm: cart?.cartItems?.length > 2 ? ' 30vh' : 'fit-content !important',
+                                                md: cart?.cartItems?.length > 3 ? ' 35vh' : 'fit-content !important',
+                                            },
+                                            overflow: 'auto'
                                         }}>
 
-                                            <form >
-                                                <FormControl sx={{ m: 0 }} variant="standard">
-                                                    {/* <FormLabel id="demo-error-radios">Pop quiz: MUI is...</FormLabel> */}
-                                                    <RadioGroup
-                                                        sx={{
-                                                            '&, &.Mui-checked': {
-                                                                // color: 'magenta',
-                                                                fontSize: '14px'
-                                                            },
-                                                        }}
-                                                        aria-labelledby="demo-error-radios"
-                                                        name="quiz"
-                                                        value={shippingMethod}
-                                                        onChange={handleShippingMethod}
-                                                    >
-                                                        <FormControlLabel sx={{ alignItems: 'start' }} value="prepaid" control={
-                                                            <Radio
-                                                                size='small'
 
-                                                                sx={{
-                                                                    marginBottom: '10px',
-                                                                    '&, &.Mui-checked': {
-                                                                        color: 'orange',
-                                                                    },
-                                                                }} />
-                                                        } label={<Box marginBottom={'10px'} display={
-                                                            {
-                                                                xs: 'block',
-                                                                md: 'block'
-                                                            }
-                                                        }>
-                                                            <Typography sx={{ fontSize: '16px', marginBlock: '8px', fontWeight: shippingMethod === "cod" ? 'normal' : 'bold' }}>{"Prepaid - UPI, Debit/Credit Card, Net-Banking, Paylater"}</Typography>
-                                                            {/* <Image width={110} src={Razorpay} duration={0} shiftDuration={0} alt='razorpay' ></Image> */}
-                                                            {/* <img referrerpolicy="origin" src="https://badges.razorpay.com/badge-light.png " style={{ height: '45px', width: '113px' }} alt="Razorpay | Payment Gateway | Neobank"></img> */}
-                                                            <Box display={{
-                                                                xs: 'flex',
-                                                                md: 'flex'
-                                                            }} sx={{ flexWrap: 'wrap', marginBlock: '15px' }}>
-                                                                <Box sx={{ padding: '2px', marginRight: '15px' }}>
-                                                                    {/* <Image height={21} width={78} src={UPI} duration={0} shiftDuration={0} alt='upi' ></Image> */}
-                                                                    <Image src={PayMethods} duration={0} shiftDuration={0} alt='upi' ></Image>
-                                                                </Box>
-                                                                {/* <Box sx={{ padding: '2px', marginRight: '15px' }}>
-                                                                    <Image height={28} width={85} src={Simpl} duration={0} shiftDuration={0} alt='visa' ></Image>
 
-                                                                </Box> */}
 
-                                                                {/* <Image height={29} width={145} src={Visa} duration={0} shiftDuration={0} alt='visa' ></Image> */}
-                                                            </Box>
-                                                            {/* <Image width={110} src={Visa} duration={0} shiftDuration={0} alt='Visa' ></Image> */}
-                                                            {/* <Image width={110} src={Mastercard} duration={0} shiftDuration={0} alt='mastercard' ></Image> */}
-
-                                                        </Box>} />
-
-                                                        <FormControlLabel value="cod" control={
-                                                            <Radio
-                                                                size='small'
-                                                                sx={{
-                                                                    '&, &.Mui-checked': {
-                                                                        color: 'orange',
-                                                                        fontSize: '14px'
-                                                                    },
-                                                                }} />
-                                                        } label={<Box
-                                                            gap={"20px"}
-                                                            sx={{
-                                                                width: '100%',
-                                                                display: 'flex',
-                                                                justifyContent: 'space-between'
+                                            {
+                                                cart ?
+                                                    cart?.cartItems?.map((item, i) => {
+                                                        return <Box>
+                                                            {<Box sx={{
+                                                                alignItems: 'center',
+                                                                display: {
+                                                                    xs: 'block',
+                                                                    sm: 'block',
+                                                                    md: 'flex'
+                                                                }
                                                             }}>
-                                                            <Typography sx={{ fontSize: '16px', fontWeight: shippingMethod !== "cod" ? 'normal' : 'bold' }}>{"Pay on delivery"}</Typography>
-                                                            {/* <Typography sx={{ fontSize: '15px' }}>{"( Shipping charge : ₹ 50 )"}</Typography> */}
-                                                        </Box>} />
-                                                    </RadioGroup>
-                                                    {/* <FormHelperText>{"45"}</FormHelperText> */}
+                                                                {<ListItem key={item?.productId} disablePadding >
+                                                                    {/* <Box height={'50px'} width={5} sx={{ background: item?.productVariants[0]?.quantity > 0 ? "green" : 'red' }}></Box> */}
+                                                                    <ListItemAvatar sx={{ padding: '10px' }}>
+                                                                        <NavLink style={{ textDecoration: 'none' }} to={`/pid=${item?.cartItemProduct?.productId}`}>
+                                                                            <Avatar sx={{
+                                                                                height: {
+                                                                                    xs: '50px',
+                                                                                    sm: '50px',
+                                                                                    md: '50px'
+                                                                                }, width: {
+                                                                                    xs: '50px',
+                                                                                    sm: '50px',
+                                                                                    md: '50px'
+                                                                                }
+                                                                            }} alt="Remy Sharp" src={item?.cartItemProduct?.productImageUrl} />
+                                                                            <Box sx={{
+                                                                                display: {
+                                                                                    xs: 'flex',
+                                                                                    sm: 'flex',
+                                                                                    md: 'none',
+                                                                                    lg: 'none'
+                                                                                }, alignItems: 'center'
+                                                                            }}>
+                                                                                <Box sx={{ marginInline: '8px', border: '0px solid #8080806e', borderRadius: '5px', display: 'flex', alignItems: 'center' }}>
 
-                                                </FormControl>
-                                            </form>
-                                        </CardContent>
-                                        {
+                                                                                    <Box sx={{ minWidth: '80px', padding: '0px', display: 'flex', alignItems: 'center' }}>
+                                                                                        <Typography sx={{ fontWeight: '', color: '#000000bf ', fontSize: '13px' }} >{`₹ ${item?.cartItemPrice}`}</Typography>
 
+                                                                                        {/* <Typography sx={{ fontWeight: '', color: '#000000bf ', fontSize: '12px' }} >{`inlusive all taxes`}</Typography> */}
+                                                                                    </Box>
 
-
-                                        }
-                                    </Card>
-                                    <LoadingButton
-                                        disableElevation={false}
-                                        onClick={handleProceedToPayment}
-                                        loading={paymentLoading}
-                                        fullWidth
-                                        variant='contained'
-                                        sx={{
-                                            fontWeight: 'bold',
-                                            background: 'orange',
-                                            color: 'white',
-                                            fontSize: '18px',
-                                            ':hover': {
-                                                background: 'orange',
-                                                color: 'white',
-                                                fontSize: '18px',
-                                            }
-                                        }}>
-                                        {"Proceed to Payment"}
-                                    </LoadingButton>
-                                </CardContent>
-                        }
-                    </Card>
-                </Box>
-
-                <Box
-
-                    sx={{
-
-                        display: {
-                            xs: 'none',
-                            sm: 'none',
-                            md: 'block'
-                        },
-                        width: {
-                            xs: 'fit-content',
-                            sm: 'fit-content',
-                            md: '30vw'
-                        },
-                        margin: '10px'
-                    }}>
-                    {
-                        // isLoading ?
-                        //     <LinearProgress /> :
-                        <Card sx={{ marginBottom: "10px" }} variant='outlined'>
-                            <Typography sx={{ fontSize: '22px', fontWeight: '', margin: '15px', }}>Cart Summary</Typography>
-                            <Divider sx={{ marginBlock: '10px' }}></Divider>
-                            <Collapse in={true} timeout="auto" unmountOnExit>
-                                {
-                                    cart ? <List sx={{
-                                        padding: '0px',
-                                        height: {
-                                            xs: cart?.cartItems?.length > 2 ? ' 30vh' : 'fit-content !important',
-                                            sm: cart?.cartItems?.length > 2 ? ' 30vh' : 'fit-content !important',
-                                            md: cart?.cartItems?.length > 4 ? ' 40vh' : 'fit-content !important',
-                                        },
-                                        overflow: 'auto'
-                                    }}>
-
-
-
-
-                                        {
-                                            cart ?
-                                                cart?.cartItems?.map((item, i) => {
-                                                    return <Box>
-                                                        {<Box sx={{
-                                                            alignItems: 'center',
-                                                            display: {
-                                                                xs: 'block',
-                                                                sm: 'block',
-                                                                md: 'flex'
-                                                            }
-                                                        }}>
-                                                            {<ListItem key={item?.productId} disablePadding >
-                                                                {/* <Box height={'50px'} width={5} sx={{ background: item?.productVariants[0]?.quantity > 0 ? "green" : 'red' }}></Box> */}
-                                                                <ListItemAvatar sx={{ padding: '10px' }}>
-                                                                    <NavLink style={{ textDecoration: 'none' }} to={`/pid=${item?.cartItemProduct?.productId}`}>
-                                                                        <Avatar sx={{
-                                                                            height: {
-                                                                                xs: '50px',
-                                                                                sm: '50px',
-                                                                                md: '50px'
-                                                                            }, width: {
-                                                                                xs: '50px',
-                                                                                sm: '50px',
-                                                                                md: '50px'
-                                                                            }
-                                                                        }} alt="Remy Sharp" src={item?.cartItemProduct?.productImageUrl} />
-                                                                        <Box sx={{
-                                                                            display: {
-                                                                                xs: 'flex',
-                                                                                sm: 'flex',
-                                                                                md: 'none',
-                                                                                lg: 'none'
-                                                                            }, alignItems: 'center'
-                                                                        }}>
-                                                                            <Box sx={{ marginInline: '8px', border: '0px solid #8080806e', borderRadius: '5px', display: 'flex', alignItems: 'center' }}>
-
-                                                                                <Box sx={{ minWidth: '80px', padding: '0px', display: 'flex', alignItems: 'center' }}>
-                                                                                    <Typography sx={{ fontWeight: '', color: '#000000bf ', fontSize: '13px' }} >{`₹ ${item?.cartItemPrice}`}</Typography>
-
-                                                                                    {/* <Typography sx={{ fontWeight: '', color: '#000000bf ', fontSize: '12px' }} >{`inlusive all taxes`}</Typography> */}
                                                                                 </Box>
 
+
+
                                                                             </Box>
+                                                                        </NavLink>
+                                                                    </ListItemAvatar>
+                                                                    <ListItemText
+                                                                        primaryTypographyProps={{
+                                                                            style: {
+                                                                                fontWeight: 'bold',
+                                                                                fontSize: '13px',
+                                                                                color: '#000000d1'
+                                                                            }
+                                                                        }}
+                                                                        secondaryTypographyProps={{
+                                                                            style: {
+                                                                                fontWeight: 'bold',
+                                                                                // fontSize: '17px',
+                                                                                color: '#000000d1'
+                                                                            }
+                                                                        }}
+                                                                        sx={{}}
+                                                                        primary={`${item?.cartItemProduct?.productName}`}
+                                                                        secondary={<Box>
+                                                                            <Typography sx={{
+                                                                                marginBlock: '5px',
+                                                                                fontWeight: 'bold',
+                                                                                fontSize: '12px',
+                                                                                color: '#000000d1'
+                                                                            }}>{`${item?.cartItemVariant?.weight}   |   ${item?.cartItemQuantity < 10 ? `0${item?.cartItemQuantity}` : item?.cartItemQuantity} x ₹ ${item?.cartItemVariant?.sellingPrice}  `}</Typography>
 
 
+
+
+                                                                        </Box>}
+
+                                                                    />
+
+
+                                                                </ListItem>}
+
+                                                                <Box sx={{
+                                                                    display: {
+                                                                        xs: 'none',
+                                                                        sm: 'none',
+                                                                        md: 'flex',
+                                                                        lg: 'block'
+                                                                    }, alignItems: 'center'
+                                                                }}>
+                                                                    <Box sx={{ marginInline: '15px', border: '0px solid #8080806e', borderRadius: '5px', display: 'flex', alignItems: 'center' }}>
+
+                                                                        <Box sx={{ minWidth: '100px', padding: '8px', display: 'flex', alignItems: 'center' }}>
+                                                                            <Typography sx={{ fontWeight: 'bold', color: '#000000a3', fontSize: '13px' }} >{`₹ ${item?.cartItemPrice}`}</Typography>
 
                                                                         </Box>
-                                                                    </NavLink>
-                                                                </ListItemAvatar>
-                                                                <ListItemText
-                                                                    primaryTypographyProps={{
-                                                                        style: {
-                                                                            fontWeight: 'bold',
-                                                                            fontSize: '13px',
-                                                                            color: '#000000d1'
-                                                                        }
-                                                                    }}
-                                                                    secondaryTypographyProps={{
-                                                                        style: {
-                                                                            fontWeight: 'bold',
-                                                                            // fontSize: '17px',
-                                                                            color: '#000000d1'
-                                                                        }
-                                                                    }}
-                                                                    sx={{}}
-                                                                    primary={`${item?.cartItemProduct?.productName}`}
-                                                                    secondary={<Box>
-                                                                        <Typography sx={{
-                                                                            marginBlock: '5px',
-                                                                            fontWeight: 'bold',
-                                                                            fontSize: '12px',
-                                                                            color: '#000000d1'
-                                                                        }}>{`${item?.cartItemVariant?.weight}   |   ${item?.cartItemQuantity < 10 ? `0${item?.cartItemQuantity}` : item?.cartItemQuantity} x ₹ ${item?.cartItemVariant?.sellingPrice}  `}</Typography>
-
-
-
-
-                                                                    </Box>}
-
-                                                                />
-
-
-                                                            </ListItem>}
-
-                                                            <Box sx={{
-                                                                display: {
-                                                                    xs: 'none',
-                                                                    sm: 'none',
-                                                                    md: 'flex',
-                                                                    lg: 'block'
-                                                                }, alignItems: 'center'
-                                                            }}>
-                                                                <Box sx={{ marginInline: '15px', border: '0px solid #8080806e', borderRadius: '5px', display: 'flex', alignItems: 'center' }}>
-
-                                                                    <Box sx={{ minWidth: '100px', padding: '8px', display: 'flex', alignItems: 'center' }}>
-                                                                        <Typography sx={{ fontWeight: 'bold', color: '#000000a3', fontSize: '13px' }} >{`₹ ${item?.cartItemPrice}`}</Typography>
 
                                                                     </Box>
 
+
+
                                                                 </Box>
 
 
 
-                                                            </Box>
+                                                            </Box>}
+                                                            {i === cart?.cartItems?.length - 1 ? <></> : <Divider></Divider>}
+                                                        </Box>
+                                                    })
+                                                    : <Box height={"30vh"}></Box>
+                                            }
+                                        </List > : <></>
+                                    }
+                                </Collapse>
 
+                                <Box>
+                                    <Card variant='' sx={{ width: 'inherit', marginBottom: '0px' }}>
+                                        {
+                                            cart ? <CardContent>
 
+                                                <Divider sx={{ marginBlock: '0px' }}></Divider>
 
-                                                        </Box>}
-                                                        {i === cart?.cartItems?.length - 1 ? <></> : <Divider></Divider>}
-                                                    </Box>
-                                                })
-                                                : <Box height={"30vh"}></Box>
-                                        }
-                                    </List > : <></>
-                                }
-                            </Collapse>
-
-                            <Box>
-                                <Card variant='' sx={{ width: 'inherit', marginBottom: '0px' }}>
-                                    {
-                                        cart ? <CardContent>
-
-                                            <Divider sx={{ marginBlock: '0px' }}></Divider>
-
-                                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                <Box>
-                                                    <Typography sx={{ fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{`Subtotal (${cart?.cartTotalItems} items)`}</Typography>
-                                                    <Typography sx={{ fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{`Taxes (GST)`}</Typography>
-                                                    <Typography sx={{ fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{`Discounts & Offers (-)`}</Typography>
-                                                    {/* <Typography sx={{ fontSize: '18px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>{`Total (incl. all taxes )`}</Typography> */}
-                                                </Box>
-                                                <Box>
-                                                    <Typography sx={{ fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{` ₹ ${Math.round(cart ? cart?.cartTotalPrice * 100 / 105 : 0)}`}</Typography>
-                                                    <Typography sx={{ fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{` ₹ ${Math.round(cart ? cart?.cartTotalPrice * 5 / 105 : 0)}`}</Typography>
-                                                    <Typography sx={{ textDecoration: 'none', color: 'green', fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{`₹ ${0}`}</Typography>
-                                                </Box>
-
-
-                                            </Box>
-                                            <Box>
-                                                <Divider sx={{ marginBlock: '10px' }}></Divider>
                                                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                                     <Box>
-                                                        {/* <Typography sx={{ fontSize: '18px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>{`Subtotal (${cart?.cartTotalItems} items)`}</Typography>
-                                    <Typography sx={{ fontSize: '18px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>{`Taxes ( GST )`}</Typography> */}
-                                                        <Typography sx={{ fontSize: '16px', fontWeight: '', marginInline: '10px', marginTop: '0px' }}>{`Total`}</Typography>
-                                                        {/* <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '11px', marginInline: '10px', }} >(Excluding shipping charges)</Typography> */}
-
-                                                        <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '11px', marginInline: '10px', }} >{`${step === 1 ? " (Shipping charges to be calculated on next step)" : step === 0 ? '(Excluding shipping charges)' : "Including shipping charges : ₹50"}`}</Typography>
-                                                        <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '11px', marginInline: '10px', }} >{`  ${step === 2 ? shippingMethod === 'cod' ? 'Pay On Delivery' : 'Prepaid Delivery' : ""}`}</Typography>
-
+                                                        <Typography sx={{ fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{`Subtotal (${cart?.cartTotalItems} items)`}</Typography>
+                                                        <Typography sx={{ fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{`Taxes (GST)`}</Typography>
+                                                        <Typography sx={{ fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{`Discounts & Offers (-)`}</Typography>
+                                                        {/* <Typography sx={{ fontSize: '18px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>{`Total (incl. all taxes )`}</Typography> */}
                                                     </Box>
                                                     <Box>
-                                                        {/* <Typography sx={{ fontSize: '18px', fontWeight: 'bold', marginInline: '20px', marginTop: '10px' }}>{`₹ ${Math.round(cart?.cartTotalPrice * 100 / 105)}`}</Typography>
-                                    <Typography sx={{ fontSize: '18px', fontWeight: 'bold', marginInline: '20px', marginTop: '10px' }}>{`₹ ${Math.round(cart?.cartTotalPrice * 5 / 105)}`}</Typography> */}
-                                                        <Typography sx={{ color: 'orange', fontSize: '16px', fontWeight: 'bold', marginInline: '10px', marginTop: '10px' }}>{`₹ ${cart?.cartTotalPrice + shippingCharge}`}</Typography>
+                                                        <Typography sx={{ fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{` ₹ ${Math.round(cart ? cart?.cartTotalPrice * 100 / 105 : 0)}`}</Typography>
+                                                        <Typography sx={{ fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{` ₹ ${Math.round(cart ? cart?.cartTotalPrice * 5 / 105 : 0)}`}</Typography>
+                                                        <Typography sx={{ textDecoration: 'none', color: 'green', fontSize: '15px', fontWeight: '', marginInline: '10px', marginTop: '10px' }}>{`₹ ${0}`}</Typography>
                                                     </Box>
+
+
                                                 </Box>
+                                                <Box>
+                                                    <Divider sx={{ marginBlock: '10px' }}></Divider>
+                                                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                        <Box>
+                                                            {/* <Typography sx={{ fontSize: '18px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>{`Subtotal (${cart?.cartTotalItems} items)`}</Typography>
+                                    <Typography sx={{ fontSize: '18px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>{`Taxes ( GST )`}</Typography> */}
+                                                            <Typography sx={{ fontSize: '16px', fontWeight: '', marginInline: '10px', marginTop: '0px' }}>{`Total`}</Typography>
+                                                            {/* <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '11px', marginInline: '10px', }} >(Excluding shipping charges)</Typography> */}
+
+                                                            <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '11px', marginInline: '10px', }} >{`${step === 1 ? " (Shipping charges to be calculated on next step)" : step === 0 ? '(Excluding shipping charges)' : "Including shipping charges : ₹50"}`}</Typography>
+                                                            <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '11px', marginInline: '10px', }} >{`  ${step === 2 ? shippingMethod === 'cod' ? 'Pay On Delivery' : 'Prepaid Delivery' : ""}`}</Typography>
+
+                                                        </Box>
+                                                        <Box>
+                                                            {/* <Typography sx={{ fontSize: '18px', fontWeight: 'bold', marginInline: '20px', marginTop: '10px' }}>{`₹ ${Math.round(cart?.cartTotalPrice * 100 / 105)}`}</Typography>
+                                    <Typography sx={{ fontSize: '18px', fontWeight: 'bold', marginInline: '20px', marginTop: '10px' }}>{`₹ ${Math.round(cart?.cartTotalPrice * 5 / 105)}`}</Typography> */}
+                                                            <Typography sx={{ color: 'orange', fontSize: '16px', fontWeight: 'bold', marginInline: '10px', marginTop: '10px' }}>{`₹ ${cart?.cartTotalPrice + shippingCharge}`}</Typography>
+                                                        </Box>
+                                                    </Box>
 
 
-                                            </Box>
-                                        </CardContent> : <></>
-                                    }
-                                </Card>
+                                                </Box>
+                                            </CardContent> : <></>
+                                        }
+                                    </Card>
 
 
 
-                                {/* <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '14px' }} >Shipping charges will calculated at checkout</Typography> */}
-                            </Box>
-                        </Card>
+                                    {/* <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '14px' }} >Shipping charges will calculated at checkout</Typography> */}
+                                </Box>
+                            </Card>
 
-                    }
+                        }
 
 
 
-                </Box>
+                    </Box>
+
+                </Box >
 
             </Box >
+        </Box>
 
-        </Box >
     )
 }
 

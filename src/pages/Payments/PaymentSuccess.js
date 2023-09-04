@@ -10,6 +10,7 @@ import Track from '@mui/icons-material/GpsFixedOutlined';
 import Ship from '@mui/icons-material/LocalShippingOutlined';
 import Location from '@mui/icons-material/LocationOnOutlined';
 import { getCart, getUserCart } from '../../redux/slices/cart';
+import { ErrorOutline } from '@mui/icons-material';
 
 const PaymentSuccess = () => {
 
@@ -76,8 +77,46 @@ const PaymentSuccess = () => {
     }}>
       <LinearProgress />
     </Box> : errorOrder || errorPayment ? <Box>
-      <Typography>Payment Failed</Typography>
-    </Box>
+      <Divider></Divider>
+      <Box
+        sx={{
+          display: {
+            md: 'block'
+          },
+          justifyContent: 'center',
+          paddingBlock: '30px',
+          paddingInline: '20px'
+        }}>
+        <Box
+          gap={'10px'}
+          sx={{
+            display: {
+              xs: 'flex ',
+              md: 'flex'
+            },
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingBlock: '0px'
+          }}>
+          {/* <Image duration={0} height={40} width={40} src={tick} alt='tick'></Image> */}
+          <IconButton>
+            <ErrorOutline sx={{ color: 'orange', fontSize: '26px' }} />
+          </IconButton>
+          <Typography sx={{ fontSize: '22px', fontWeight: 'bold', color: 'orange', }}>Something Went Wrong!</Typography>
+        </Box>
+        <Box sx={{
+          display: {
+            xs: 'flex',
+            md: 'flex'
+          },
+          justifyContent: 'center'
+        }}>
+          <Typography sx={{ fontSize: '15px', fontWeight: 'normal', color: 'grey' }}>Don't Worry! If the amount was deducted, we will refund it within 2-3 hours</Typography>
+
+        </Box>
+      </Box>
+
+    </Box >
       :
       <Box>
         <Divider></Divider>

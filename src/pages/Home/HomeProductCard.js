@@ -8,21 +8,33 @@ import './HomePageCard.css';
 
 const HomeProductCard = ({ product }) => {
     const navigate = useNavigate();
-    const handleDragStart = (e) => e.preventDefault();
+    const handleDragStart = (e) => {
+        console.log(e);
+        e.stopPropagation();
+        console.log("Dragging")
+    }
 
 
     return (
 
         <Card className="home-product-card">
-            <NavLink to={`/pid=${product.productId}`}>
-                <div onDragStart={handleDragStart}>
+
+            <div >
+                <NavLink
+                    onDragEnd={(e) => {
+                        console.log("event", e);
+                    }}
+                    onClick={(e) => {
+                        console.log("event", e);
+                    }} to={`/pid=${product.productId}`}>
                     <Image
                         duration={0}
                         src={product?.productImageUrl}
                         alt={product?.productName}
                     />
-                </div>
-            </NavLink>
+                </NavLink>
+            </div>
+
 
 
             <div className="product-name" style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>

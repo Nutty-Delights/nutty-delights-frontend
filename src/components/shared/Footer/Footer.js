@@ -5,9 +5,12 @@ import Image from 'mui-image'
 import logo from '../../../assets/images/logo-png.png'
 import Facebook from '@mui/icons-material/FacebookOutlined';
 import Instagram from '@mui/icons-material/Instagram';
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 
 function Footer() {
+
+    const location = useLocation().pathname;
+    console.log("location", location)
 
     const content = [
         {
@@ -19,12 +22,12 @@ function Footer() {
                     active: false
                 },
                 {
-                    title: '+91 9340104808',
+                    title: 'shop@nuttydelights.co.in',
                     link: '',
                     active: false
                 },
                 {
-                    title: 'Dal Bazar, Lashkar Gwalior, Madhya Pradesh',
+                    title: 'Gwalior, Madhya Pradesh',
                     link: '',
                     active: false
                 },

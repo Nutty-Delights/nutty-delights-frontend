@@ -45,7 +45,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'checkout',
-        element: !localStorage.getItem('jwt') ? <Checkout /> : <ErrorPage></ErrorPage>
+        element: <Checkout />
 
 
       },

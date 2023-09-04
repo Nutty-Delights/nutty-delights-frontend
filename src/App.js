@@ -4,16 +4,22 @@ import Carousel from './components/shared/Carousel/Carousel';
 import Footer from './components/shared/Footer/Footer';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-import { Fab, Toolbar } from '@mui/material'
+import { Box, Fab, Toolbar } from '@mui/material'
 import { ShoppingBagOutlined } from '@mui/icons-material';
 
 function App() {
   return (
-    <div className="App">
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      minHeight: '100vh',
+    }} className="App">
       <NavBar />
       <Toolbar sx={{ margin: '10px' }} />
 
-      <Outlet />
+      <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+        <Outlet />
+      </Box>
 
       <ToastContainer
         position="top-right"
