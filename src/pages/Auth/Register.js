@@ -445,7 +445,7 @@ const Register = ({ setAuthForm }) => {
                                         }
                                     }} variant='contained' fullWidth>Create Account</LoadingButton>
 
-                                <LoadingButton size='large' startIcon={<Image duration={0} height={25} width={25} src={Google}></Image>} sx={{ padding: '8px', color: 'black', border: '1px solid #8080806e', fontSize: '1rem' }} variant='outlined' fullWidth>Sign up with Google</LoadingButton>
+                                {/* <LoadingButton size='large' startIcon={<Image duration={0} height={25} width={25} src={Google}></Image>} sx={{ padding: '8px', color: 'black', border: '1px solid #8080806e', fontSize: '1rem' }} variant='outlined' fullWidth>Sign up with Google</LoadingButton> */}
                             </Box>
 
 

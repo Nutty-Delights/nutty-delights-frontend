@@ -1070,12 +1070,12 @@ const Checkout = () => {
                                     <Card variant='outlined' sx={{ marginBottom: '20px' }}>
                                         <CardContent>
                                             <Box gap={"25px"} display={"flex"}>
-                                                <Typography sx={{ fontWeight: 'bold', minWidth: '55px' }} >Contact</Typography>
+                                                <Typography sx={{ fontWeight: 'bold', minWidth: '60px' }} >Contact</Typography>
                                                 <Typography sx={{ fontSize: "14px" }}>{`${firstName} ${lastName}, ${user?.email}, ${mobNo}`}</Typography>
                                             </Box>
                                             <Divider sx={{ marginBlock: '10px' }}></Divider>
                                             <Box gap={"25px"} display={"flex"}>
-                                                <Typography sx={{ fontWeight: 'bold', minWidth: '55px' }}>Ship to</Typography>
+                                                <Typography sx={{ fontWeight: 'bold', minWidth: '60px' }}>Ship to</Typography>
                                                 <Typography sx={{ fontSize: "14px" }}>{shippingAddress}</Typography>
                                             </Box>
                                         </CardContent>

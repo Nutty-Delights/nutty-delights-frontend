@@ -639,7 +639,7 @@ const NavBar = (props) => {
                         <HoverMenu
                           sx={{
                             display: {
-                              xs: 'none',
+                              xs: 'inherit',
                               sm: 'inherit',
                               md: 'inherit'
                             }
@@ -665,12 +665,20 @@ const NavBar = (props) => {
                             </Badge>
 
                           </MenuItem>}
-                          <MenuItem onClick={handleAccount}>
+                          <MenuItem onClick={() => {
+                            popupStateAccount.close();
+                            handleAccount();
+
+                          }}>
                             {/* <AccountCircleOutlinedIcon /> */}
                             Account
                           </MenuItem>
                           <MenuItem
-                            onClick={handleLogout}>
+                            onClick={() => {
+                              popupStateAccount.close();
+                              handleLogout();
+
+                            }}>
                             {/* <LogoutOutlinedIcon /> */}
                             Logout
                           </MenuItem>

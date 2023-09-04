@@ -289,7 +289,7 @@ const Login = ({ setAuthForm }) => {
 
                                     }
                                 }} variant='contained' fullWidth>Sign In</LoadingButton>
-                            <LoadingButton size='large' startIcon={<Image duration={0} height={25} width={25} src={Google}></Image>} sx={{ padding: '8px', color: 'black', border: '1px solid #8080806e', fontSize: '1rem' }} variant='outlined' fullWidth>Sign in with Google</LoadingButton>
+                            {/* <LoadingButton size='large' startIcon={<Image duration={0} height={25} width={25} src={Google}></Image>} sx={{ padding: '8px', color: 'black', border: '1px solid #8080806e', fontSize: '1rem' }} variant='outlined' fullWidth>Sign in with Google</LoadingButton> */}
                         </Box>
 
 
