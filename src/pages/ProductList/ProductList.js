@@ -66,10 +66,6 @@ function ProductList() {
                                     xs: '100%',
                                     sm: '44%',
                                     md: '31%'
-                                }, height: {
-                                    xs: '300px',
-                                    sm: '360px',
-                                    md: '350px'
                                 }
                             }} key={product.productId} elevation={3}>
                                 <NavLink to={`/pid=${product.productId}`}>
@@ -77,7 +73,7 @@ function ProductList() {
                                         style={{ padding: '10px' }}
                                         duration={0}
                                         // showLoading
-                                        height={220}
+                                        height={230}
                                         fit='contain'
                                         src={product.productImageUrl}>
 
