@@ -1,4 +1,4 @@
-import { Autocomplete, Avatar, Box, Breadcrumbs, Button, Card, CardContent, Checkbox, Collapse, Divider, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel, InputAdornment, InputLabel, LinearProgress, List, ListItem, ListItemAvatar, ListItemText, MenuItem, Paper, Radio, RadioGroup, Select, TextField, Typography, } from '@mui/material'
+import { Autocomplete, Avatar, Box, Breadcrumbs, Button, Card, CardContent, Checkbox, CircularProgress, Collapse, Divider, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel, IconButton, InputAdornment, InputLabel, LinearProgress, List, ListItem, ListItemAvatar, ListItemText, MenuItem, Paper, Radio, RadioGroup, Select, TextField, Tooltip, Typography, tooltipClasses, } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { Link, NavLink } from 'react-router-dom';
@@ -19,10 +19,22 @@ import UPI from '../../assets/images/UPI.png';
 import Visa from '../../assets/images/VisaAndMasterCard.png';
 import PayMethods from '../../assets/images/pay_methods_branding.png';
 import Simpl from '../../assets/images/Simpl.png';
+import { ErrorOutline, FlashOffOutlined, LocalDining, WarningOutlined, WarningRounded } from '@mui/icons-material';
+import { styled } from '@mui/material/styles';
 
 
 
 
+const LightTooltip = styled(({ className, ...props }) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+        backgroundColor: "grey",
+        color: 'white',
+        boxShadow: theme.shadows[3],
+        fontSize: 12,
+    },
+}));
 
 const Checkout = () => {
     const [step, setStep] = useState(0);
@@ -51,6 +63,16 @@ const Checkout = () => {
     const createdOrderError = useSelector(getOrderError);
     const paymentError = useSelector(getPaymentError);
     const order = useSelector(getCreatedOrder);
+    const [isFetching, setFetching] = useState(false);
+    const [showFirstNameError, setFirstNameError] = useState(false);
+    const [showLastNameError, setLastNameError] = useState(false);
+    const [showMobileError, setMobileError] = useState(false);
+    const [showAddressError, setAddressError] = useState(false);
+    const [showPinCodeError, setPinCodeError] = useState(false);
+    const [showCityError, setCityError] = useState(false);
+    const [showStateError, setStateError] = useState(false);
+    const [showCountryError, setCountryError] = useState(false);
+    const [globalError, setGlobalError] = useState(false);
 
 
     // useEffect(() => {
@@ -78,22 +100,37 @@ const Checkout = () => {
 
     const handleFirstName = (e) => {
         setFirstName(e.target.value);
+        if (e.target.value !== '') {
+            setFirstNameError(false);
+        }
     }
     const handleLastName = (e) => {
         setLastName(e.target.value);
+        if (e.target.value !== '') {
+            setLastNameError(false);
+        }
     }
     const handleAddress = (e) => {
         setAddress(e.target.value);
+        if (e.target.value !== '') {
+            setAddressError(false);
+        }
     }
     const handleHouseNo = (e) => {
         setHouseNo(e.target.value);
     }
+    console.log(isFetching)
     const handlePincode = (e) => {
 
         if (e.target.value.length <= 6) {
             setPinCode(e.target.value);
             if (e.target.value?.length > 5) {
+
                 getPincode(e.target.value);
+                if (e.target.value?.length === 6) {
+                    setPinCodeError(false);
+                }
+                // setFetching(false);
             }
 
             else {
@@ -105,27 +142,45 @@ const Checkout = () => {
     }
     const handleCountry = (e) => {
         setCountry(e.target.value);
+        if (e.target.value !== '') {
+            setCountryError(false);
+        }
     }
     const handleCity = (e) => {
         setCity(e.target.value);
+        if (e.target.value !== '') {
+            setCityError(false);
+        }
     }
     const handleState = (e) => {
         setState(e.target.value);
+        if (e.target.value !== '') {
+            setStateError(false);
+        }
     }
     const handleMob = (e) => {
         let c = e.target.value?.[0]
         if (c === '+' || c === '0') {
 
             if (c === '+') {
+                c = '+91';
                 setMobNo(e.target.value?.split(c)[1]);
+                if (e.target.value?.length === 13) {
+                    setMobileError(false);
+                }
             }
 
             else {
                 if (c === '0') {
                     setMobNo(e.target.value?.substring(1, e.target.value?.length));
+                    if (e.target.value?.length === 11) {
+                        setMobileError(false);
+                    }
 
                 }
             }
+
+
 
 
 
@@ -134,47 +189,93 @@ const Checkout = () => {
 
         else {
             setMobNo(e.target.value);
+            if (e.target.value?.length === 10) {
+                setMobileError(false);
+            }
 
         }
+
+
     }
 
 
 
     const handleShipping = () => {
 
-        if (firstName !== '' && lastName !== "" && mobNo.length === 10 && address !== "" && pinCode.length === 6) {
-            if (user?.isEnabled) {
-                const data = {
-                    userId: localStorage.getItem("jwt"),
-                    firstName: firstName,
-                    lastName: lastName,
-                    addressLine: address,
-                    houseNo: houseNo,
-                    pinCode: pinCode,
-                    country: country,
-                    state: state,
-                    city: city,
-                    mobileNumber: mobNo
-                }
+        if (
+            firstName === '' ||
+            firstName === undefined ||
+            state === '' ||
+            state === undefined ||
+            city === '' ||
+            city === undefined ||
+            country === '' ||
+            country === undefined ||
+            lastName === '' ||
+            lastName === undefined ||
+            address === '' ||
+            address === undefined ||
+            mobNo === "" ||
+            mobNo === undefined ||
+            mobNo.length !== 10 ||
+            pinCode === '' ||
+            pinCode === undefined ||
+            pinCode.length !== 6
+        ) {
 
-                let houseNumber = houseNo ? houseNo + ", " : "";
-                let deliveryAddress = houseNumber + address + ", " + pinCode + ", " + city + ", " + state + ", " + country;
-                console.log(deliveryAddress);
-                setData(data);
-                setShippingAddress(deliveryAddress)
-                // console.log("Shipping Details", data);
-                setStep(1);
-                window.scrollTo(0, 0);
-            }
+            console.log("Error in one of the field");
+            setFirstNameError((firstName === '' || firstName === undefined));
+            setLastNameError((lastName === '' || lastName === undefined));
+            setAddressError((address === '' || address === undefined));
+            setCityError((city === '' || city === undefined));
+            setStateError((state === '' || state === undefined));
+            setCountryError((country === '' || country === undefined));
+            setMobileError((mobNo === "" || mobNo === undefined || mobNo.length !== 10))
+            setPinCodeError((pinCode === undefined || pinCode.length !== 6))
+            setGlobalError(true);
 
-            else {
-                dispatch(setOpenEmail({ open: true }));
-            }
+
+
         }
 
         else {
-            console.log("not working")
+            if (firstName !== '' && lastName !== "" && mobNo.length === 10 && address !== "" && pinCode.length === 6 && city !== "" && state !== "" && country !== "") {
+                if (user?.isEnabled) {
+                    const data = {
+                        userId: localStorage.getItem("jwt"),
+                        firstName: firstName,
+                        lastName: lastName,
+                        addressLine: address,
+                        houseNo: houseNo,
+                        pinCode: pinCode,
+                        country: country,
+                        state: state,
+                        city: city,
+                        mobileNumber: mobNo
+                    }
+
+                    let houseNumber = houseNo ? houseNo + ", " : "";
+                    let deliveryAddress = houseNumber + address + ", " + pinCode + ", " + city + ", " + state + ", " + country;
+                    console.log(deliveryAddress);
+                    setData(data);
+                    setShippingAddress(deliveryAddress)
+                    // console.log("Shipping Details", data);
+                    setStep(1);
+                    setGlobalError(false);
+
+                    window.scrollTo(0, 0);
+                }
+
+                else {
+                    dispatch(setOpenEmail({ open: true }));
+                }
+            }
+
+            else {
+                console.log("not working")
+            }
         }
+
 
     }
 
@@ -204,6 +305,7 @@ const Checkout = () => {
 
 
     const getPincode = async (pincode) => {
+        setFetching(true);
         const config = {
             headers: {
                 "Access-Control-Allow-Origin": "*",
@@ -219,10 +321,32 @@ const Checkout = () => {
             setCountry(data?.[0]?.PostOffice?.[0]?.Country || "");
             setCity(data?.[0]?.PostOffice?.[0]?.District || "");
             setState(data?.[0]?.PostOffice?.[0]?.State || "");
+            setFetching(false);
+            console.log("PinCode Data", res.data?.[0])
+            if (res.data?.[0].Status === "Error") {
+                console.log("Inside here")
+                setPinCodeError(true)
+                setCityError(true);
+                setCountryError(true);
+                setStateError(true);
+            }
+            else {
+                setPinCodeError(false)
+                setCityError(false);
+                setCountryError(false);
+                setStateError(false);
+            }
             // console.log("data_1: ", data[0].PostOffice[0].District + " " + data[0].PostOffice[0].State, data[0].PostOffice[0].Country)
 
 
-        }).catch();
+        }).catch(e => {
+            console.log(e);
+            setFetching(false);
+            setPinCodeError(true)
+            setCityError(true);
+            setCountryError(true);
+            setStateError(true);
+        });
 
 
 
@@ -405,7 +529,12 @@ const Checkout = () => {
 
                                     }
                                 </Box>
-
+                                <Box marginLeft={'15px'}>
+                                    {
+                                        globalError ? <Typography sx={{ color: 'red', fontWeight: 'bold' }}>{"Fill all the *required fields"}</Typography> :
+                                            <></>
+                                    }
+                                </Box>
                                 <Box sx={{ padding: '5px' }}>
                                     {/* <Typography sx={{ margin: '15px', fontWeight: 'bold' }}>{"Update Product"}</Typography> */}
                                     <Box sx={{ gap: '10px', }}>
@@ -418,19 +547,22 @@ const Checkout = () => {
                                                 }
                                             }}>
                                                 <TextField
+                                                    error={showFirstNameError}
                                                     onChange={handleFirstName}
                                                     value={firstName || ""}
                                                     fullWidth
                                                     size='small'
                                                     // onChange={handleUpdatedNameChange}
                                                     sx={{
-
                                                         "& .MuiInputLabel-outlined": {
                                                             color: "black",
                                                             fontSize: '14px',
 
                                                             "&.MuiInputLabel-shrink": {
                                                                 color: "orange"
+                                                            },
+                                                            "&.MuiInputLabel-root.Mui-error": {
+                                                                color: "#d32f2f !important"
                                                             },
                                                         },
                                                         "& .MuiOutlinedInput-root": {
@@ -446,6 +578,7 @@ const Checkout = () => {
                                                     label="First Name"
                                                 />
                                                 <TextField
+                                                    error={showLastNameError}
                                                     onChange={handleLastName}
                                                     value={"" || lastName}
                                                     fullWidth
@@ -460,6 +593,9 @@ const Checkout = () => {
 
                                                             "&.MuiInputLabel-shrink": {
                                                                 color: "orange"
+                                                            },
+                                                            "&.MuiInputLabel-root.Mui-error": {
+                                                                color: "#d32f2f !important"
                                                             },
                                                         },
                                                         "& .MuiOutlinedInput-root": {
@@ -477,11 +613,20 @@ const Checkout = () => {
 
                                                 />
                                                 <TextField
+                                                    // helperText={mobNo.length !== 10 && mobNo.length > 0 ? "Incorrect entry." : ""}
+                                                    // error={mobNo.length !== 10 && mobNo.length > 0 ? true : false}
+                                                    error={showMobileError}
                                                     onChange={handleMob}
                                                     InputProps={{
                                                         sx: {
                                                             flexDirection: 'row-reverse'
                                                         },
+                                                        // startAdornment: mobNo?.length !== 10 && mobNo?.length > 0 ? <InputAdornment sx={{ marginTop: '1px', }} position='end'>
+
+                                                        //     {<LightTooltip title={"Mobile number should be of 10 digits"}>
+                                                        //         <ErrorOutline sx={{ cursor: 'pointer', mr: '-8px', fontSize: '20px', color: 'red' }} />
+                                                        //     </LightTooltip>}
+                                                        // </InputAdornment> : <></>,
                                                         endAdornment:
                                                             mobNo?.length > 0 ? <InputAdornment sx={{ marginTop: '1px', ml: '12px', }} position='start'>
 
@@ -503,6 +648,9 @@ const Checkout = () => {
 
                                                             "&.MuiInputLabel-shrink": {
                                                                 color: "orange"
+                                                            },
+                                                            "&.MuiInputLabel-root.Mui-error": {
+                                                                color: "#d32f2f !important"
                                                             },
                                                         },
                                                         "& .MuiOutlinedInput-root": {
@@ -560,8 +708,9 @@ const Checkout = () => {
 
                                                 /> */}
                                                 <TextField
+                                                    error={showAddressError}
                                                     onChange={handleAddress}
-                                                    value={"" || address}
+                                                    value={address || ""}
                                                     size='small'
                                                     // onChange={handleUpdatedImageChange}
                                                     sx={{
@@ -576,6 +725,9 @@ const Checkout = () => {
 
                                                             "&.MuiInputLabel-shrink": {
                                                                 color: "orange"
+                                                            },
+                                                            "&.MuiInputLabel-root.Mui-error": {
+                                                                color: "#d32f2f !important"
                                                             },
                                                         },
                                                         "& .MuiOutlinedInput-root": {
@@ -594,6 +746,23 @@ const Checkout = () => {
 
                                                 />
                                                 <TextField
+                                                    error={showPinCodeError}
+                                                    InputProps={{
+                                                        sx: {
+                                                            // flexDirection: 'row-reverse'
+                                                        },
+                                                        endAdornment:
+                                                            isFetching ? <InputAdornment sx={{ marginTop: '1px', ml: '12px', }} position='start'>
+
+                                                                {<CircularProgress sx={{ color: 'orange', padding: '10px' }}></CircularProgress>}
+                                                            </InputAdornment> : pinCode.length !== 6 && pinCode.length > 0 ?
+                                                                <InputAdornment sx={{ marginTop: '1px', ml: '12px', }} position='start'>
+
+                                                                    {<LightTooltip title={"Pin code should be of 6 digits"}>
+                                                                        <ErrorOutline sx={{ cursor: 'pointer', mr: '-8px', fontSize: '20px', color: 'red' }} />
+                                                                    </LightTooltip>}
+                                                                </InputAdornment> : <></>
+                                                    }}
                                                     onChange={handlePincode}
                                                     value={pinCode || ""}
                                                     fullWidth
@@ -615,6 +784,9 @@ const Checkout = () => {
 
                                                             "&.MuiInputLabel-shrink": {
                                                                 color: "orange"
+                                                            },
+                                                            "&.MuiInputLabel-root.Mui-error": {
+                                                                color: "#d32f2f !important"
                                                             },
                                                         },
                                                         "& .MuiOutlinedInput-root": {
@@ -647,6 +819,7 @@ const Checkout = () => {
                                                 }
                                             }}>
                                                 <TextField
+                                                    error={showPinCodeError}
                                                     onChange={handlePincode}
                                                     value={pinCode || ""}
                                                     fullWidth
@@ -669,6 +842,9 @@ const Checkout = () => {
                                                             "&.MuiInputLabel-shrink": {
                                                                 color: "orange"
                                                             },
+                                                            "&.MuiInputLabel-root.Mui-error": {
+                                                                color: "#d32f2f !important"
+                                                            },
                                                         },
                                                         "& .MuiOutlinedInput-root": {
                                                             "&.Mui-focused fieldset": {
@@ -685,6 +861,7 @@ const Checkout = () => {
                                                 />
                                                 <TextField
                                                     // disabled
+                                                    error={showCountryError}
                                                     onChange={handleCountry}
                                                     value={country || ""}
                                                     fullWidth
@@ -701,6 +878,9 @@ const Checkout = () => {
 
                                                             "&.MuiInputLabel-shrink": {
                                                                 color: "orange"
+                                                            },
+                                                            "&.MuiInputLabel-root.Mui-error": {
+                                                                color: "#d32f2f !important"
                                                             },
                                                         },
                                                         "& .MuiOutlinedInput-root": {
@@ -725,12 +905,16 @@ const Checkout = () => {
                                             /> */}
                                                 <TextField
                                                     // disabled
+                                                    error={showStateError}
                                                     onChange={handleState}
                                                     value={state || ""}
                                                     fullWidth
                                                     size='small'
                                                     sx={{
-
+                                                        width: {
+                                                            xs: '43%',
+                                                            md: '40%'
+                                                        },
 
                                                         "& .MuiInputLabel-outlined": {
                                                             color: "black",
@@ -738,6 +922,9 @@ const Checkout = () => {
 
                                                             "&.MuiInputLabel-shrink": {
                                                                 color: "orange"
+                                                            },
+                                                            "&.MuiInputLabel-root.Mui-error": {
+                                                                color: "#d32f2f !important"
                                                             },
                                                         },
                                                         "& .MuiOutlinedInput-root": {
@@ -755,6 +942,7 @@ const Checkout = () => {
                                                 />
                                                 <TextField
                                                     // disabled={pinCode}
+                                                    error={showCityError}
                                                     onChange={handleCity}
                                                     value={city || ""}
                                                     fullWidth
@@ -762,13 +950,19 @@ const Checkout = () => {
                                                     // onChange={handleUpdatedNameChange}
                                                     sx={{
 
-
+                                                        width: {
+                                                            xs: '43%',
+                                                            md: '40%'
+                                                        },
                                                         "& .MuiInputLabel-outlined": {
                                                             color: "black",
                                                             fontSize: '14px',
 
                                                             "&.MuiInputLabel-shrink": {
                                                                 color: "orange"
+                                                            },
+                                                            "&.MuiInputLabel-root.Mui-error": {
+                                                                color: "#d32f2f !important"
                                                             },
                                                         },
                                                         "& .MuiOutlinedInput-root": {
@@ -789,48 +983,7 @@ const Checkout = () => {
 
                                             <FormGroup row sx={{ width: 'inherit', flexWrap: 'nowrap' }}>
 
-                                                {/* <TextField
-                                                    onChange={handleMob}
-                                                    InputProps={{
-                                                        sx: {
-                                                            flexDirection: 'row-reverse'
-                                                        },
-                                                        endAdornment:
-                                                            mobNo?.length > 0 ? <InputAdornment sx={{ marginTop: '1px', ml: '12px', }} position='start'>
 
-                                                                {<Typography sx={{ mr: '-15px', }}>
-                                                                    +91
-                                                                </Typography>}
-                                                            </InputAdornment> : <></>
-                                                    }}
-                                                    value={"" || mobNo}
-                                                    fullWidth
-                                                    size='small'
-                                                    // onChange={handleUpdatedNameChange}
-                                                    sx={{
-
-
-                                                        "& .MuiInputLabel-outlined": {
-                                                            color: "black",
-                                                            fontSize: '14px',
-
-                                                            "&.MuiInputLabel-shrink": {
-                                                                color: "orange"
-                                                            },
-                                                        },
-                                                        "& .MuiOutlinedInput-root": {
-                                                            "&.Mui-focused fieldset": {
-                                                                "borderColor": "orange"
-                                                            }
-                                                        },
-                                                        margin: '10px'
-                                                    }}
-                                                    // fullWidth
-                                                    required
-                                                    id="outlined-required"
-                                                    label="Mobile No."
-
-                                                /> */}
                                             </FormGroup>
                                             <FormGroup sx={{ width: 'fit-content' }}>
                                                 <FormControlLabel sx={{ marginInline: '0px' }} control={<Checkbox color='success' sx={{}} defaultChecked />} label="Save address for future use" />
@@ -840,6 +993,75 @@ const Checkout = () => {
                                     </Box>
 
                                 </Box>
+                                {
+                                    step === 0 ?
+                                        <LoadingButton
+                                            // loading={isLoading}
+                                            onClick={handleShipping}
+                                            fullWidth
+                                            variant='contained'
+                                            sx={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                fontWeight: 'bold',
+                                                background: 'orange',
+                                                color: 'white',
+                                                fontSize: '20px',
+                                                ':hover': {
+                                                    background: 'orange',
+                                                    color: 'white',
+                                                    fontSize: '20px',
+                                                }
+                                            }}>
+                                            {"Proceed"}
+                                            {/* {
+                                    user?.isEnabled ? <></> :
+                                        <Typography sx={{ marginBlock: '5px', fontWeight: 'bold', color: 'white', fontSize: '12px', marginInline: '10px', }} >{`(Verify Your email to proceed)`}</Typography>
+
+                                } */}
+                                        </LoadingButton> :
+
+                                        step === 1 ?
+                                            <LoadingButton
+                                                loading={createdOrderLoading}
+                                                // loading={isLoading}
+                                                onClick={handleCreateOrder}
+                                                fullWidth
+                                                variant='contained'
+                                                sx={{
+                                                    fontWeight: 'bold',
+                                                    background: 'orange',
+                                                    color: 'white',
+                                                    fontSize: '20px',
+                                                    ':hover': {
+                                                        background: 'orange',
+                                                        color: 'white',
+                                                        fontSize: '20px',
+                                                    }
+                                                }}>
+                                                {"Proceed"}
+                                            </LoadingButton> :
+                                            <LoadingButton
+                                                onClick={handleProceedToPayment}
+                                                loading={paymentLoading}
+                                                fullWidth
+                                                variant='contained'
+                                                sx={{
+                                                    fontWeight: 'bold',
+                                                    background: 'orange',
+                                                    color: 'white',
+                                                    fontSize: '20px',
+                                                    ':hover': {
+                                                        background: 'orange',
+                                                        color: 'white',
+                                                        fontSize: '20px',
+                                                    }
+                                                }}>
+                                                {"Proceed to Payment"}
+                                            </LoadingButton>
+
+                                }
+
                             </CardContent> :
                             step === 1 ?
                                 <CardContent sx={{ padding: '24px' }}>
@@ -856,7 +1078,74 @@ const Checkout = () => {
                                             </Box>
                                         </CardContent>
                                     </Card>
+                                    {
+                                        step === 0 ?
+                                            <LoadingButton
+                                                // loading={isLoading}
+                                                onClick={handleShipping}
+                                                fullWidth
+                                                variant='contained'
+                                                sx={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    fontWeight: 'bold',
+                                                    background: 'orange',
+                                                    color: 'white',
+                                                    fontSize: '20px',
+                                                    ':hover': {
+                                                        background: 'orange',
+                                                        color: 'white',
+                                                        fontSize: '20px',
+                                                    }
+                                                }}>
+                                                {"Proceed"}
+                                                {/* {
+                                    user?.isEnabled ? <></> :
+                                        <Typography sx={{ marginBlock: '5px', fontWeight: 'bold', color: 'white', fontSize: '12px', marginInline: '10px', }} >{`(Verify Your email to proceed)`}</Typography>
 
+                                } */}
+                                            </LoadingButton> :
+
+                                            step === 1 ?
+                                                <LoadingButton
+                                                    loading={createdOrderLoading}
+                                                    // loading={isLoading}
+                                                    onClick={handleCreateOrder}
+                                                    fullWidth
+                                                    variant='contained'
+                                                    sx={{
+                                                        fontWeight: 'bold',
+                                                        background: 'orange',
+                                                        color: 'white',
+                                                        fontSize: '20px',
+                                                        ':hover': {
+                                                            background: 'orange',
+                                                            color: 'white',
+                                                            fontSize: '20px',
+                                                        }
+                                                    }}>
+                                                    {"Proceed"}
+                                                </LoadingButton> :
+                                                <LoadingButton
+                                                    onClick={handleProceedToPayment}
+                                                    loading={paymentLoading}
+                                                    fullWidth
+                                                    variant='contained'
+                                                    sx={{
+                                                        fontWeight: 'bold',
+                                                        background: 'orange',
+                                                        color: 'white',
+                                                        fontSize: '20px',
+                                                        ':hover': {
+                                                            background: 'orange',
+                                                            color: 'white',
+                                                            fontSize: '20px',
+                                                        }
+                                                    }}>
+                                                    {"Proceed to Payment"}
+                                                </LoadingButton>
+
+                                    }
                                 </CardContent> :
 
                                 <CardContent>
@@ -955,6 +1244,74 @@ const Checkout = () => {
                                                 </FormControl>
                                             </form>
                                         </CardContent>
+                                        {
+                                            step === 0 ?
+                                                <LoadingButton
+                                                    // loading={isLoading}
+                                                    onClick={handleShipping}
+                                                    fullWidth
+                                                    variant='contained'
+                                                    sx={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        fontWeight: 'bold',
+                                                        background: 'orange',
+                                                        color: 'white',
+                                                        fontSize: '20px',
+                                                        ':hover': {
+                                                            background: 'orange',
+                                                            color: 'white',
+                                                            fontSize: '20px',
+                                                        }
+                                                    }}>
+                                                    {"Proceed"}
+                                                    {/* {
+                                    user?.isEnabled ? <></> :
+                                        <Typography sx={{ marginBlock: '5px', fontWeight: 'bold', color: 'white', fontSize: '12px', marginInline: '10px', }} >{`(Verify Your email to proceed)`}</Typography>
+
+                                } */}
+                                                </LoadingButton> :
+
+                                                step === 1 ?
+                                                    <LoadingButton
+                                                        loading={createdOrderLoading}
+                                                        // loading={isLoading}
+                                                        onClick={handleCreateOrder}
+                                                        fullWidth
+                                                        variant='contained'
+                                                        sx={{
+                                                            fontWeight: 'bold',
+                                                            background: 'orange',
+                                                            color: 'white',
+                                                            fontSize: '20px',
+                                                            ':hover': {
+                                                                background: 'orange',
+                                                                color: 'white',
+                                                                fontSize: '20px',
+                                                            }
+                                                        }}>
+                                                        {"Proceed"}
+                                                    </LoadingButton> :
+                                                    <LoadingButton
+                                                        onClick={handleProceedToPayment}
+                                                        loading={paymentLoading}
+                                                        fullWidth
+                                                        variant='contained'
+                                                        sx={{
+                                                            fontWeight: 'bold',
+                                                            background: 'orange',
+                                                            color: 'white',
+                                                            fontSize: '20px',
+                                                            ':hover': {
+                                                                background: 'orange',
+                                                                color: 'white',
+                                                                fontSize: '20px',
+                                                            }
+                                                        }}>
+                                                        {"Proceed to Payment"}
+                                                    </LoadingButton>
+
+                                        }
                                     </Card>
                                 </CardContent>
                         }
@@ -1062,6 +1419,8 @@ const Checkout = () => {
                         // isLoading ?
                         //     <LinearProgress /> :
                         <Card sx={{ marginBottom: "10px" }} variant='outlined'>
+                            <Typography sx={{ fontSize: '22px', fontWeight: '', margin: '15px', }}>Cart Summary</Typography>
+                            <Divider sx={{ marginBlock: '10px' }}></Divider>
                             <Collapse in={true} timeout="auto" unmountOnExit>
                                 {
                                     cart ? <List sx={{
@@ -1069,7 +1428,7 @@ const Checkout = () => {
                                         height: {
                                             xs: cart?.cartItems?.length > 2 ? ' 30vh' : 'fit-content !important',
                                             sm: cart?.cartItems?.length > 2 ? ' 30vh' : 'fit-content !important',
-                                            md: cart?.cartItems?.length > 4 ? ' 35vh' : 'fit-content !important',
+                                            md: cart?.cartItems?.length > 4 ? ' 40vh' : 'fit-content !important',
                                         },
                                         overflow: 'auto'
                                     }}>
@@ -1251,74 +1610,7 @@ const Checkout = () => {
 
                     }
 
-                    {
-                        step === 0 ?
-                            <LoadingButton
-                                // loading={isLoading}
-                                onClick={handleShipping}
-                                fullWidth
-                                variant='contained'
-                                sx={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    fontWeight: 'bold',
-                                    background: 'orange',
-                                    color: 'white',
-                                    fontSize: '20px',
-                                    ':hover': {
-                                        background: 'orange',
-                                        color: 'white',
-                                        fontSize: '20px',
-                                    }
-                                }}>
-                                {"Proceed"}
-                                {/* {
-                                    user?.isEnabled ? <></> :
-                                        <Typography sx={{ marginBlock: '5px', fontWeight: 'bold', color: 'white', fontSize: '12px', marginInline: '10px', }} >{`(Verify Your email to proceed)`}</Typography>
 
-                                } */}
-                            </LoadingButton> :
-
-                            step === 1 ?
-                                <LoadingButton
-                                    loading={createdOrderLoading}
-                                    // loading={isLoading}
-                                    onClick={handleCreateOrder}
-                                    fullWidth
-                                    variant='contained'
-                                    sx={{
-                                        fontWeight: 'bold',
-                                        background: 'orange',
-                                        color: 'white',
-                                        fontSize: '20px',
-                                        ':hover': {
-                                            background: 'orange',
-                                            color: 'white',
-                                            fontSize: '20px',
-                                        }
-                                    }}>
-                                    {"Proceed"}
-                                </LoadingButton> :
-                                <LoadingButton
-                                    onClick={handleProceedToPayment}
-                                    loading={paymentLoading}
-                                    fullWidth
-                                    variant='contained'
-                                    sx={{
-                                        fontWeight: 'bold',
-                                        background: 'orange',
-                                        color: 'white',
-                                        fontSize: '20px',
-                                        ':hover': {
-                                            background: 'orange',
-                                            color: 'white',
-                                            fontSize: '20px',
-                                        }
-                                    }}>
-                                    {"Proceed to Payment"}
-                                </LoadingButton>
-
-                    }
 
                 </Box>
 

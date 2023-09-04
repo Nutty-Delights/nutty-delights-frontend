@@ -380,7 +380,7 @@ const NavBar = (props) => {
                     }
 
                     {
-                      location === '/cart' || location === '/checkout' || !localStorage.getItem('jwt') || cart?.cartTotalItems === 0 ? <></> :
+                      cart === null || location === '/cart' || location === '/checkout' || !localStorage.getItem('jwt') || cart?.cartTotalItems === 0 ? <></> :
                         <HoverMenu
                           sx={{
                             display: {
