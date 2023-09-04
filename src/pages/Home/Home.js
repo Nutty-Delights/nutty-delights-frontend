@@ -177,7 +177,7 @@ const Home = () => {
         }
     }, [])
 
-    const images = [banner3, banner, banner4];
+    const images = [banner3, banner4];
 
     const items = products?.slice(0, 10).map((item) => (
         <div className="">
