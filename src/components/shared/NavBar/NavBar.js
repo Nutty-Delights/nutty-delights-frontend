@@ -29,8 +29,8 @@ import useScrollTrigger from '@mui/material/useScrollTrigger';
 // import { ShopOutlined, ShoppingBasketOutlined } from '@mui/icons-material';
 import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
 import ShoppingBasketOutlined from '@mui/icons-material/ShoppingBasketOutlined';
-import { clearCart, getCart, getUserCart } from '../../../redux/slices/cart';
-import { CardGiftcardSharp, Person2Outlined, Person2Rounded, PersonOutline, PersonOutlineOutlined } from '@mui/icons-material';
+import { clearCart, getCart, getUserCart, removeItemFromCart } from '../../../redux/slices/cart';
+import { CardGiftcardSharp, CheckOutlined, EditOutlined, Person2Outlined, Person2Rounded, PersonOutline, PersonOutlineOutlined, ShoppingCartCheckoutOutlined } from '@mui/icons-material';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import HoverMenu from 'material-ui-popup-state/HoverMenu'
 
@@ -261,6 +261,21 @@ const NavBar = (props) => {
 
 
   }, [cart])
+
+  const handleRemoveItem = (e, cartItemId, i) => {
+    // setIsRemoved(i);
+    e.preventDefault();
+    const token = localStorage.getItem('jwt');
+    // var variant = product?.productVariants?.[selectedVariant];
+    // const productId = product?.productId;
+
+    const data = {
+      cartItemId: cartItemId
+    }
+
+    dispatch(removeItemFromCart({ token, data }));
+    // dispatch(getCart(localStorage.getItem('jwt')));
+  }
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{}}>
       {/* <Image style={{ padding: '10px' }} duration={0} src={logo} fit='cover' height='60px' width='130px' /> */}
@@ -346,7 +361,11 @@ const NavBar = (props) => {
 
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
 
-                  <Button disableRipple disableElevation disableTouchRipple sx={{ color: 'black' }} {...bindHover(popupState)}>
+                  <Button disableRipple disableElevation disableTouchRipple sx={{
+                    color: 'black', ':hover': {
+                      background: 'transparent'
+                    }
+                  }} {...bindHover(popupState)}>
                     <Badge
 
                       // variant='dot'
@@ -370,231 +389,279 @@ const NavBar = (props) => {
                       </Typography>
 
                     </NavLink> :
-                      <NavLink onClick={handleOpenDialog} to={''} style={{ color: 'black', textDecoration: "none", }}>
+                      <div onClick={handleOpenDialog} to={''} style={{ color: 'black', textDecoration: "none", }}>
 
                         <Typography sx={{ fontWeight: 'bold', ml: '4px' }}>
                           {"Cart"}
                         </Typography>
 
-                      </NavLink>
+                      </div>
                     }
 
                     {
-                      cart === null || location === '/cart' || location === '/checkout' || !localStorage.getItem('jwt') || cart?.cartTotalItems === 0 ? <></> :
-                        <HoverMenu
-                          sx={{
-                            display: {
-                              xs: 'none',
-                              sm: 'inherit',
-                              md: 'inherit'
-                            }
+                      !localStorage.getItem('jwt') ? <HoverMenu
+                        sx={{
+                          display: {
+                            xs: 'none',
+                            sm: 'inherit',
+                            md: 'inherit'
+                          }
+                        }}
+                        {...bindMenu(popupState)}
+                        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+                      >
+                        <MenuItem
+                          onClick={() => {
+                            handleOpenDialog();
+                            popupState.close();
                           }}
-                          {...bindMenu(popupState)}
-                          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-                          transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-                        >
-                          <MenuItem
-                            onClick={popupState.close}
-                            disableRipple
-                            disableGutters
+                          disableRipple
+                          disableGutters
 
+                          sx={{
+                            ":hover": {
+                              background: 'white',
+                            },
+                            // padding: '8px !important',
+                            padding: '0px',
+                            fontSize: '11px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'start',
+                            alignItems: 'start'
+                          }} >
+                          <Typography sx={{ fontSize: '13px', fontWeight: 'bold', color: 'orange', marginInline: '8px' }}>Sign in to Continue</Typography>
+                        </MenuItem>
+                      </HoverMenu> :
+                        cart === null || location === '/cart' || location === '/checkout' || cart?.cartTotalItems === 0
+                          ? <></> :
+                          <HoverMenu
                             sx={{
-                              ":hover": {
-                                background: 'white',
-                              },
-                              padding: '8px !important',
-                              fontSize: '14px',
-                              display: 'flex',
-                              flexDirection: 'column',
-                              justifyContent: 'start',
-                              alignItems: 'start'
-                            }} >
-                            <Card variant='outlined' sx={{
-                              width: {
-                                xs: '100% ',
-                                sm: '100%',
-                                md: '100%',
-                              }, marginBottom: '20px'
-                            }} >
-                              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography sx={{ fontSize: '24px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>Shopping Bag</Typography>
-                                <Typography sx={{ fontSize: '24px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>{`${cart?.cartTotalItems} Item${cart?.cartTotalItems > 1 ? 's' : ''}`}</Typography>
-                              </Box>
-                              <List sx={{
-                                padding: '0px',
-                                height: {
-                                  xs: cart?.cartItems?.length > 3 ? ' 55vh' : 'fit-content !important',
-                                  sm: cart?.cartItems?.length > 3 ? ' 55vh' : 'fit-content !important',
-                                  md: cart?.cartItems?.length > 3 ? ' 55vh' : 'fit-content !important',
+                              display: {
+                                xs: 'none',
+                                sm: 'inherit',
+                                md: 'inherit'
+                              }
+                            }}
+                            {...bindMenu(popupState)}
+                            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                            transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+                          >
+                            <MenuItem
+                              // onClick={popupState.close}
+                              disableRipple
+                              disableGutters
+
+                              sx={{
+                                ":hover": {
+                                  background: 'white',
                                 },
-                                overflowY: 'auto',
-                                overflowX: 'hidden',
-                              }}>
+                                paddingInline: '12px !important',
+                                fontSize: '14px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'start',
+                                alignItems: 'start'
+                              }} >
+                              <Card variant='outlined' sx={{
+                                width: {
+                                  xs: '100% ',
+                                  sm: '100%',
+                                  md: '100%',
+                                }, marginBottom: '20px'
+                              }} >
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                  <Typography sx={{ fontSize: '24px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>Shopping Bag</Typography>
+                                  <Typography sx={{ fontSize: '24px', fontWeight: '', marginInline: '20px', marginTop: '10px' }}>{`${cart?.cartTotalItems} Item${cart?.cartTotalItems > 1 ? 's' : ''}`}</Typography>
+                                </Box>
+                                <List sx={{
+                                  padding: '0px',
+                                  height: {
+                                    xs: cart?.cartItems?.length > 3 ? ' 55vh' : 'fit-content !important',
+                                    sm: cart?.cartItems?.length > 3 ? ' 55vh' : 'fit-content !important',
+                                    md: cart?.cartItems?.length > 3 ? ' 55vh' : 'fit-content !important',
+                                  },
+                                  overflowY: 'auto',
+                                  overflowX: 'hidden',
+                                }}>
 
 
 
 
-                                {
-                                  cart ? cart?.cartItems?.map((item, i) => {
-                                    return <Box>
-                                      {<Box sx={{
-                                        alignItems: 'center',
-                                        display: {
-                                          xs: 'block',
-                                          sm: 'block',
-                                          md: 'flex'
-                                        }
-                                      }}>
-                                        {<ListItem key={item?.productId} disablePadding >
-                                          {/* <Box height={'50px'} width={5} sx={{ background: item?.productVariants[0]?.quantity > 0 ? "green" : 'red' }}></Box> */}
-                                          <ListItemAvatar sx={{ padding: '10px', minWidth: '0px !important' }}>
-                                            <NavLink style={{ textDecoration: 'none' }} to={`/pid=${item?.cartItemProduct?.productId}`}>
-                                              <Avatar sx={{
-                                                height: {
-                                                  xs: '60px',
-                                                  sm: '100px',
-                                                  md: '120px'
-                                                }, width: {
-                                                  xs: '60px',
-                                                  sm: '100px',
-                                                  md: '120px'
-                                                }
-                                              }} alt="Remy Sharp" src={item?.cartItemProduct?.productImageUrl} />
-                                              <Box sx={{
-                                                display: {
-                                                  xs: 'flex',
-                                                  sm: 'flex',
-                                                  md: 'none',
-                                                  lg: 'none'
-                                                }, alignItems: 'center'
-                                              }}>
-                                                <Box sx={{ marginInline: '15px', border: '0px solid #8080806e', borderRadius: '5px', display: 'flex', alignItems: 'center' }}>
+                                  {
+                                    cart ? cart?.cartItems?.map((item, i) => {
+                                      return <Box>
+                                        {<Box sx={{
+                                          alignItems: 'center',
+                                          display: {
+                                            xs: 'block',
+                                            sm: 'block',
+                                            md: 'flex'
+                                          }
+                                        }}>
+                                          {<ListItem key={item?.productId} disablePadding >
+                                            {/* <Box height={'50px'} width={5} sx={{ background: item?.productVariants[0]?.quantity > 0 ? "green" : 'red' }}></Box> */}
+                                            <ListItemAvatar sx={{ padding: '10px', minWidth: '0px !important' }}>
+                                              <NavLink style={{ textDecoration: 'none' }} to={`/pid=${item?.cartItemProduct?.productId}`}>
+                                                <Avatar sx={{
+                                                  height: {
+                                                    xs: '60px',
+                                                    sm: '100px',
+                                                    md: '120px'
+                                                  }, width: {
+                                                    xs: '60px',
+                                                    sm: '100px',
+                                                    md: '120px'
+                                                  }
+                                                }} alt="Remy Sharp" src={item?.cartItemProduct?.productImageUrl} />
+                                                <Box sx={{
+                                                  display: {
+                                                    xs: 'flex',
+                                                    sm: 'flex',
+                                                    md: 'none',
+                                                    lg: 'none'
+                                                  }, alignItems: 'center'
+                                                }}>
+                                                  <Box sx={{ marginInline: '15px', border: '0px solid #8080806e', borderRadius: '5px', display: 'flex', alignItems: 'center' }}>
 
-                                                  <Box sx={{ padding: '8px', display: 'flex', alignItems: 'center' }}>
-                                                    <Typography sx={{ fontWeight: '', color: '#000000bf ', fontSize: '17px' }} >{`₹ ${item?.cartItemPrice}`}</Typography>
+                                                    <Box sx={{ padding: '8px', display: 'flex', alignItems: 'center' }}>
+                                                      <Typography sx={{ fontWeight: '', color: '#000000bf ', fontSize: '17px' }} >{`₹ ${item?.cartItemPrice}`}</Typography>
 
-                                                    {/* <Typography sx={{ fontWeight: '', color: '#000000bf ', fontSize: '12px' }} >{`inlusive all taxes`}</Typography> */}
+                                                      {/* <Typography sx={{ fontWeight: '', color: '#000000bf ', fontSize: '12px' }} >{`inlusive all taxes`}</Typography> */}
+                                                    </Box>
+
                                                   </Box>
 
+
+
                                                 </Box>
+                                              </NavLink>
+                                            </ListItemAvatar>
+                                            <ListItemText
+                                              primaryTypographyProps={{
+                                                style: {
+                                                  fontWeight: 'bold',
+                                                  fontSize: '15px',
+                                                  color: '#000000d1'
+                                                }
+                                              }}
+                                              secondaryTypographyProps={{
+                                                style: {
+                                                  fontWeight: 'bold',
+                                                  // fontSize: '17px',
+                                                  color: '#000000d1'
+                                                }
+                                              }}
+                                              sx={{}}
+                                              primary={`${item?.cartItemProduct?.productName}`}
+                                              secondary={<Box>
+                                                <Typography sx={{
+                                                  marginBlock: '5px',
+                                                  fontWeight: 'bold',
+                                                  fontSize: '13px',
+                                                  color: '#000000d1'
+                                                }}>{`${item?.cartItemVariant?.weight}   |   ${item?.cartItemQuantity < 10 ? `0${item?.cartItemQuantity}` : item?.cartItemQuantity} x ₹ ${item?.cartItemVariant?.sellingPrice}  `}</Typography>
 
 
+                                                <Button
+                                                  onClick={(e) => { handleRemoveItem(e, item?.cartItemId, i) }}
+                                                  sx={{
+                                                    textDecoration: 'underline',
+                                                    color: 'orange',
+                                                    paddingLeft: '5px !important   ',
+                                                    padding: '0px',
+                                                    fontSize: '11px'
+                                                  }} >Remove item</Button>
+                                              </Box>}
+
+                                            />
+
+
+                                          </ListItem>}
+
+                                          <Box sx={{
+                                            display: {
+                                              xs: 'none',
+                                              sm: 'none',
+                                              md: 'flex',
+                                              lg: 'block'
+                                            }, alignItems: 'center'
+                                          }}>
+                                            <Box sx={{ marginInline: '15px', border: '0px solid #8080806e', borderRadius: '5px', display: 'flex', alignItems: 'center' }}>
+
+                                              <Box sx={{ minWidth: '100px', padding: '8px', display: 'flex', alignItems: 'center' }}>
+                                                <Typography sx={{ fontWeight: 'bold', color: '#000000a3', fontSize: '17px' }} >{`₹ ${item?.cartItemPrice}`}</Typography>
 
                                               </Box>
-                                            </NavLink>
-                                          </ListItemAvatar>
-                                          <ListItemText
-                                            primaryTypographyProps={{
-                                              style: {
-                                                fontWeight: 'bold',
-                                                fontSize: '15px',
-                                                color: '#000000d1'
-                                              }
-                                            }}
-                                            secondaryTypographyProps={{
-                                              style: {
-                                                fontWeight: 'bold',
-                                                // fontSize: '17px',
-                                                color: '#000000d1'
-                                              }
-                                            }}
-                                            sx={{}}
-                                            primary={`${item?.cartItemProduct?.productName}`}
-                                            secondary={<Box>
-                                              <Typography sx={{
-                                                marginBlock: '5px',
-                                                fontWeight: 'bold',
-                                                fontSize: '13px',
-                                                color: '#000000d1'
-                                              }}>{`${item?.cartItemVariant?.weight}   |   ${item?.cartItemQuantity < 10 ? `0${item?.cartItemQuantity}` : item?.cartItemQuantity} x ₹ ${item?.cartItemVariant?.sellingPrice}  `}</Typography>
-
-
-
-                                            </Box>}
-
-                                          />
-
-
-                                        </ListItem>}
-
-                                        <Box sx={{
-                                          display: {
-                                            xs: 'none',
-                                            sm: 'none',
-                                            md: 'flex',
-                                            lg: 'block'
-                                          }, alignItems: 'center'
-                                        }}>
-                                          <Box sx={{ marginInline: '15px', border: '0px solid #8080806e', borderRadius: '5px', display: 'flex', alignItems: 'center' }}>
-
-                                            <Box sx={{ minWidth: '100px', padding: '8px', display: 'flex', alignItems: 'center' }}>
-                                              <Typography sx={{ fontWeight: 'bold', color: '#000000a3', fontSize: '17px' }} >{`₹ ${item?.cartItemPrice}`}</Typography>
 
                                             </Box>
+
+
 
                                           </Box>
 
 
 
-                                        </Box>
+                                        </Box>}
+                                        {i === cart?.cartItems?.length - 1 ? <></> : <Divider></Divider>}
+                                      </Box>
+                                    }) : <LinearProgress></LinearProgress>
+                                  }
+                                </List >
 
 
+                              </Card>
+                              <Box display={'flex'} justifyContent={'space-between'}>
 
-                                      </Box>}
-                                      {i === cart?.cartItems?.length - 1 ? <></> : <Divider></Divider>}
-                                    </Box>
-                                  }) : <LinearProgress></LinearProgress>
-                                }
-                              </List >
-
-
-                            </Card>
-                            <Box display={'flex'} justifyContent={'space-between'}>
-
-                              <Box display={'flex'} alignItems={'center'}>
                                 <Box display={'flex'} alignItems={'center'}>
-                                  <Typography sx={{ fontSize: '17px', fontWeight: 'bold', marginInline: '10px', marginTop: '0px' }}>{`Total`}</Typography>
-                                  <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '13px', marginInline: '0px', }} >(Excluding shipping charges) :</Typography>
+                                  <Box display={'flex'} alignItems={'center'}>
+                                    <Typography sx={{ fontSize: '17px', fontWeight: 'bold', marginInline: '10px', marginTop: '0px' }}>{`Total`}</Typography>
+                                    <Typography sx={{ fontWeight: '', color: 'grey', fontSize: '13px', marginInline: '0px', }} >(Excluding shipping charges) :</Typography>
+                                  </Box>
+                                  <Typography sx={{ color: 'orange', fontSize: '17px', fontWeight: 'bold', marginInline: '10px', marginTop: '0px' }}>{`₹ ${cart ? cart?.cartTotalPrice : 0}`}</Typography>
                                 </Box>
-                                <Typography sx={{ color: 'orange', fontSize: '17px', fontWeight: 'bold', marginInline: '10px', marginTop: '0px' }}>{`₹ ${cart ? cart?.cartTotalPrice : 0}`}</Typography>
+                                <Box display={'flex'} marginLeft={'15px'}>
+                                  <Button
+                                    endIcon={<EditOutlined />}
+                                    onClick={() => {
+                                      popupState.close();
+                                      navigate('/cart');
+                                      popupState.close();
+
+                                    }}
+                                    disableElevation
+                                    variant='contained' sx={{
+                                      height: '35px',
+                                      fontWeight: 'bold',
+                                      background: 'orange', color: 'white', paddingInline: '10px', paddingBlock: '5px', marginInline: '8px', ':hover': {
+                                        background: 'orange',
+                                      }
+                                    }}>
+                                    Edit Cart
+                                  </Button>
+                                  <Button
+                                    endIcon={<ShoppingCartCheckoutOutlined />}
+                                    onClick={() => {
+                                      popupState.close();
+                                      navigate('/checkout');
+                                      popupState.close();
+
+                                    }}
+                                    disableElevation variant='contained' sx={{
+                                      fontWeight: 'bold',
+                                      height: '35px',
+                                      background: 'orange', color: 'white', padding: '10px', marginInline: '8px', ':hover': {
+                                        background: 'orange',
+                                      }
+                                    }}>
+                                    Checkout
+                                  </Button>
+                                </Box>
+
                               </Box>
-                              <Box display={'flex'} marginLeft={'15px'}>
-                                <Button
-                                  onClick={() => {
-                                    popupState.close();
-                                    navigate('/cart');
-                                    popupState.close();
-
-                                  }}
-                                  disableElevation
-                                  variant='contained' sx={{
-                                    fontWeight: 'bold',
-                                    background: 'orange', color: 'white', paddingInline: '10px', paddingBlock: '5px', marginInline: '8px', ':hover': {
-                                      background: 'orange',
-                                    }
-                                  }}>
-                                  Edit Cart
-                                </Button>
-                                <Button
-                                  onClick={() => {
-                                    popupState.close();
-                                    navigate('/checkout');
-                                    popupState.close();
-
-                                  }}
-                                  disableElevation variant='contained' sx={{
-                                    fontWeight: 'bold',
-                                    background: 'orange', color: 'white', padding: '10px', marginInline: '8px', ':hover': {
-                                      background: 'orange',
-                                    }
-                                  }}>
-                                  Checkout
-                                </Button>
-                              </Box>
-
-                            </Box>
-                          </MenuItem>
-                        </HoverMenu>
+                            </MenuItem>
+                          </HoverMenu>
                     }
                   </Button>
 
