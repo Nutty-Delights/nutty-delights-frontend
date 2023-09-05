@@ -1123,8 +1123,22 @@ const Checkout = () => {
                                             }} alignItems={{
                                                 md: 'center'
                                             }} >
-                                                <LockOutlined sx={{ color: 'grey', fontSize: '18px' }} />
-                                                <Typography sx={{ marginRight: '10px', marginLeft: '5px', fontSize: '14px', fontWeight: 'bold', color: 'grey', marginBottom: { xs: '10px', md: '0px' } }}>Secured By</Typography>
+                                                <Box sx={{
+                                                    marginBottom: {
+                                                        xs: '10px',
+                                                        sm: '10px',
+                                                        md: '0px'
+                                                    },
+                                                    alignItems: 'center',
+                                                    display: {
+                                                        xs: 'flex',
+                                                        sm: 'flex',
+                                                        md: 'flex'
+                                                    }
+                                                }}>
+                                                    <LockOutlined sx={{ color: 'grey', fontSize: '18px' }} />
+                                                    <Typography sx={{ marginRight: '10px', marginLeft: '5px', fontSize: '14px', fontWeight: 'bold', color: 'grey', marginBottom: { xs: '10px', md: '0px' } }}>Secured By</Typography>
+                                                </Box>
 
                                                 <img referrerpolicy="origin" src={Razorpay} style={{ height: '23px', width: '118px' }} alt="Razorpay | Payment Gateway | Neobank"></img>
                                             </Box>
