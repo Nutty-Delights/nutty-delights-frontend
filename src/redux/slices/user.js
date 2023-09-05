@@ -10,7 +10,8 @@ const initialState = {
     // user: {},
     isLoading: false,
     isError: false,
-    openEmailDialog: false
+    openEmailDialog: false,
+    loginDialog: false
 };
 const userUrl = URLs.users;
 
@@ -95,6 +96,18 @@ const userSlice = createSlice({
             let newState = {
                 ...state,
                 openEmailDialog: open
+            }
+            console.log(newState)
+            return newState;
+
+        },
+
+        openLoginDialog(state, action) {
+            console.log(action.payload);
+            const { open } = action.payload;
+            let newState = {
+                ...state,
+                loginDialog: open
             }
             console.log(newState)
             return newState;
@@ -395,7 +408,8 @@ export const getUserLoading = (state) => state.user.isLoading;
 export const getUserError = (state) => state.user.isError;
 export const getAuthOtp = (state) => state.user.otp;
 export const getOpenEmail = (state) => state.user.openEmailDialog;
-export const { setOpenEmail } = userSlice.actions;
+export const getOpenLoginDialog = (state) => state.user.loginDialog;
+export const { setOpenEmail, openLoginDialog } = userSlice.actions;
 
 
 export default userSlice.reducer;;

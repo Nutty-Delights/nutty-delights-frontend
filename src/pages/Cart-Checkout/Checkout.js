@@ -1,7 +1,7 @@
 import { Autocomplete, Avatar, Box, Breadcrumbs, Button, Card, CardContent, Checkbox, CircularProgress, Collapse, Divider, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel, IconButton, InputAdornment, InputLabel, LinearProgress, List, ListItem, ListItemAvatar, ListItemText, MenuItem, Paper, Radio, RadioGroup, Select, TextField, Tooltip, Typography, tooltipClasses, } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCart, getCartLoading, getUserCart } from '../../redux/slices/cart';
 import { getUser, getUserProfile, setOpenEmail } from '../../redux/slices/user';
@@ -12,7 +12,7 @@ import axios from 'axios';
 import { Country, State, City } from 'country-state-city';
 import { createOrder, getCreatedOrder, getOrderError, getOrderLoading } from '../../redux/slices/order';
 import { LoadingButton } from '@mui/lab';
-import { createPaymentLink, getPaymentError, getPaymentLoading } from '../../redux/slices/payment';
+import { PayOnDeliveryPayment, changePaymentStatus, createPaymentLink, getPaymentError, getPaymentLoading, getPaymentStatus, getPodError, getPodLoading } from '../../redux/slices/payment';
 import Image from 'mui-image';
 import Razorpay from '../../assets/images/razorpay.svg';
 import UPI from '../../assets/images/UPI.png';
@@ -60,6 +60,9 @@ const Checkout = () => {
     const [data, setData] = useState();
     const createdOrderLoading = useSelector(getOrderLoading);
     const paymentLoading = useSelector(getPaymentLoading);
+    const podLoading = useSelector(getPodLoading);
+    const payment = useSelector(getPaymentStatus);
+    const podError = useSelector(getPodError);
     const createdOrderError = useSelector(getOrderError);
     const paymentError = useSelector(getPaymentError);
     const order = useSelector(getCreatedOrder);
@@ -73,11 +76,18 @@ const Checkout = () => {
     const [showStateError, setStateError] = useState(false);
     const [showCountryError, setCountryError] = useState(false);
     const [globalError, setGlobalError] = useState(false);
+    const navigate = useNavigate();
+    console.log("payment", payment);
 
 
-    // useEffect(() => {
-    //     setStep(0);
-    // }, [])
+    useEffect(() => {
+
+        if (payment === true) {
+            dispatch(changePaymentStatus({ status: false }));
+            navigate(`/payment/pod/order/${order?.id}`);
+        }
+
+    }, [payment])
 
     useEffect(() => {
         if (order?.orderId === null)
@@ -298,6 +308,20 @@ const Checkout = () => {
 
         if (paymentLoading)
             setStep(0);
+
+
+    }
+    const handlePayOnDelivery = () => {
+        //creating the order
+        // handleCreateOrder();
+
+        dispatch(PayOnDeliveryPayment(order?.id));
+
+        if (podLoading)
+            setStep(0);
+
+
+
 
 
     }
@@ -1201,10 +1225,10 @@ const Checkout = () => {
 
                                             }
                                         </Card>
-                                        <LoadingButton
+                                        {shippingMethod === "cod" ? <LoadingButton
                                             disableElevation={false}
-                                            onClick={handleProceedToPayment}
-                                            loading={paymentLoading}
+                                            onClick={handlePayOnDelivery}
+                                            loading={podLoading}
                                             fullWidth
                                             variant='contained'
                                             sx={{
@@ -1218,9 +1242,30 @@ const Checkout = () => {
                                                     fontSize: '18px',
                                                 }
                                             }}>
-                                            {paymentLoading ? 'Redirecting...' : "Proceed to Payment"}
+                                            {paymentLoading ? 'Processing...' : "Place Order"}
 
-                                        </LoadingButton>
+                                        </LoadingButton> :
+                                            <LoadingButton
+                                                disableElevation={false}
+                                                onClick={handleProceedToPayment}
+                                                loading={paymentLoading}
+                                                fullWidth
+                                                variant='contained'
+                                                sx={{
+                                                    fontWeight: 'bold',
+                                                    background: 'orange',
+                                                    color: 'white',
+                                                    fontSize: '18px',
+                                                    ':hover': {
+                                                        background: 'orange',
+                                                        color: 'white',
+                                                        fontSize: '18px',
+                                                    }
+                                                }}>
+                                                {paymentLoading ? 'Redirecting...' : "Proceed to Payment"}
+
+                                            </LoadingButton>
+                                        }
                                     </CardContent>
                             }
                         </Card>

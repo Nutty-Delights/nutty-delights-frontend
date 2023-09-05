@@ -25,6 +25,7 @@ import PaymentSuccess from './pages/Payments/PaymentSuccess';
 import Gifts from './pages/Gifts';
 import Order from './pages/UserOrder/Order';
 import ErrorPage from './pages/ErrorPage';
+import PayOnDeliveryOrder from './pages/Payments/PayOnDeliveryOrder';
 
 
 
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
       {
         path: 'payment/:orderId',
         element: <PaymentSuccess />
+      },
+      {
+        path: 'payment/pod/order/:orderId',
+        element: <PayOnDeliveryOrder />
       },
       {
         path: 'bulk-orders',

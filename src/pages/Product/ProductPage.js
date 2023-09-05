@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllProducts, getAllProductsByCategory, getProduct, getProducts, getProductsByCategory, getProductsById, getProductsByIdError, getProductsByIdLoading, getProductsError, getProductsLoading } from '../../redux/slices/products'
 import Image from 'mui-image';
-import { useLocation, useParams, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import './productPage.css'
-import { Box, Button, Divider, Skeleton, Typography, Toolbar, CircularProgress, LinearProgress, Card, Chip, IconButton } from '@mui/material';
+import { Box, Button, Divider, Skeleton, Typography, Toolbar, CircularProgress, LinearProgress, Card, Chip, IconButton, MenuItem } from '@mui/material';
 import ShoppingBag from '@mui/icons-material/ShoppingBagOutlined';
 import NavBar from '../../components/shared/NavBar/NavBar';
 import BuyNow from '@mui/icons-material/Bolt';
@@ -19,7 +19,12 @@ import cart, { addItemToCart, addItems, getCart, getCartLoading } from '../../re
 import { LoadingButton } from '@mui/lab';
 import { ToastContainer } from 'react-toastify';
 import ErrorPage from '../ErrorPage';
+import HoverMenu from 'material-ui-popup-state/HoverMenu';
+import { bindMenu } from 'material-ui-popup-state';
+import { bindHover, usePopupState } from 'material-ui-popup-state/hooks';
+import { loginDialogHandler } from '../../handlers/handlers';
 // import { ProgressBar } from 'react-toastify/dist/components';
+
 
 var settings = {
     dots: false,
@@ -132,6 +137,7 @@ function ProductPage() {
     const addItemToCartLoading = useSelector(getCartLoading);
 
     const [selectedVariant, setSelectedVariant] = useState(0);
+
     // const categoryId = searchParams.get('productType');
 
     const [productVariants, setProductVariants] = useState([
@@ -140,6 +146,8 @@ function ProductPage() {
             discount: 0,
         }
     ]);
+
+    const navigate = useNavigate();
 
     const url = useParams();
     const id = url.productId.split('pid=')[1];
@@ -203,6 +211,10 @@ function ProductPage() {
 
 
     }
+    const popupState = usePopupState({
+        variant: 'popover',
+        popupId: 'demoMenu',
+    })
 
 
 
@@ -483,24 +495,76 @@ function ProductPage() {
                                                 backgroundColor: 'green', color: 'white', borderColor: 'white'
                                             }
                                         }} variant='contained' endIcon={<ShoppingBag sx={{ fontSize: "24px !important" }} />}>
-                                        {addItemToCartLoading ? 'Adding...' : "Add to bag"}
+                                        {addItemToCartLoading ? 'Adding...' : "Add to cart"}
                                     </LoadingButton>
-                                    <LoadingButton sx={{
-                                        // margin: '10px',
-                                        background: 'orange',
-                                        width: "100%",
-                                        marginBlock: '12px',
-                                        color: 'white',
-                                        fontSize: '17px',
-                                        fontWeight: 'bold',
-                                        borderRadius: '15px',
-                                        borderColor: 'Orange',
-                                        ':hover': {
-                                            backgroundColor: 'orange', color: 'white', borderColor: 'white'
-                                        }
-                                    }} variant='contained' endIcon={<BuyNow sx={{ fontSize: "24px !important" }} />}>
-                                        Buy Now
+                                    <LoadingButton
+                                        // {...bindHover(popupState)}
+                                        // loading={addItemToCartLoading}
+                                        onClick={() => {
+                                            // handleAddToCart();
+                                            if (localStorage.getItem('jwt')) {
+                                                navigate('/cart');
+                                            }
+                                            else {
+                                                // popupState.open();
+                                                loginDialogHandler(true, dispatch)
+
+
+                                            }
+
+                                        }}
+                                        sx={{
+                                            // margin: '10px',
+                                            background: 'orange',
+                                            width: "100%",
+                                            marginBlock: '12px',
+                                            color: 'white',
+                                            fontSize: '17px',
+                                            fontWeight: 'bold',
+                                            borderRadius: '15px',
+                                            borderColor: 'Orange',
+                                            ':hover': {
+                                                backgroundColor: 'orange', color: 'white', borderColor: 'white'
+                                            }
+                                        }} variant='contained' endIcon={<BuyNow sx={{ fontSize: "24px !important" }} />}>
+                                        Go to cart
                                     </LoadingButton>
+                                    {/* <HoverMenu
+
+                                        sx={{
+                                            display: {
+                                                xs: 'none',
+                                                sm: 'inherit',
+                                                md: 'inherit'
+                                            }
+                                        }}
+                                        {...bindMenu(popupState)}
+                                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                                        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+                                    >
+                                        <MenuItem
+                                            onClick={() => {
+                                                // handleOpenDialog();
+                                                popupState.close();
+                                            }}
+                                            disableRipple
+                                            disableGutters
+
+                                            sx={{
+                                                ":hover": {
+                                                    background: 'white',
+                                                },
+                                                // padding: '8px !important',
+                                                padding: '0px',
+                                                fontSize: '11px',
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                justifyContent: 'start',
+                                                alignItems: 'start'
+                                            }} >
+                                            <Typography sx={{ fontSize: '13px', fontWeight: 'bold', color: 'orange', marginInline: '8px' }}>Sign in to Continue</Typography>
+                                        </MenuItem>
+                                    </HoverMenu> */}
                                     <ToastContainer
                                         position="top-right"
                                         autoClose={1000}

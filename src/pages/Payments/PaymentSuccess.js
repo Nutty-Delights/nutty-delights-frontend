@@ -55,6 +55,7 @@ const PaymentSuccess = () => {
     // if (orderId)
     dispatch(getOrder(orderId));
     dispatch(clearCreatedOrder);
+    dispatch(getCart(localStorage.getItem('jwt')));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [payment]);
 
@@ -221,7 +222,7 @@ const PaymentSuccess = () => {
                       {/* <IconButton>
                       <Ship sx={{ color: 'green' }} />
                     </IconButton> */}
-                      <Typography sx={{ fontWeight: 'normal', color: 'green', fontSize: '14px' }}>{`Expected delivery date : ${order?.deliveryDate ? new Date(order?.deliveryDate).toLocaleDateString() : 'to be updated'} `}</Typography>
+                      <Typography sx={{ fontWeight: 'normal', color: 'green', fontSize: '14px' }}>{`Tracking Details : ${order?.deliveryDate ? new Date(order?.deliveryDate).toLocaleDateString() : 'to be updated'} `}</Typography>
                     </Box>
                   </Box>
                 }
@@ -335,7 +336,7 @@ const PaymentSuccess = () => {
                             <Box sx={{ marginInline: '15px', border: '0px solid #8080806e', borderRadius: '5px', display: 'flex', alignItems: 'center' }}>
 
                               <Box sx={{ minWidth: '100px', padding: '8px', display: 'flex', alignItems: 'center' }}>
-                                <Typography sx={{ fontWeight: 'bold', color: '#000000a3', fontSize: '13px' }} >{`₹ ${item?.price}`}</Typography>
+                                <Typography sx={{ fontWeight: 'bold', color: '#000000a3', fontSize: '13px' }} >{`₹ ${item?.variant?.sellingPrice}`}</Typography>
 
                               </Box>
 

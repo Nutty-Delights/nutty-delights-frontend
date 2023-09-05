@@ -291,7 +291,7 @@ const Order = () => {
                                                                 fontWeight: 'bold',
                                                                 fontSize: '12px',
                                                                 color: '#000000d1'
-                                                            }}>{`${item?.variant?.weight}   |   ${item?.quantity < 10 ? `0${item?.quantity}` : item?.quantity} x ₹ ${item?.price}  `}</Typography>
+                                                            }}>{`${item?.variant?.weight}   |   ${item?.quantity < 10 ? `0${item?.quantity}` : item?.quantity} x ₹ ${item?.variant?.sellingPrice}  `}</Typography>
 
 
 
@@ -409,7 +409,8 @@ const Order = () => {
                                     },
                                     alignItems: 'center'
                                 }}>
-                                <Typography sx={{ fontWeight: 'normal', color: 'grey', fontSize: '14px' }}>{`Payment Id : ${order?.paymentDetails?.paymentId}`}</Typography>
+                                {
+                                    order?.paymentDetails?.paymentId ? <Typography sx={{ fontWeight: 'normal', color: 'grey', fontSize: '14px' }}>{`Payment Id : ${order?.paymentDetails?.paymentId}`}</Typography> : <></>}
 
                                 <Typography sx={{ fontWeight: 'normal', color: 'grey', fontSize: '14px' }}>{`Payment Status : ${order?.paymentDetails?.status === 'COMPLETED' ? "Paid" : "Pending"}`}</Typography>
                                 <Typography sx={{ fontWeight: 'normal', color: 'grey', fontSize: '14px' }}>{`Payment Mode : ${order?.paymentDetails?.paymentMethod ? order?.paymentDetails?.paymentMethod?.toLowerCase() : "Pay on delivery"}`}</Typography>

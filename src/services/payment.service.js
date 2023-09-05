@@ -13,6 +13,14 @@ class PaymentDataService {
             }
         })
     }
+    PayOnDeliveryPayment(orderId) {
+        return http.post(`/${this.paymentUrl}/payments/pod/${orderId}`, orderId, {
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem('jwt')}`
+            }
+        })
+    }
+
 
     createPaymentLink(orderId) {
         return http.post(`/${this.paymentUrl}/payments/${orderId}`, orderId, {

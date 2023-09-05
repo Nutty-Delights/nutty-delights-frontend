@@ -17,7 +17,7 @@ import BulkOrderIcon from '@mui/icons-material/CasesOutlined';
 import CombosIcon from '@mui/icons-material/AcUnitOutlined';
 import DeliveryIcon from '@mui/icons-material/LocalShippingOutlined';
 import { useDispatch, useSelector } from 'react-redux';
-import { getOpenEmail, getUser, getUserProfile, logoutUser, setOpenEmail } from '../../../redux/slices/user';
+import { getOpenEmail, getOpenLoginDialog, getUser, getUserProfile, logoutUser, openLoginDialog, setOpenEmail } from '../../../redux/slices/user';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Login from '../../../pages/Auth/Login';
@@ -118,13 +118,15 @@ const NavBar = (props) => {
   const container = window !== undefined ? () => window().document.body : undefined;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [invisible, setInvisible] = useState(true);
+
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const emailOpen = useSelector(getOpenEmail);
-  const [openDialog, setOpen] = useState(emailOpen);
+  const authOpen = useSelector(getOpenLoginDialog);
+  const [openDialog, setOpen] = useState(authOpen);
   const [openEmailDialog, setOpenEmailDialog] = useState(false);
 
 
@@ -186,6 +188,9 @@ const NavBar = (props) => {
 
   const handleDialog = () => {
     setOpen(false);
+    dispatch(openLoginDialog({ open: false }));
+
+
     setAuthForm(false);
     if (localStorage.getItem('jwt'))
       dispatch(getCart(localStorage.getItem('jwt')));
@@ -199,6 +204,8 @@ const NavBar = (props) => {
   }
   const handleOpenDialog = () => {
     setOpen(true);
+    dispatch(openLoginDialog({ open: true }));
+
   }
 
 
@@ -782,7 +789,7 @@ const NavBar = (props) => {
 
                     },
                     elevation: 10
-                  }} onClose={handleDialog} open={openDialog}>
+                  }} onClose={handleDialog} open={authOpen}>
 
                     {
                       !toggleAuthForm ? <Login setAuthForm={setAuthForm} /> : <Register setAuthForm={setAuthForm} />
