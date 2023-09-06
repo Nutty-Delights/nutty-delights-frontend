@@ -31,12 +31,11 @@ const PaymentSuccess = () => {
   const order = useSelector(getPlacedOrder);
 
   useEffect(() => {
-    dispatch(getCart(localStorage.getItem('jwt')));
+    // dispatch(getCart(localStorage.getItem('jwt')));
     console.log("inside first useEffect");
     console.log("orderId", orderId)
     const urlParams = new URLSearchParams(window.location.search);
     setPaymentId(urlParams.get("razorpay_payment_id"));
-    setReferenceId(urlParams.get("razorpay_payment_link_reference_id"));
     setPaymentStatus(urlParams.get("razorpay_payment_link_status"));
     if (urlParams.get("razorpay_payment_id") && urlParams.get("razorpay_payment_link_status") === "paid") {
       const payId = urlParams.get("razorpay_payment_id");
@@ -55,9 +54,9 @@ const PaymentSuccess = () => {
     // if (orderId)
     dispatch(getOrder(orderId));
     dispatch(clearCreatedOrder);
-    dispatch(getCart(localStorage.getItem('jwt')));
+    // dispatch(getCart(localStorage.getItem('jwt')));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [payment]);
 
   // console.log("created order", order)
 
