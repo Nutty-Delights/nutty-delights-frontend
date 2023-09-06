@@ -56,8 +56,9 @@ const PaymentSuccess = () => {
     if (payment === true) {
       dispatch(getOrder(orderId));
       dispatch(clearCreatedOrder);
+      dispatch(getCart(localStorage.getItem('jwt')));
     }
-    // dispatch(getCart(localStorage.getItem('jwt')));
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [payment]);
 
