@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { clearCreatedOrder, getCreatedOrder, getOrder, getOrderError, getOrderLoading, getPlacedOrder } from '../../redux/slices/order';
-import payment, { getPaymentError, getPaymentLoading, getPaymentStatus, updatePayment } from '../../redux/slices/payment';
+import payment, { getPaymentError, getPaymentLoading, getPaymentStatus, getRazorPaymentStatus, updatePayment } from '../../redux/slices/payment';
 import { Avatar, Box, Card, CardContent, Divider, IconButton, LinearProgress, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material';
 import tick from '../../assets/images/tick.jpg'
 import Image from 'mui-image';
@@ -20,7 +20,7 @@ const PaymentSuccess = () => {
   const { orderId } = useParams();
   const isLoadingPayment = useSelector(getPaymentLoading);
   const isLoadingOrder = useSelector(getOrderLoading);
-  const payment = useSelector(getPaymentStatus);
+  const payment = useSelector(getRazorPaymentStatus);
   const errorPayment = useSelector(getPaymentError);
   const errorOrder = useSelector(getOrderError);
 

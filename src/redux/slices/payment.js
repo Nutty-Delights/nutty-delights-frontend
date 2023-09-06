@@ -180,6 +180,7 @@ export const getPaymentError = (state) => state.payment.isError;
 export const getPodLoading = (state) => state.payment.isPodLoading;
 export const getPodError = (state) => state.payment.isPodError;
 export const getPaymentStatus = (state) => state.payment.podPayment;
+export const getRazorPaymentStatus = (state) => state.payment.payment;
 export const getPaymentPlacedOrder = (state) => state.payment.placedOrder;
 
 export const { changePaymentStatus } = paymentSlice.actions;
