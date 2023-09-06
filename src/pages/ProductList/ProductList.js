@@ -23,7 +23,7 @@ function ProductList() {
     const products = useSelector(getProductsByCategory);
     const isLoading = useSelector(getProductsLoading);
     const isError = useSelector(getProductsError);
-    const loading = ["1", "2", "3", "4", "5", "6"];
+    const loading = categoryId ? ["1", "2", "3", "4", "5", "6"] : ["1", "2"];
 
 
     useEffect(() => {
@@ -51,7 +51,13 @@ function ProductList() {
             <div style={{ padding: '33px', paddingBlock: "40px", display: 'flex', justifyContent: 'center' }} className='product-list'>
                 {
                     isLoading ? loading?.map((e, i) => (
-                        <Box key={i} width={"30%"} >
+                        <Box key={i} sx={{
+                            width: {
+                                xs: '100%',
+                                sm: '44%',
+                                md: '31%'
+                            }
+                        }} >
                             <Skeleton variant="rectangular" height={250} />
                             <Skeleton animation="wave" />
                             <Skeleton animation="wave" />
