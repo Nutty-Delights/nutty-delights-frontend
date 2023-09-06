@@ -1113,16 +1113,20 @@ const Checkout = () => {
                                             </CardContent>
                                         </Card>
                                         <Divider sx={{ marginBottom: '10px' }}></Divider>
-                                        <Box display={{
-                                            xs: 'flex',
-                                            md: 'flex'
-                                        }} sx={{ margin: '15px', justifyContent: 'space-between', alignItems: 'center' }}>
-                                            <Typography sx={{ fontSize: '17px', fontWeight: 'bold', marginBottom: { xs: '10px', md: '0px' } }}>Payment Method</Typography>
-                                            <Box gap={'0px'} display={{
-                                                md: 'flex',
-                                            }} alignItems={{
-                                                md: 'center'
-                                            }} >
+                                        <Box
+                                            display={{
+                                                xs: 'flex',
+                                                md: 'flex'
+                                            }} sx={{ margin: '15px', justifyContent: 'space-between', alignItems: 'start', flexDirection: 'column', }}>
+                                            <Typography sx={{ fontSize: '17px', fontWeight: 'bold', marginBottom: { xs: '10px', md: '10px' } }}>Payment Method</Typography>
+                                            <Box gap={'0px'}
+                                                display={{
+                                                    xs: 'flex',
+                                                    sm: 'flex',
+                                                    md: 'flex',
+                                                }} alignItems={{
+                                                    md: 'center'
+                                                }} >
                                                 <Box sx={{
                                                     marginBottom: {
                                                         xs: '10px',
@@ -1137,10 +1141,10 @@ const Checkout = () => {
                                                     }
                                                 }}>
                                                     <LockOutlined sx={{ color: 'grey', fontSize: '18px' }} />
-                                                    <Typography sx={{ marginRight: '10px', marginLeft: '5px', fontSize: '14px', fontWeight: 'bold', color: 'grey', marginBottom: { xs: '10px', md: '0px' } }}>Secured By</Typography>
+                                                    <Typography sx={{ margin: '0px', fontSize: '14px', fontWeight: 'bold', color: 'grey', marginBottom: { xs: '0px', md: '0px' } }}>Secured By</Typography>
                                                 </Box>
 
-                                                <img referrerpolicy="origin" src={Razorpay} style={{ height: '23px', width: '118px' }} alt="Razorpay | Payment Gateway | Neobank"></img>
+                                                <img referrerpolicy="origin" src={Razorpay} style={{ marginLeft: '5px', height: '23px', width: '118px' }} alt="Razorpay | Payment Gateway | Neobank"></img>
                                             </Box>
 
 
