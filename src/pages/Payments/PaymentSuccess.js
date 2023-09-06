@@ -57,7 +57,7 @@ const PaymentSuccess = () => {
     dispatch(clearCreatedOrder);
     dispatch(getCart(localStorage.getItem('jwt')));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [payment]);
+  }, []);
 
   // console.log("created order", order)
 
