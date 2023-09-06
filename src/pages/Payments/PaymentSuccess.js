@@ -30,6 +30,7 @@ const PaymentSuccess = () => {
   const dispatch = useDispatch();
   const order = useSelector(getPlacedOrder);
 
+
   useEffect(() => {
     // dispatch(getCart(localStorage.getItem('jwt')));
     console.log("inside first useEffect");
@@ -52,8 +53,10 @@ const PaymentSuccess = () => {
     console.log("Payment ID and status", paymentId, paymentStatus);
 
     // if (orderId)
-    dispatch(getOrder(orderId));
-    dispatch(clearCreatedOrder);
+    if (payment === true) {
+      dispatch(getOrder(orderId));
+      dispatch(clearCreatedOrder);
+    }
     // dispatch(getCart(localStorage.getItem('jwt')));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [payment]);
