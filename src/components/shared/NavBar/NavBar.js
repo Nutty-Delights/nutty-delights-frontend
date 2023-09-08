@@ -5,7 +5,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
 import { Card, Box, Button, CssBaseline, Dialog, DialogTitle, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Toolbar, Tooltip, Typography, makeStyles, Badge, LinearProgress, ListItemAvatar, Avatar } from '@mui/material';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import logo from '../../../assets/images/logo-png.png'
+import logo from '../../../assets/images/LogoV9 (1).gif'
+// import logo from '../../../assets/images/LogoV8.png'
+// import logo from '../../../assets/images/logo-png.png'
 import Image from 'mui-image';
 import AccountIcon from '@mui/icons-material/PermIdentityOutlined';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCartOutlined';
@@ -341,9 +343,25 @@ const NavBar = (props) => {
               >
                 <MenuIcon />
               </IconButton>
-              <Box sx={{ marginRight: "0px" }}>
+              <Box sx={{ marginLeft: '20px', marginRight: '15px' }}>
                 <NavLink replace={true} to='/'>
-                  <Image style={{ display: { sm: 'none', md: 'flex' }, }} duration={0} src={logo} fit='cover' height='42px' width='120px' />
+                  <Image sx={{
+                    padding: {
+                      md: '3.5px'
+                    },
+                    width: {
+                      xs: '80px !important',
+                      md: '96px !important'
+                    },
+
+                    height: {
+                      xs: '52px !important',
+                      md: '68px !important'
+                    }
+                  }} duration={0} src={logo} fit='cover' />
+                  {/* <img style={{
+                    height: "auto"
+                  }} alt='logo' src={logo}></img> */}
                 </NavLink>
               </Box>
               <Box sx={{ display: { xs: 'none', sm: 'none', md: 'flex', marginLeft: '10px !important' }, flexGrow: 1, }}>

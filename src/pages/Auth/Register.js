@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import GoogleIcon from '@mui/icons-material/Google';
 import Google from '../../assets/images/googleIcon.png'
 import banner2 from '../../assets/images/banner 2.jpg'
-import login from '../../assets/images/logo.png'
+import login from '../../assets/images/LogoV9 (1).gif'
 import Image from 'mui-image';
 import { NavLink, json, useNavigate } from 'react-router-dom';
 import validator from 'validator'
@@ -196,14 +196,14 @@ const Register = ({ setAuthForm }) => {
                                 <CardMedia
                                     sx={{
                                         height: {
-                                            'xs': "60px",
+                                            'xs': "80px",
                                             'sm': "80px",
-                                            'md': "80px",
+                                            'md': "90px",
 
                                         }, width: {
-                                            'xs': "180px",
-                                            'sm': "200px",
-                                            'md': "220px",
+                                            'xs': "120px",
+                                            'sm': "120px",
+                                            'md': "140px",
 
                                         }
                                     }}
