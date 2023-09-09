@@ -15,7 +15,8 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import { generateEmailCode, getAuthOtp, getUser, getUserLoading, getUserProfile, loginUser, verifyEmailCode } from '../../redux/slices/user';
 import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
-
+import Generate from '@mui/icons-material/ForwardToInboxOutlined';
+import Verify from '@mui/icons-material/MarkEmailReadOutlined';
 const VerifyEmail = ({ setAuthForm }) => {
 
 
@@ -190,10 +191,13 @@ const VerifyEmail = ({ setAuthForm }) => {
                                     disableElevation
                                     onClick={verifyCode}
                                     size='large'
+                                    endIcon={<Verify sx={{ fontWeight: 'bold' }} />}
+
                                     sx={{
                                         padding: '8px',
                                         background: 'orange',
                                         fontSize: '1rem',
+                                        fontWeight: 'bold',
                                         ':hover': {
                                             padding: '8px',
                                             background: 'orange',
@@ -208,10 +212,12 @@ const VerifyEmail = ({ setAuthForm }) => {
                                         disableElevation
                                         onClick={generateCode}
                                         size='large'
+                                        endIcon={<Generate sx={{ fontWeight: 'bold' }} />}
                                         sx={{
                                             padding: '8px',
                                             background: 'orange',
                                             fontSize: '1rem',
+                                            fontWeight: 'bold',
                                             ':hover': {
                                                 padding: '8px',
                                                 background: 'orange',

@@ -130,7 +130,7 @@ const Register = ({ setAuthForm }) => {
             // const userPassword = name.trim().split(/\s+/);
             const userData = {
                 firstName: userName[0],
-                lastName: userName[1],
+                lastName: userName[1] === undefined || userName[1] === '' || userName[1] === null ? "" : userName[1],
                 email: userEmail[0],
                 mobileNumber: userMobile[0],
                 password: password
@@ -247,7 +247,7 @@ const Register = ({ setAuthForm }) => {
                                     error={showNameError}
 
 
-                                    id="name" label="Name" variant="outlined" />
+                                    id="name" label="Full Name" variant="outlined" />
                                 <TextField
                                     InputProps={{
                                         endAdornment: (
