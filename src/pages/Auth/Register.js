@@ -211,7 +211,12 @@ const Register = ({ setAuthForm }) => {
                                     title="green iguana"
                                 />
                             </NavLink>
-                            <Typography sx={{ fontSize: '30px' }} gutterBottom>
+                            <Typography sx={{
+                                fontSize: {
+                                    smx: '29px',
+                                    md: '30px'
+                                }
+                            }} gutterBottom>
                                 Create an account!
                             </Typography>
                         </Box>
@@ -455,6 +460,7 @@ const Register = ({ setAuthForm }) => {
 
 
                         <Box sx={{
+                            gap: '10px',
                             display: {
                                 'xs': 'block',
                                 'sm': 'block',

@@ -174,7 +174,12 @@ const Login = ({ setAuthForm }) => {
                                     title="green iguana"
                                 />
                             </NavLink>
-                            <Typography sx={{ fontSize: '30px', fontWeight: 'normal', marginTop: '5px' }} >
+                            <Typography sx={{
+                                fontSize: {
+                                    smx: '25px',
+                                    md: '30px'
+                                }, fontWeight: 'normal', marginTop: '5px'
+                            }} >
                                 Hi, Welcome User!
                             </Typography>
 
@@ -295,6 +300,7 @@ const Login = ({ setAuthForm }) => {
 
 
                         <Box sx={{
+                            gap: '10px',
                             display: {
                                 'xs': 'flex',
                                 'sm': 'block',

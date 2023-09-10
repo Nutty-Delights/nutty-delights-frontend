@@ -859,13 +859,15 @@ const Checkout = () => {
                                                         sx={{
 
                                                             display: {
+                                                                smx: 'flex',
                                                                 xs: 'flex',
                                                                 sm: 'none',
                                                                 md: 'none'
                                                             },
                                                             width: {
-                                                                xs: '43%',
-                                                                md: '40%'
+                                                                smx: '42%',
+                                                                // xs: '43%',
+                                                                md: '45%'
                                                             },
                                                             "& .MuiInputLabel-outlined": {
                                                                 color: "black",
@@ -900,8 +902,8 @@ const Checkout = () => {
                                                         size='small'
                                                         sx={{
                                                             width: {
-                                                                xs: '43%',
-                                                                md: '40%'
+                                                                smx: '42%',
+                                                                md: '45%'
                                                             },
 
                                                             "& .MuiInputLabel-outlined": {
@@ -944,8 +946,9 @@ const Checkout = () => {
                                                         size='small'
                                                         sx={{
                                                             width: {
-                                                                xs: '43%',
-                                                                md: '40%'
+                                                                // xs: '43%',
+                                                                smx: '42%',
+                                                                md: '45%'
                                                             },
 
                                                             "& .MuiInputLabel-outlined": {
@@ -983,8 +986,8 @@ const Checkout = () => {
                                                         sx={{
 
                                                             width: {
-                                                                xs: '43%',
-                                                                md: '40%'
+                                                                smx: '42%',
+                                                                md: '45%'
                                                             },
                                                             "& .MuiInputLabel-outlined": {
                                                                 color: "black",
