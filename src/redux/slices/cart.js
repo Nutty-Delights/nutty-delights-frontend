@@ -451,7 +451,13 @@ const cartSlice = createSlice({
             var index = updatedCartItems.findIndex((item) => item.cartItemId === cartItem?.cartItemId);
 
 
+
             if (index !== -1) {
+
+                const oldPrice = updatedCartItems[index]?.cartItemPrice;
+                console.log("oldPrice", oldPrice, index, updatedCartItems[index])
+
+
                 updatedCartItems[index] = {
                     ...updatedCartItems[index],
                     ...cartItem
@@ -465,6 +471,7 @@ const cartSlice = createSlice({
                         ...state.cart,
                         cartItems: updatedCartItems,
                         cartTotalItems: updatedCartItems?.length,
+                        cartTotalPrice: state.cart.cartTotalPrice ? state.cart.cartTotalPrice + cartItem.cartItemPrice - oldPrice : cartItem.cartItemPrice - oldPrice
                         // cartTotalPrice: state.cart.cartTotalPrice + cartItem.cartItemPrice
 
                     }
@@ -483,6 +490,7 @@ const cartSlice = createSlice({
                 }
 
 
+                console.log("newSTate after adding item", newState)
                 return newState;
             }
 
@@ -495,7 +503,7 @@ const cartSlice = createSlice({
                         ...state.cart,
                         cartItems: [...state.cart.cartItems, cartItem],
                         cartTotalItems: state.cart.cartItems.length + 1,
-                        // cartTotalPrice: state.cart.cartTotalPrice + cartItem.cartItemPrice
+                        cartTotalPrice: state.cart.cartTotalPrice ? state.cart.cartTotalPrice + cartItem.cartItemPrice : cartItem.cartItemPrice
                     }
                 }
 
@@ -506,7 +514,7 @@ const cartSlice = createSlice({
                     toast.error("Something went wrong ! try again")
                 }
 
-                // console.log("newState after adding item", newState);
+                console.log("newState after adding item", newState);
                 return newState;
 
             }
