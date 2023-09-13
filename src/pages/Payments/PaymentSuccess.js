@@ -398,7 +398,7 @@ const PaymentSuccess = () => {
                         alignItems: 'center'
                       }}>
                       <Typography sx={{ fontWeight: 'normal', color: 'grey', fontSize: '14px' }}>{order?.shippingAddress?.firstName + " " + order?.shippingAddress?.lastName}</Typography>
-                      <Typography sx={{ fontWeight: 'normal', color: 'grey', fontSize: '14px' }}>{order?.shippingAddress?.houseNo + ", " + order?.shippingAddress?.addressLine}</Typography>
+                      <Typography sx={{ fontWeight: 'normal', color: 'grey', fontSize: '14px' }}>{order?.shippingAddress?.addressLine}</Typography>
 
                     </Box>
                     <Box
